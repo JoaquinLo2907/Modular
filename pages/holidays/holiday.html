@@ -26,7 +26,18 @@
   <!-- Weeducate styles -->
   <link href="../../assets/css/style.css" rel="stylesheet">
   <!-- Favicon -->
-   
+
+  <link href="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.css" rel="stylesheet">
+
+  <style>
+    .fc-toolbar-title,
+    .fc-col-header-cell-cushion,
+    .fc-daygrid-day-number {
+      text-transform: capitalize;
+    }
+  </style>
+  
+
 
 </head>
 
@@ -95,7 +106,7 @@
 
     <!-- Logo -->
     <div class="logo-sn ms-d-block-lg">
-      <a class="pl-0 ml-0 text-center" href="../../index.html"> <img src="../../assets/img/logo/weeducate-4.png" alt="logo"> </a>
+      <a class="pl-0 ml-0 text-center" href="../../index.php"> <img src="../../assets/img/logo/weeducate-4.png" alt="logo"> </a>
     </div>
 
     <!-- Navigation -->
@@ -106,7 +117,7 @@
                <span><i class="material-icons fs-16">dashboard</i>Dashboard </span>
              </a>
             <ul id="dashboard" class="collapse" aria-labelledby="dashboard" data-parent="#side-nav-accordion">
-              <li> <a href="../../index.html">Weeducate</a> </li>
+              <li> <a href="../../index.php">Weeducate</a> </li>
               
             </ul>
         </li>
@@ -149,20 +160,20 @@
                   </ul>
         </li>
         <!-- /Student End--->
+      
         
-        
-        <!--Staff Start-->
+        <!--tutor Start-->
         <li class="menu-item">
             <a href="#" class="has-chevron" data-toggle="collapse" data-target="#staff" aria-expanded="false" aria-controls="dashboard">
-               <span><i class="fa fa-user-circle fs-16"></i>Staff</span>
+               <span><i class="fa fa-user-circle fs-16"></i>Tutores</span>
              </a>
             <ul id="staff" class="collapse" aria-labelledby="staff" data-parent="#side-nav-accordion">
-              <li> <a href="../staff/addstaff.html">Add Staff</a> </li>
-               <li> <a href="../staff/staffprofile.html">Staff Proflie</a> </li>
+              <li> <a href="../tutor/addtutor.html">Añadir Tutor</a> </li>
+               <li> <a href="../tutor/tutorprofile.html">Tabla de Tutores</a> </li>
                  
             </ul>
         </li>
-        <!-- /Staff End--->
+        <!-- /tutor End--->
         
         
         
@@ -181,28 +192,15 @@
         </li>
         <!-- /Fees End--->
         
-        <!--Departement Start-->
-        <li class="menu-item">
-            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#departement" aria-expanded="false" aria-controls="dashboard">
-               <span><i class="fa fa-building fs-16"></i>Departement</span>
-             </a>
-            <ul id="departement" class="collapse" aria-labelledby="departement" data-parent="#side-nav-accordion">
-              <li> <a href="../departement/departement.html">Departement List</a> </li>
-              <li> <a href="../departement/adddepartement.html">Add Departement</a> </li>
-               
-                 
-            </ul>
-        </li>
-        <!-- /Departemnt End--->
-        
        
         <!--Holiday Start-->
         <li class="menu-item">
           <a href="../holidays/holiday.html">
-            <span><i class="fa fa-calendar fs-16"></i>Holidays</span>
+            <span><i class="fa fa-calendar fs-16"></i>Calendario-Festivo</span>
           </a>
         </li>
         <!-- /Holiday End--->
+
         <!-- Charts -->
         <li class="menu-item">
             <a href="#" class="has-chevron" data-toggle="collapse" data-target="#charts" aria-expanded="false" aria-controls="charts">
@@ -379,7 +377,7 @@
       </div>
 
       <div class="logo-sn logo-sm ms-d-block-sm">
-        <a class="pl-0 ml-0 text-center navbar-brand mr-0" href="index.html"><img src="../../assets/img/logo/weeducate-4.png" alt="logo"> </a>
+        <a class="pl-0 ml-0 text-center navbar-brand mr-0" href="../../index.php"><img src="../../assets/img/logo/weeducate-4.png" alt="logo"> </a>
       </div>
 
       <ul class="ms-nav-list ms-inline mb-0" id="ms-nav-options">
@@ -517,7 +515,7 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb pl-0">
               <li class="breadcrumb-item"><a href="#"><i class="material-icons">home</i> Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Holiday</li>
+              <li class="breadcrumb-item active" aria-current="page">Calendario</li>
                
             </ol>
           </nav>
@@ -527,13 +525,10 @@
          <div class="col-xl-12">
         <div class="ms-panel">
             <div class="ms-panel-header">
-              <h6>Holiday List</h6>
+              <h6>Calendario Anual</h6>
             </div>
             <div class="ms-panel-body">
-             
-              <div class="table-responsive">
-                <table id="data-table-9" class="table table-hover w-100"></table>
-              </div>
+              <div id="calendario-festivos"></div>
             </div>
           </div>
           </div>
@@ -1308,6 +1303,40 @@
 
   <!-- Settings -->
   <script src="../../assets/js/settings.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.8/index.global.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const calendarEl = document.getElementById('calendario-festivos');
+
+      fetch('../holidays/dias_festivos.json')
+        .then(response => response.json())
+        .then(data => {
+          const eventos = data.map(festivo => {
+            const rango = festivo.fecha.split(' al ');
+            return {
+              title: festivo.motivo,
+              start: rango[0],
+              end: rango[1] ? new Date(new Date(rango[1]).getTime() + 86400000).toISOString().split('T')[0] : undefined,
+              allDay: true
+            };
+          });
+
+          const calendar = new FullCalendar.Calendar(calendarEl, {
+            initialView: 'dayGridMonth',
+            locale: 'es',
+            height: 600,
+            events: eventos,
+            eventClick: function (info) {
+              alert(`📅 ${info.event.title}\nFecha: ${info.event.start.toLocaleDateString('es-MX')}`);
+            }
+          });
+
+          calendar.render();
+        });
+    });
+  </script>
 
 </body>
 

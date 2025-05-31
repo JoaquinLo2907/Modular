@@ -37,7 +37,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $redirect = "../../index.php";
                     break;
                 case 1:
-                    $redirect = "../../PruebaDoc.php";
+                    $redirect = "../../PruebaDoc.html";
                     break;
                 case 2:
                     $redirect = "../../pruebaTuto.php";

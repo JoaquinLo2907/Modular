@@ -90,7 +90,7 @@
 
     <!-- Logo -->
     <div class="logo-sn ms-d-block-lg">
-      <a class="pl-0 ml-0 text-center" href="index.html"><img src="assets/img/logo/weeducate-4.png" alt="logo">  </a>
+      <a class="pl-0 ml-0 text-center" href="index.php "><img src="assets/img/logo/weeducate-4.png" alt="logo">  </a>
     </div>
 
     <!-- Navigation -->
@@ -146,18 +146,18 @@
         <!-- /Student End--->
         
         
-        <!--Staff Start-->
+        <!--tutor Start-->
         <li class="menu-item">
             <a href="#" class="has-chevron" data-toggle="collapse" data-target="#staff" aria-expanded="false" aria-controls="dashboard">
-               <span><i class="fa fa-user-circle fs-16"></i>Staff</span>
+               <span><i class="fa fa-user-circle fs-16"></i>Tutores</span>
              </a>
             <ul id="staff" class="collapse" aria-labelledby="staff" data-parent="#side-nav-accordion">
-              <li> <a href="pages/staff/addstaff.html">Add Staff</a> </li>
-               <li> <a href="pages/staff/staffprofile.html">Staff Proflie</a> </li>
+              <li> <a href="pages/tutor/addtutor.html">Añadir Tutor</a> </li>
+               <li> <a href="pages/tutor/tutorprofile.html">Tabla de Tutores</a> </li>
                  
             </ul>
         </li>
-        <!-- /Staff End--->
+        <!-- /tutor End--->
         
         
         
@@ -175,20 +175,7 @@
             </ul>
         </li>
         <!-- /Fees End--->
-        
-        <!--Departement Start-->
-        <li class="menu-item">
-            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#departement" aria-expanded="false" aria-controls="dashboard">
-               <span><i class="fa fa-building fs-16"></i>Departement</span>
-             </a>
-            <ul id="departement" class="collapse" aria-labelledby="departement" data-parent="#side-nav-accordion">
-              <li> <a href="pages/departement/departement.html">Departement List</a> </li>
-              <li> <a href="pages/departement/adddepartement.html">Add Departement</a> </li>
-               
-                 
-            </ul>
-        </li>
-        <!-- /Departemnt End--->
+      
         
        
        
@@ -393,7 +380,7 @@
       </div>
 
       <div class="logo-sn logo-sm ms-d-block-sm">
-        <a class="pl-0 ml-0 text-center navbar-brand mr-0" href="index.html"><img src="assets/img/logo/weeducate-4.png" alt="logo"> </a>
+        <a class="pl-0 ml-0 text-center navbar-brand mr-0" href="index.php"><img src="assets/img/logo/weeducate-4.png" alt="logo"> </a>
       </div>
 
       <ul class="ms-nav-list ms-inline mb-0" id="ms-nav-options">
@@ -503,11 +490,11 @@
             <li class="ms-dropdown-list">
               <a class="media fs-14 p-2" href="pages/prebuilt-pages/user-profile.html"> <span><i class="flaticon-user mr-2"></i> Profile</span> </a>
               <a class="media fs-14 p-2" href="pages/apps/email.html"> <span><i class="flaticon-mail mr-2"></i> Inbox</span> <span class="badge badge-pill badge-info">3</span> </a>
-              <a class="media fs-14 p-2" href="pages/prebuilt-pages/user-profile.html"> <span><i class="flaticon-gear mr-2"></i> Account Settings</span> </a>
+              
             </li>
             <li class="dropdown-divider"></li>
             <li class="dropdown-menu-footer">
-              <a class="media fs-14 p-2" href="pages/prebuilt-pages/lock-screen.html"> <span><i class="flaticon-security mr-2"></i> Lock</span> </a>
+              
             </li>
             <li class="dropdown-menu-footer">
              <a class="media fs-14 p-2" href="index.php?logout=true">
