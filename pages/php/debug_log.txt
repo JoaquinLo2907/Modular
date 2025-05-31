@@ -1,0 +1,27 @@
+Array
+(
+    [nombre] => holaa
+    [apellido] => lopez
+    [email] => h@prueba.com
+    [contraseña] => 123
+    [rol] => 1
+    [puesto] => profesor
+    [genero] => masculino
+    [telefono] => 23232323
+    [nacimiento] => 2025-04-24
+    [salario] => 2333.00
+    [direccion] => edqwdqwdqw
+    [docente_id] => 26
+)
+Consulta SQL: UPDATE docentes SET 
+                nombre = ?, 
+                apellido = ?, 
+                correo = ?, 
+                telefono = ?, 
+                puesto = ?, 
+                genero = ?, 
+                fecha_nacimiento = ?, 
+                salario = ?, 
+                direccion = ?, 
+                actualizado_en = NOW() 
+            WHERE docente_id = ?

@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar Profesor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Weeducate</title>
+    <!-- Iconic Fonts -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="../../vendors/iconic-fonts/font-awesome/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../vendors/iconic-fonts/flat-icons/flaticon.css">
+    
+     <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/weicon/weicon.ico">
+      
+            
+    <!-- Bootstrap core CSS -->
+    <link href="../../assets/css/bootstrap.min.css" rel="stylesheet">
+    <!-- jQuery UI -->
+    <link href="../../assets/css/jquery-ui.min.css" rel="stylesheet">
+    <!-- Page Specific CSS (Slick Slider.css) -->
+    <link href="../../assets/css/slick.css" rel="stylesheet">
+    <!-- Weeducate styles -->
+    <link href="../../assets/css/style.css" rel="stylesheet">
+    <!-- Favicon -->
+    <link href="../../assets/css/tableStyle.css" rel="stylesheet">
+  
+</head>
+<body>
+
+    <!-- Body Content Wrapper -->
+    <!-- Body Content Wrapper -->
+<div class="ms-content-wrapper">
+    <div class="row">
+
+        <div class="col-md-12">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb pl-0">
+                    <li class="breadcrumb-item"><a href="#"><i class="material-icons">home</i> Lobby</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Profesor</li>
+                    <li class="breadcrumb-item active" aria-current="page">Editar Profesor</li>
+                </ol>
+            </nav>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="ms-panel">
+                <div class="ms-panel-header">
+                    <h6>Editar Profesor</h6>
+                </div>
+
+                <div class="ms-panel-body">
+                    <form id="editProfessorForm" action="../php/actualizar_profesor.php" method="POST" enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="nombre">Nombre:</label>
+                                    <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre/s" required>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="apellido">Apellidos:</label>
+                                    <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido/s" required>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="email">Correo:</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Nombre@ejemplo.com" required>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="contraseña">Contraseña:</label>
+                                    <input type="password" class="form-control" id="contraseña" name="contraseña" placeholder="Contraseña" required>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="rol">Rol:</label>
+                                    <select class="form-control" id="rol" name="rol" disabled required>
+                                        <option value="1" selected>Docente</option>
+                                    </select>
+                                    <input type="hidden" name="rol" value="1">
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="puesto">Puesto:</label>
+                                    <select class="form-control" id="puesto" name="puesto" required>
+                                        <option value="profesor">Profesor</option>
+                                        <option value="coordinador">Coordinador</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="genero">Género:</label>
+                                    <select class="form-control" id="genero" name="genero" required>
+                                        <option value="masculino">Masculino</option>
+                                        <option value="femenino">Femenino</option>
+                                        <option value="otro">Otro</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="telefono">Número de teléfono:</label>
+                                    <input type="text" class="form-control" id="telefono" name="telefono" placeholder="#" required>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="nacimiento">Nacimiento:</label>
+                                    <input type="date" class="form-control" id="nacimiento" name="nacimiento" required>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6">
+                                <div class="form-group">
+                                    <label for="salario">Salario:</label>
+                                    <input type="text" class="form-control" id="salario" name="salario" placeholder="$" required>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-12">
+                                <div class="form-group">
+                                    <label for="direccion">Dirección:</label>
+                                    <textarea class="form-control" id="direccion" name="direccion" rows="5" required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-6 mx-auto">
+                                <div class="form-group">
+                                    <label for="imagen">Seleccione la imagen:</label>
+                                    <input type="file" class="form-control" id="imagen" name="imagen">
+                                </div>
+                            </div>
+
+                            <input type="hidden" id="docente_id" name="docente_id">
+
+
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-warning mb-5">Actualizar</button>
+                                <button type="button" class="btn btn-outline-warning mb-5 ml-3">Cancelar</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const docenteId = urlParams.get('id');
+
+    if (docenteId) {
+        fetch(`../php/profesorId.php?id=${docenteId}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    alert(data.error);
+                } else {
+                    // Asignar los valores a los campos del formulario
+                    document.getElementById('nombre').value = data.nombre;
+                    document.getElementById('apellido').value = data.apellido;
+                    document.getElementById('email').value = data.correo;
+                    document.getElementById('telefono').value = data.telefono;
+                    document.getElementById('puesto').value = data.puesto;
+                    document.getElementById('genero').value = data.genero;
+                    document.getElementById('nacimiento').value = data.fecha_nacimiento;
+                    document.getElementById('salario').value = data.salario;
+                    document.getElementById('direccion').value = data.direccion;
+
+                    // Asignar el ID del docente al campo oculto
+                    document.getElementById('docente_id').value = docenteId;
+                }
+            })
+            .catch(error => console.error('Error al cargar los datos:', error));
+    } else {
+        alert('No se proporcionó el ID del docente.');
+    }
+
+    // Manejo del formulario para enviar los datos actualizados
+    const form = document.getElementById('editProfessorForm');
+    form.addEventListener('submit', (event) => {
+        event.preventDefault(); // Evitar recarga de la página
+
+        // Capturar los datos del formulario
+        const formData = new FormData(form);
+
+        fetch('../php/actualizar_profesor.php', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                alert('Datos actualizados correctamente.');
+                window.location.href = 'allprofessor.html'; // Redirigir a la lista de profesores
+            } else {
+                alert('Error al actualizar los datos: ' + data.error);
+            }
+        })
+        .catch(error => console.error('Error al actualizar:', error));
+    });
+});
+
+    </script>
+
+
+</body>
+</html>

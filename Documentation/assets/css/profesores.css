@@ -1,0 +1,35 @@
+/* Estilo para las tarjetas de profesores */
+.card-profesor {
+    margin-bottom: 20px;
+  }
+  
+  .card-profesor img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+  }
+  
+  .card-profesor .card-body {
+    text-align: center;
+  }
+  
+  .card-profesor .card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  .card-profesor .card-text {
+    font-size: 0.9rem;
+    color: #777;
+  }
+  
+  .card-profesor .btn-info {
+    width: 100%;
+    background-color: #17a2b8;
+    border: none;
+  }
+  
+  .card-profesor .btn-info:hover {
+    background-color: #138496;
+  }
+  

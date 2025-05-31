@@ -1,0 +1,51 @@
+/* Estilos generales para los botones */
+button {
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 14px;
+    font-weight: bold;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+/* Botón de editar */
+#btn-editar {
+    background-color: #4CAF50;
+    color: white;
+    margin-right: 10px;
+}
+
+#btn-editar:hover:not(:disabled) {
+    background-color: #45a049;
+}
+
+#btn-editar:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+#btn-editar:disabled {
+    background-color: #c8e6c9;
+    color: #7cb77e;
+    cursor: not-allowed;
+}
+
+/* Botón de eliminar */
+#btn-eliminar {
+    background-color: #f44336;
+    color: white;
+}
+
+#btn-eliminar:hover:not(:disabled) {
+    background-color: #e53935;
+}
+
+#btn-eliminar:active:not(:disabled) {
+    transform: scale(0.98);
+}
+
+#btn-eliminar:disabled {
+    background-color: #ffebee;
+    color: #ef9a9a;
+    cursor: not-allowed;
+}
