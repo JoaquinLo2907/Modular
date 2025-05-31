@@ -179,19 +179,7 @@
         </li>
         <!-- /Fees End--->
         
-        <!--Departement Start-->
-        <li class="menu-item">
-            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#departement" aria-expanded="false" aria-controls="dashboard">
-               <span><i class="fa fa-building fs-16"></i>Departement</span>
-             </a>
-            <ul id="departement" class="collapse" aria-labelledby="departement" data-parent="#side-nav-accordion">
-              <li> <a href="../departement/departement.html">Departement List</a> </li>
-              <li> <a href="../departement/adddepartement.html">Add Departement</a> </li>
-               
-                 
-            </ul>
-        </li>
-        <!-- /Departemnt End--->
+
        
         <!--Holiday Start-->
         <li class="menu-item">
@@ -510,7 +498,7 @@
         <div class="col-md-12">
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb pl-0">
-              <li class="breadcrumb-item"><a href="#"><i class="material-icons">home</i> Lobby</a></li>
+              <li class="breadcrumb-item"><a href="../../index.php"><i class="material-icons">home</i> Home</a></li>
               <li class="breadcrumb-item active" aria-current="page">Profesores</li>
                 <li class="breadcrumb-item active" aria-current="page">Todos los profesores</li>
             </ol>
@@ -528,8 +516,13 @@
         <a class="fa fa-chevron-down mr-5" data-toggle="dropdown"></a>
         <div class="dropdown-menu">
           <a class="dropdown-item" href="./addprofessor.html">Agregar Docente</a>
-          <a class="dropdown-item" href="#">Imprimir</a>
-          <a class="dropdown-item" href="#">Detalles</a>
+
+          <!-- Exporta el CSV -->
+          <a class="dropdown-item" href="../php/csv-profesores.php">
+            Exportar a (CSV)
+          </a>
+
+          <a class="dropdown-item" href="./aboutprofessor.html">Detalles</a>
         </div>
       </div>
     </div>
@@ -541,14 +534,18 @@
   </div>
 </div>
 
-<!-- Modal para editar docente -->
+
 <!-- Modal para editar profesor -->
 <div class="modal fade" id="modalEditarProfesor" tabindex="-1" role="dialog" aria-labelledby="modalEditarProfesorLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Editar Profesor</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+      <div class="modal-header position-relative">
+        <h2 class="modal-title w-100 text-center m-0">Editar Profesor</h2>
+        <button type="button"
+                class="close position-absolute"
+                style="right:1rem;"
+                data-dismiss="modal"
+                aria-label="Cerrar">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -558,22 +555,22 @@
           <input type="hidden" id="edit-docente-id">
 
           <div class="form-group">
-            <label for="edit-nombre">Nombre</label>
+            <label for="edit-nombre">Nombre:</label>
             <input type="text" class="form-control" id="edit-nombre" required>
           </div>
 
           <div class="form-group">
-            <label for="edit-apellido">Apellido</label>
+            <label for="edit-apellido">Apellido:</label>
             <input type="text" class="form-control" id="edit-apellido" required>
           </div>
 
           <div class="form-group">
-            <label for="edit-telefono">Teléfono</label>
+            <label for="edit-telefono">Teléfono:</label>
             <input type="text" class="form-control" id="edit-telefono" required>
           </div>
 
           <div class="form-group">
-            <label for="edit-correo">Correo</label>
+            <label for="edit-correo">Correo:</label>
             <input type="email" class="form-control" id="edit-correo" required>
           </div>
 
@@ -586,12 +583,12 @@
           </div>
 
           <div class="form-group">
-            <label for="edit-puesto">Puesto</label>
+            <label for="edit-puesto">Puesto:</label>
             <input type="text" class="form-control" id="edit-puesto" required>
           </div>
 
          <div class="form-group">
-          <label for="edit-genero">Género</label>
+          <label for="edit-genero">Género:</label>
           <select id="edit-genero" class="form-control">
             <option value="Masculino">Masculino</option>
             <option value="Femenino">Femenino</option>
