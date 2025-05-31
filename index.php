@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="vendors/iconic-fonts/font-awesome/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="vendors/iconic-fonts/flat-icons/flaticon.css">
-  
+  <link rel="stylesheet" href="vendors/iconic-fonts/flat-icons/flaticon.css">
   <!-- Bootstrap core CSS -->
   <link href="assets/css/bootstrap.min.css" rel="stylesheet">
   <!-- jQuery UI -->
