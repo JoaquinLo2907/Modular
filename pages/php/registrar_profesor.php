@@ -13,28 +13,39 @@ if (!$conexion) {
 // Verificar si el formulario fue enviado correctamente
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Obtener los datos del formulario
-    $nombre = $_POST['nombre'];
-    $apellido = $_POST['apellido'];
-    $correo = $_POST['email'];
-    $password = password_hash($_POST['contraseña'], PASSWORD_BCRYPT); // Encriptar la contraseña
-    $rol = $_POST['rol'];
+    $nombre    = $_POST['nombre'];
+    $apellido  = $_POST['apellido'];
+    $correo    = $_POST['email'];
+    $password1 = $_POST['contraseña'] ?? '';
+    $password2 = $_POST['confirmar_contraseña'] ?? '';
+    $rol       = $_POST['rol'];
+
+    // Validar coincidencia de contraseñas
+    if ($password1 !== $password2) {
+        echo "<script>
+                alert('Las contraseñas no coinciden. Intente nuevamente.');
+                window.history.back();
+              </script>";
+        exit;
+    }
+
+    // Encriptar la contraseña
+    $password = password_hash($password1, PASSWORD_BCRYPT);
 
     // Manejo de imagen
-    $directorio = "../../assets/img/uploads/"; // Carpeta donde se guardarán las imágenes
+    $directorio = "../../assets/img/uploads/";
     $nombreImagen = basename($_FILES["imagen"]["name"]);
     $rutaImagen = $directorio . $nombreImagen;
-    $rutaBD = "assets/img/uploads/" . $nombreImagen; // Ruta relativa para la BD
+    $rutaBD = "assets/img/uploads/" . $nombreImagen;
 
-    // Validar que se haya subido correctamente el archivo
     if ($_FILES["imagen"]["error"] !== UPLOAD_ERR_OK) {
         echo "<script>
-                alert('Error al subir la imagen. Código de error: {$_FILES['imagen']['error']}');
+                alert('Error al subir la imagen. Código: {$_FILES['imagen']['error']}');
                 window.location.href = 'default-register.html';
               </script>";
         exit;
     }
 
-    // Mover la imagen a la carpeta
     if (!move_uploaded_file($_FILES["imagen"]["tmp_name"], $rutaImagen)) {
         echo "<script>
                 alert('Error al guardar la imagen en el servidor.');
@@ -43,21 +54,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
+    // Confirmación visual de imagen (opcional)
     if (file_exists($rutaImagen)) {
-        // Construir la URL completa de la imagen en el servidor
         $urlImagen = "http://localhost/proyecto/assets/img/uploads/" . $nombreImagen;
-    
-        // Usar un script para mostrar el mensaje con el enlace
         echo "<script>
-                alert('Imagen subida correctamente. Verifica aquí: <a href=\"$urlImagen\" target=\"_blank\">$nombreImagen</a>');
-              </script>";
-    } else {
-        echo "<script>
-                alert('Error al subir la imagen.');
+                alert('Imagen subida correctamente: $urlImagen');
               </script>";
     }
-    
-    
 
     // Verificar si el correo ya existe
     $sql_verificar = "SELECT * FROM usuarios WHERE correo = ?";
@@ -71,13 +74,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($resultado->num_rows > 0) {
         echo "<script>
-                alert('El correo ya está registrado. Por favor, use otro correo.');
+                alert('El correo ya está registrado. Use otro correo.');
                 window.location.href = 'default-register.html';
               </script>";
         exit;
     }
 
-    // Insertar en la tabla `usuarios`
+    // Insertar en la tabla usuarios
     $sql_usuario = "INSERT INTO usuarios (nombre_usuario, contraseña, correo, rol) VALUES (?, ?, ?, ?)";
     $stmt_usuario = $conexion->prepare($sql_usuario);
     if (!$stmt_usuario) {
@@ -86,16 +89,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt_usuario->bind_param('sssi', $nombre, $password, $correo, $rol);
 
     if ($stmt_usuario->execute()) {
-        $usuario_id = $stmt_usuario->insert_id; // Obtener el ID del usuario insertado
+        $usuario_id = $stmt_usuario->insert_id;
 
-        // Insertar en la tabla `docentes` si el rol es 1 (Docente)
+        // Si es docente, insertar en docentes
         if ($rol == 1) {
-            $direccion = $_POST['direccion'];
-            $telefono = $_POST['telefono'];
-            $puesto = $_POST['puesto'];
-            $genero = $_POST['genero'];
+            $direccion  = $_POST['direccion'];
+            $telefono   = $_POST['telefono'];
+            $puesto     = $_POST['puesto'];
+            $genero     = $_POST['genero'];
             $nacimiento = $_POST['nacimiento'];
-            $salario = $_POST['salario'];
+            $salario    = $_POST['salario'];
 
             $sql_docente = "INSERT INTO docentes (usuario_id, nombre, apellido, telefono, correo, rol, puesto, genero, fecha_nacimiento, salario, direccion, foto_url) 
                             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -125,7 +128,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
               </script>";
     }
 
-    // Cerrar las conexiones
+    // Cerrar
     $stmt_usuario->close();
     $stmt_verificar->close();
     $conexion->close();

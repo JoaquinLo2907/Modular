@@ -553,6 +553,13 @@
                                   <input type="hidden" name="rol" value="1">
                               </div>
                           </div>
+
+                          <div class="col-lg-6">
+                              <div class="form-group">
+                                  <label for="confirmar_contraseña">Confirmar contraseña:</label>
+                                   <input type="password" class="form-control" id="confirmar_contraseña" name="confirmar_contraseña" placeholder="Repetir contraseña" required>
+                               </div>
+                          </div>
                   
                           <div class="col-lg-6">
                               <div class="form-group">
@@ -1319,6 +1326,19 @@
 
   <!-- Settings -->
   <script src="../../assets/js/settings.js"></script>
+
+  <script>
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+      const pass1 = document.getElementById('contraseña').value;
+      const pass2 = document.getElementById('confirmar_contraseña').value;
+
+      if (pass1 !== pass2) {
+        e.preventDefault();
+        alert('Las contraseñas no coinciden. Por favor, verifique.');
+      }
+    });
+  </script>
+
 
 </body>
 

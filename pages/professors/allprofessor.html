@@ -510,22 +510,36 @@
       <!-- Tabla de docentes -->
 <div class="col-md-12">
   <div class="ms-panel">
-    <div class="ms-panel-header d-flex justify-content-between">
+    <div class="ms-panel-header d-flex justify-content-between align-items-center">
       <h6>Lista de Docentes</h6>
-      <div class="dropdown ms-panel-dropdown">
-        <a class="fa fa-chevron-down mr-5" data-toggle="dropdown"></a>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="./addprofessor.html">Agregar Docente</a>
-
-          <!-- Exporta el CSV -->
-          <a class="dropdown-item" href="../php/csv-profesores.php">
-            Exportar a (CSV)
-          </a>
-
-          <a class="dropdown-item" href="./aboutprofessor.html">Detalles</a>
+      <div>
+        <!-- Dropdown existente -->
+        <div class="dropdown d-inline-block mr-2">
+          <a class="fa fa-chevron-down" data-toggle="dropdown"></a>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="./addprofessor.html">Agregar Docente</a>
+            <a class="dropdown-item" href="../php/csv-profesores.php">Exportar a (CSV)</a>
+            <a class="dropdown-item" href="./aboutprofessor.html">Detalles</a>
+          </div>
         </div>
+
+        <!-- Formulario para importar CSV -->
+        <form action="../php/importar_profesores.php" method="POST" enctype="multipart/form-data" class="d-inline-block">
+          <!-- Input oculto -->
+          <input type="file" id="archivoCSV" name="archivo_csv" accept=".csv" required hidden>
+          
+          <!-- Botón personalizado -->
+          <label for="archivoCSV" class="btn btn-warning btn-sm mb-1">Elegir archivo</label>
+
+          <!-- Mostrar nombre del archivo -->
+          <span id="nombreArchivo" class="text-muted ml-2">Ningún archivo seleccionado</span>
+
+          <!-- Botón de envío -->
+          <button type="submit" class="btn btn-primary btn-sm ml-2">Importar CSV</button>
+        </form>
       </div>
     </div>
+
     <div class="ms-panel-body">
       <ul id="docentes-lista" class="list-group">
         <!-- Lista de docentes se cargará aquí -->
@@ -533,6 +547,7 @@
     </div>
   </div>
 </div>
+
 
 
 <!-- Modal para editar profesor -->
@@ -573,6 +588,17 @@
             <label for="edit-correo">Correo:</label>
             <input type="email" class="form-control" id="edit-correo" required>
           </div>
+
+          <div class="form-group">
+            <label for="edit-password">Nueva Contraseña (opcional):</label>
+            <input type="password" class="form-control" id="edit-password" name="nueva_contraseña" placeholder="Nueva contraseña">
+          </div>
+
+          <div class="form-group">
+            <label for="edit-password2">Confirmar Contraseña:</label>
+            <input type="password" class="form-control" id="edit-password2" name="confirmar_contraseña" placeholder="Confirmar contraseña">
+          </div>
+
 
           <div class="form-group">
             <label for="edit-activo">Activo</label>

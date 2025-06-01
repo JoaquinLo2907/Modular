@@ -150,8 +150,8 @@ function eliminarDocente(id) {
 
 const formEditar = document.getElementById('formEditarProfesor');
 formEditar.addEventListener('submit', function(event) {
-    event.preventDefault(); // Evita el envío del formulario por defecto
-    
+    event.preventDefault();
+
     const id = document.getElementById('edit-docente-id').value;
     const nombre = document.getElementById('edit-nombre').value;
     const apellido = document.getElementById('edit-apellido').value;
@@ -160,49 +160,59 @@ formEditar.addEventListener('submit', function(event) {
     const activo = document.getElementById('edit-activo').value;
     const puesto = document.getElementById('edit-puesto').value;
     const genero = document.getElementById('edit-genero').value;
-    const fechaNacimiento = document.getElementById('edit-fecha-nacimiento').value; // Asegúrate de que aquí se obtiene correctamente
+    const fechaNacimiento = document.getElementById('edit-fecha-nacimiento').value;
     const salario = document.getElementById('edit-salario').value;
     const direccion = document.getElementById('edit-direccion').value;
     const fotoUrl = document.getElementById('edit-foto').value;
 
-    // Verifica si la fecha de nacimiento es válida
+    const nuevaContraseña = document.getElementById('edit-password').value;
+    const confirmarContraseña = document.getElementById('edit-password2').value;
+
     if (!fechaNacimiento) {
         alert("Por favor, ingresa una fecha de nacimiento.");
         return;
     }
 
-    // Realiza la solicitud al servidor
+    if ((nuevaContraseña || confirmarContraseña) && nuevaContraseña !== confirmarContraseña) {
+        alert("Las contraseñas no coinciden.");
+        return;
+    }
+
+    const datos = {
+        id,
+        nombre,
+        apellido,
+        telefono,
+        correo,
+        activo,
+        puesto,
+        genero,
+        fecha_nacimiento: fechaNacimiento,
+        salario,
+        direccion,
+        foto_url: fotoUrl
+    };
+
+    if (nuevaContraseña && confirmarContraseña) {
+        datos.nueva_contraseña = nuevaContraseña;
+        datos.confirmar_contraseña = confirmarContraseña;
+    }
+
     fetch('../php/editar_docentes.php', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            id,
-            nombre,
-            apellido,
-            telefono,
-            correo,
-            activo,
-            puesto,
-            genero,
-            fecha_nacimiento: fechaNacimiento,
-            salario,
-            direccion,
-            foto_url: fotoUrl
-        })
+        body: JSON.stringify(datos)
     })
     .then(response => response.json())
     .then(data => {
         if (data.success) {
             alert("Docente actualizado correctamente.");
-            $('#modalEditarProfesor').modal('hide'); // Cierra el modal después de la actualización
-
-            // Llamamos a la función para volver a cargar la lista de docentes
-            cargarDocentes(); // Esto actualizará la lista de docentes
-
+            $('#modalEditarProfesor').modal('hide');
+            cargarDocentes();
         } else {
-            alert("Hubo un error al actualizar el docente.");
+            alert("Hubo un error al actualizar el docente: " + (data.message || ""));
         }
     })
     .catch(error => {
@@ -211,7 +221,5 @@ formEditar.addEventListener('submit', function(event) {
 });
 
 
-
-
-  cargarDocentes();
+cargarDocentes();
 });
