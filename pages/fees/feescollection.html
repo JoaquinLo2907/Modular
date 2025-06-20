@@ -505,38 +505,64 @@
     </nav>
 
 
-    <!-- Body Content Wrapper -->
-    
-    <!-- Body Content Wrapper -->
-    <div class="ms-content-wrapper">
-      <div class="row">
+<!-- Body Content Wrapper -->
 
-        <div class="col-md-12">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb pl-0">
-              <li class="breadcrumb-item"><a href="#"><i class="material-icons">home</i> Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Fees</li>
-                <li class="breadcrumb-item active" aria-current="page">Fees Collection</li>
-            </ol>
-          </nav>
-        </div>
-          <div class="col-lg-12">
-          <div class="ms-panel">
-            <div class="ms-panel-header">
-              <h6>Fees Table</h6>
-            </div>
-            <div class="ms-panel-body">
-              <div class="table-responsive">
-                <table id="data-table-2" class="table table-striped thead-primary w-100"></table>
-              </div>
-            </div>
-          </div>
-</div>
-          
-          
-          
-        </div>
+<div class="ms-content-wrapper">
+  <div class="container-fluid px-5 py-4"> <!-- Margen horizontal y vertical ampliado -->
+    <div class="card shadow-sm">
+      <div class="card-body">
+    <table id="tabla-fees" class="table table-striped thead-primary w-100">
+<thead>
+  <tr>
+    <th>ID</th>
+    <th>Estudiante</th>
+    <th>Grado</th>
+    <th>Grupo</th>
+    <th>Monto</th>
+    <th>Fecha de Pago</th>
+    <th>Fecha de Vencimiento</th>
+    <th>Estado</th>
+    <th>Creado</th>
+    <th>Actualizado</th>
+    <th>Acciones</th> <!-- esta columna faltaba -->
+  </tr>
+  <tr>
+    <th><input type="text" placeholder="Buscar ID" class="form-control form-control-sm"></th>
+    <th><input type="text" placeholder="Estudiante" class="form-control form-control-sm"></th>
+    <th><input type="text" placeholder="Grado" class="form-control form-control-sm"></th>
+    <th><input type="text" placeholder="Grupo" class="form-control form-control-sm"></th>
+    <th><input type="text" placeholder="Monto" class="form-control form-control-sm"></th>
+    <th><input type="text" placeholder="Fecha pago" class="form-control form-control-sm"></th>
+    <th><input type="text" placeholder="Vencimiento" class="form-control form-control-sm"></th>
+    <th>
+      <select class="form-control form-control-sm">
+        <option value="">Todos</option>
+        <option value="pagado">Pagado</option>
+        <option value="pendiente">Pendiente</option>
+      </select>
+    </th>
+    <th><input type="text" placeholder="Creado" class="form-control form-control-sm"></th>
+    <th><input type="text" placeholder="Actualizado" class="form-control form-control-sm"></th>
+    <th></th> <!-- esta es la celda vacía para "Acciones" -->
+  </tr>
+</thead>
+
+
+
+  <tbody></tbody>
+</table>
+
+
       </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
 
   </main>
 
@@ -1213,28 +1239,56 @@
   </div>
 
   <!-- SCRIPTS -->
-  <!-- Global Required Scripts Start -->
-  <script src="../../assets/js/jquery-3.3.1.min.js"></script>
-  <script src="../../assets/js/popper.min.js"></script>
-  <script src="../../assets/js/bootstrap.min.js"></script>
-  <script src="../../assets/js/perfect-scrollbar.js"> </script>
-  <script src="../../assets/js/jquery-ui.min.js"> </script>
-  <!-- Global Required Scripts End -->
+<!-- jQuery (debe ir solo una vez y antes de DataTables) -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- Page Specific Scripts Start -->
-  <script src="../../assets/js/slick.min.js"> </script>
-  <script src="../../assets/js/moment.js"> </script>
-  <script src="../../assets/js/jquery.webticker.min.js"> </script>
-  
-     <script src="../../assets/js/datatables.min.js"> </script>
-  <script src="../../assets/js/data-tables.js"> </script>
-  <!-- Page Specific Scripts Finish -->
+<!-- Bootstrap y dependencias -->
+<script src="../../assets/js/popper.min.js"></script>
+<script src="../../assets/js/bootstrap.min.js"></script>
+<script src="../../assets/js/jquery-ui.min.js"></script>
+<script src="../../assets/js/perfect-scrollbar.js"></script>
+<script src="../../assets/js/slick.min.js"></script>
+<script src="../../assets/js/moment.js"></script>
+<script src="../../assets/js/jquery.webticker.min.js"></script>
 
-  <!-- Weeducate core JavaScript -->
-  <script src="../../assets/js/framework.js"></script>
+<!-- DataTables CSS y JS (versión Bootstrap 4) -->
+<link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/dataTables.bootstrap4.min.css">
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
 
-  <!-- Settings -->
-  <script src="../../assets/js/settings.js"></script>
+<!-- Framework del template -->
+<script src="../../assets/js/framework.js"></script>
+<script src="../../assets/js/settings.js"></script>
+
+<!-- Script personalizado para cargar pagos -->
+<script src="../../pages/scripts/feescollection.js"></script>
+
+
+<!-- Modal Cambiar Estado -->
+<div class="modal fade" id="modalActualizarEstado" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="modalLabel">Actualizar Estado de Pago</h5>
+        <button type="button" class="close text-white" data-dismiss="modal">&times;</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="modal-pago-id">
+        <div class="form-group">
+          <label for="modal-estado">Estado</label>
+          <select class="form-control" id="modal-estado">
+            <option value="pagado">Pagado</option>
+            <option value="pendiente">Pendiente</option>
+          </select>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="btnGuardarEstado" class="btn btn-success">Guardar Cambios</button>
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 </body>
 
