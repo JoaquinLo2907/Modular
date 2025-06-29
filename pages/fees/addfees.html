@@ -503,131 +503,181 @@
 
     <!-- Body Content Wrapper -->
     
-    <!-- Body Content Wrapper -->
-    <div class="ms-content-wrapper">
-      <div class="row">
+<!-- Body Content Wrapper -->
+<div class="ms-content-wrapper">
+  <div class="row">
 
-        <div class="col-md-12">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb pl-0">
-              <li class="breadcrumb-item"><a href="#"><i class="material-icons">home</i> Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Fees</li>
-                <li class="breadcrumb-item active" aria-current="page">Fees Add</li>
-            </ol>
-          </nav>
+    <!-- Breadcrumb -->
+    <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb pl-0">
+          <li class="breadcrumb-item"><a href="#"><i class="material-icons">home</i> Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Fees</li>
+          <li class="breadcrumb-item active" aria-current="page">Add Fees</li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- Pagos Masivos -->
+    <div class="col-lg-12">
+      <div class="ms-panel">
+        <div class="ms-panel-header">
+          <h6>Agregar Pagos Masivos por Grado y Grupo</h6>
         </div>
-          
-            <div class="col-lg-12">
-          <div class="ms-panel">
-            <div class="ms-panel-header">
-              <h6>Student Add</h6>
-            </div>
-            <div class="ms-panel-body">
-              <form>
-                  <div class="row">
-                  <div class="col-lg-6">
-                  <div class="form-group">
-                  <label for="name">Roll No</label>
-                  <input type="text" class="form-control" id="exampleEmail" placeholder="Roll No">
-                </div>
-                  </div>
-                  <div class="col-lg-6">
-                  <div class="form-group">
-                  <label for="name">Student Name</label>
-                  <input type="text" class="form-control" id="exampleEmail" placeholder="Student name">
-                </div>
-                  </div>
-                  <div class="col-lg-6">
-                 <div class="form-group">
-                  <label for="name">Departement/Class</label>
-                  <select class="form-control" id="exampleSelect">
-                    <option value="male">Meachnical</option>
-                    <option value="female">Computer</option>
-                    <option value="male">Electronic</option>
-                    <option value="female">Electrical</option>
-                    <option value="male">Civil</option>
-                    <option value="female">Architecture</option>
-                    
-                  </select>
-                </div>
-                  </div>
-                      <div class="col-lg-6">
-                   <div class="form-group">
-                  <label for="name">Fees Type</label>
-                  <select class="form-control" id="exampleSelect">
-                    <option value="annual">Annual</option>
-                    <option value="tution">Tution</option>
-                    <option value="exam">Exams</option>
-                    <option value="transport">Transport</option>
-                    <option value="other">Others</option>
-                    
-                  </select>
-                </div>
-                  </div>
-                  <div class="col-lg-6">
+        <div class="ms-panel-body">
+          <form method="POST" action="../../pages/php/agregar_pago_masivo.php">
+            <div class="row">
+              <div class="col-lg-6">
                 <div class="form-group">
-                  <label for="examplePassword">Fees Semester</label>
-               <select class="form-control" id="exampleSelect">
-                    <option value="annual">Monthly</option>
-                    <option value="tution">Yearly</option>
-                    <option value="exam">Session</option>
-                    
+                  <label for="grado">Grado</label>
+                  <select class="form-control" name="grado" id="grado" required>
+                    <option value="">Seleccione un grado</option>
+                    <!-- Puedes llenar dinámicamente si lo prefieres -->
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
                   </select>
-                    
                 </div>
-                  </div>
-                  <div class="col-lg-6">
-                  <div class="form-group">
-                  <label for="examplePassword">Collection Date</label>
-                  <input type="date" class="form-control" id="examplePassword" placeholder="Confirm Password">
-                </div>
-                  </div>
-                      <div class="col-lg-6">
-               <div class="form-group">
-                  <label for="name">Payement Type</label>
-                  
-                <select class="form-control" id="exampleSelect">
-                    <option value="cash">Cash</option>
-                    <option value="cheque">Cheque</option>
-                    <option value="online Transfer">Online Transfer</option>
-                    <option value="draft">Draft</option>
-                    
-                  </select>          
-                          
-                          </div>
-                      </div>
-                      <div class="col-lg-6">
-               <div class="form-group">
-                  <label for="name">Payement Reference Number</label>
-                  <input type="text" class="form-control" placeholder="Payement References Number">
-                </div>
-                      </div>
-                       
-                       <div class="col-lg-12">
-                  <div class="form-group">
-                  <label for="name">Amount</label>
-                  <input type="text" class="form-control" id="exampleEmail" placeholder="Amount">
-                </div>
-                      </div>
-                                            
-                       
-                       <div class="col-lg-12">
+              </div>
+
+              <div class="col-lg-6">
                 <div class="form-group">
-                  <label for="exampleTextarea">Amount Details</label>
-                  <textarea class="form-control" id="exampleTextarea" rows="5"></textarea>
+                  <label for="grupo">Grupo</label>
+                  <select class="form-control" name="grupo" id="grupo" required>
+                    <option value="">Seleccione un grupo</option>
+                    <option value="A">A</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                  </select>
                 </div>
-                  </div>
-                  </div>
-              </form>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="monto">Monto</label>
+                  <input type="number" class="form-control" name="monto" step="0.01" placeholder="Cantidad en MXN" required>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="fecha_pago">Fecha de Pago</label>
+                  <input type="date" class="form-control" name="fecha_pago" required>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="fecha_vencimiento">Fecha de Vencimiento</label>
+                  <input type="date" class="form-control" name="fecha_vencimiento" required>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="estado">Estado del Pago</label>
+                  <select name="estado" class="form-control" required>
+                    <option value="pagado">Pagado</option>
+                    <option value="pendiente">Pendiente</option>
+                  </select>
+                </div>
+              </div>
             </div>
-              <center><button type="button" class="btn btn-warning mb-5">Submit</button>
-                  <button type="button" class="btn btn-outline-warning mb-5 ml-3">Cancel</button></center>
-          </div>
-              
-      </div>
-          
+
+            <div class="text-center">
+              <button type="submit" class="btn btn-warning mb-4">Asignar Pagos</button>
+              <button type="reset" class="btn btn-outline-secondary mb-4 ml-2">Cancelar</button>
+            </div>
+          </form>
         </div>
       </div>
+    </div>
+
+    <!-- Pago Individual -->
+    <div class="col-lg-12">
+      <div class="ms-panel">
+        <div class="ms-panel-header">
+          <h6>Agregar Pago Individual</h6>
+        </div>
+        <div class="ms-panel-body">
+          <form method="POST" action="../../pages/php/agregar_pago.php">
+            <div class="row">
+
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <label for="estudiante_id">Seleccionar Estudiante</label>
+                  <select class="form-control" name="estudiante_id" id="estudianteSelect" required>
+                    <option value="" disabled selected>Selecciona un estudiante</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="monto">Monto</label>
+                  <input type="number" class="form-control" name="monto" step="0.01" placeholder="Cantidad en MXN" required>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="fecha_pago">Fecha de Pago</label>
+                  <input type="date" class="form-control" name="fecha_pago" required>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="fecha_vencimiento">Fecha de Vencimiento</label>
+                  <input type="date" class="form-control" name="fecha_vencimiento" required>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="form-group">
+                  <label for="estado">Estado del Pago</label>
+                  <select name="estado" class="form-control" required>
+                    <option value="pagado">Pagado</option>
+                    <option value="pendiente">Pendiente</option>
+                  </select>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="text-center">
+              <button type="submit" class="btn btn-warning mb-4">Guardar Pago</button>
+              <button type="reset" class="btn btn-outline-secondary mb-4 ml-2">Cancelar</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+<div id="toastSuccess" style="position: fixed; top: 20px; right: 20px; z-index: 9999; display: none;" class="alert alert-success shadow">
+  ✅ Pago agregado con éxito.
+</div>
+
+<script src="../../pages/scripts/cargarEstudiantesSelect.js"></script>
+<script src="../../pages/scripts/cargarGradoGrupo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../../pages/scripts/addfees.js"></script>
+
+
+
+
+
 
   </main>
 
