@@ -1,16 +1,23 @@
 <?php
-header('Content-Type: application/json');
-include 'conecta.php';
+header('Content-Type: application/json; charset=utf-8');
+// Esto garantiza que PHP busque conecta.php en el mismo directorio que este script
+require_once __DIR__ . '/conecta.php';
 $con = conecta();
 
-$sql = "SELECT tutor_id, nombre, apellido FROM tutores WHERE activo = 1";
-$result = $con->query($sql);
-
-$tutores = [];
-while ($row = $result->fetch_assoc()) {
-    $tutores[] = $row;
+if (!$con) {
+    http_response_code(500);
+    echo json_encode(['error' => 'No se pudo conectar a la base de datos']);
+    exit;
 }
 
-echo json_encode($tutores);
+$sql = "SELECT tutor_id, nombre, apellido FROM tutores WHERE activo = 1";
+if ($result = $con->query($sql)) {
+    // fetch_all está disponible en mysqli para sacar todo en un array
+    $tutores = $result->fetch_all(MYSQLI_ASSOC);
+    echo json_encode($tutores);
+} else {
+    http_response_code(500);
+    echo json_encode(['error' => 'Error en la consulta: '.$con->error]);
+}
+
 $con->close();
-?>

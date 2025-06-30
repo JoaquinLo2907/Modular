@@ -7,7 +7,12 @@ header('Content-Type: application/json');
 if (isset($_GET['id'])) {
     $id = $_GET['id'];
 
-    $stmt = $con->prepare("SELECT estudiante_id, nombre, apellido, fecha_nacimiento, grado, grupo FROM estudiantes WHERE estudiante_id = ? AND activo = 1");
+    $stmt = $con->prepare("
+        SELECT estudiante_id, nombre, apellido, fecha_nacimiento, grado, grupo, tutor_id 
+        FROM estudiantes 
+        WHERE estudiante_id = ? AND activo = 1
+    ");
+
     $stmt->bind_param("i", $id);
     $stmt->execute();
     $resultado = $stmt->get_result();
