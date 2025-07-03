@@ -15,7 +15,7 @@ function cargarDocentes() {
             contenedor.innerHTML = ""; // Limpiamos el contenedor por si acaso
 
             // Ruta base de tus imágenes en el servidor local
-            const rutaBase = 'http://localhost/dashboard/Proyecto/';
+           const rutaBase = 'http://localhost/dashboard/Modular/';
 
             // Recorremos cada docente y generamos las tarjetas
             data.forEach(docente => {

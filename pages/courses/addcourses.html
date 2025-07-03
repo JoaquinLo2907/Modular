@@ -20,6 +20,8 @@
   <link href="../../assets/css/slick.css" rel="stylesheet">
   <!-- Weeducate styles -->
   <link href="../../assets/css/style.css" rel="stylesheet">
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   <!-- Favicon -->
    <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/weicon/weicon.ico">
 
@@ -90,7 +92,7 @@
 
     <!-- Logo -->
     <div class="logo-sn ms-d-block-lg">
-      <a class="pl-0 ml-0 text-center" href="../../index.html"> <img src="../../assets/img/logo/weeducate-4.png" alt="logo">  </a>
+      <a class="pl-0 ml-0 text-center" href="../../index.php"> <img src="../../assets/img/logo/weeducate-4.png" alt="logo">  </a>
     </div>
 
     <!-- Navigation -->
@@ -101,7 +103,7 @@
                <span><i class="material-icons fs-16">dashboard</i>Dashboard </span>
              </a>
             <ul id="dashboard" class="collapse" aria-labelledby="dashboard" data-parent="#side-nav-accordion">
-              <li> <a href="../../index.html">Weeducate</a> </li>
+              <li> <a href="../../index.php">Weeducate</a> </li>
               
             </ul>
         </li>
@@ -499,8 +501,8 @@
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb pl-0">
               <li class="breadcrumb-item"><a href="../../index.php"><i class="material-icons">home</i> Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Courses</li>
-                <li class="breadcrumb-item active" aria-current="page">Add Courses</li>
+              <li class="breadcrumb-item active" aria-current="page">Materias</li>
+                <li class="breadcrumb-item active" aria-current="page">Añadir Materias</li>
             </ol>
           </nav>
         </div>
@@ -512,7 +514,7 @@
 <div class="col-lg-12">
   <div class="ms-panel">
     <div class="ms-panel-header">
-      <h6>Agregar Materia</h6>
+      <h6>Agregar Nueva Materia</h6>
     </div>
     <div class="ms-panel-body">
       <!-- Formulario de agregar materia -->
@@ -520,33 +522,32 @@
         <div class="row">
           <div class="col-lg-6">
             <div class="form-group">
-              <label for="nombre">Nombre de la materia</label>
-              <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Nombre de la materia" required>
+              <label for="nombre">Nombre de la materia: </label>
+              <input type="text" class="form-control" name="nombre" id="nombre" placeholder="Ej. español" required>
             </div>
           </div>
       
           <div class="col-lg-6">
             <div class="form-group">
-              <label for="nivel_grado">Nivel de Grado</label>
+              <label for="nivel_grado">Nivel de Grado: </label>
               <select class="form-control" name="nivel_grado" id="nivel_grado" required>
-                <option value="Bachillerato">Bachillerato</option>
-                <option value="Licenciatura">Licenciatura</option>
-                <option value="Posgrado">Posgrado</option>
+                <option value="primaria">Primaria </option>
+                <option value="secundaria">Secundaria </option>
               </select>
             </div>
           </div>
       
           <div class="col-lg-12">
             <div class="form-group">
-              <label for="descripcion">Detalles de la materia</label>
-              <textarea class="form-control" name="descripcion" id="descripcion" rows="5" placeholder="Detalles sobre la materia" required></textarea>
+              <label for="descripcion">Detalles de la materia: </label>
+              <textarea class="form-control" name="descripcion" id="descripcion" rows="5" placeholder="Ej. Materia para primaria etc." required></textarea>
             </div>
           </div>
       
           <div class="col-lg-6">
             <div class="form-group">
-              <label for="foto">Foto de la materia</label>
-              <input type="file" class="form-control" name="foto" id="foto" accept="image/*">
+              <label for="imagen_materia">Imagen ilustrativa: </label>
+              <input type="file" class="form-control" name="foto" id="imagenMateria" accept="image/*">
             </div>
           </div>
         </div>
@@ -557,6 +558,7 @@
         </div>
       </form>
       
+<script src="../scripts/animacionAgregarMateria.js"></script>
 
         
   </main>

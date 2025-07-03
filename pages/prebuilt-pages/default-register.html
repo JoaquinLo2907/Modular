@@ -2,15 +2,13 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Registro - Weeducate Parents</title>
-  
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
-  
+
   <style>
     body {
       font-family: 'Poppins', sans-serif;
@@ -22,177 +20,170 @@
       height: 100vh;
       position: relative;
     }
-
     body::before {
       content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.4);
+      position: absolute; top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0,0,0,0.4);
       backdrop-filter: blur(3px);
     }
-
     .registro-container {
       background: rgba(255, 255, 255, 0.9);
       padding: 2.5rem;
       border-radius: 12px;
-      box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      max-width: 500px;
+      box-shadow: 0px 5px 15px rgba(0,0,0,0.2);
+      width: 100%; max-width: 500px;
+      position: relative; z-index: 2;
       text-align: center;
-      position: relative;
-      z-index: 2;
     }
-
-    .form-control {
-      border-radius: 8px;
-      height: 45px;
-      border: 1px solid #d1d1d1;
-    }
-
+    .form-control { border-radius: 8px; height: 45px; border: 1px solid #d1d1d1; }
     .btn-primary {
-      background-color: #4A90E2;
-      border: none;
-      border-radius: 8px;
-      transition: 0.3s ease;
+      background-color: #4A90E2; border: none; border-radius: 8px; transition: .3s;
     }
-
-    .btn-primary:hover {
-      background-color: #357ABD;
-      transform: scale(1.03);
-    }
-
-    .login-link {
-      color: #4A90E2;
-      font-weight: 500;
-      transition: 0.3s ease;
-    }
-
-    .login-link:hover {
-      text-decoration: underline;
-    }
-
-    .logo {
-      width: 60px;
-      height: auto;
-    }
-
-    .btn-regresar {
-      background-color: #6c757d;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      transition: 0.3s ease;
-    }
-
-    .btn-regresar:hover {
-      background-color: #5a6268;
-      transform: scale(1.03);
-    }
-
-    /* Ajuste para centrar los campos de nombre y apellido */
-    .form-row {
-      display: flex;
-      justify-content: space-between;
-      gap: 15px; /* Espacio entre los campos */
-    }
-
-    .form-row .col-md-6 {
-      flex: 1; /* Hace que ambos campos ocupen el mismo espacio */
-    }
-
-    /* Ajustes para los campos dinámicos */
-    #campos-extra .form-row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin-bottom: 1rem;
-    }
-
-    #campos-extra .col-md-6 {
-      flex: 1 1 calc(50% - 15px);
-      min-width: 200px;
-    }
-
-    #campos-extra textarea.form-control {
-      min-height: 25px;
-    }
-
-    #campos-extra select.form-control {
-      height: 45px;
-    }
-
-    #campos-extra input[type="date"],
-    #campos-extra input[type="number"] {
-      height: 45px;
-    }
-
-    #campos-extra .form-label {
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
+    .btn-primary:hover { background-color: #357ABD; transform: scale(1.03); }
+    .btn-secondary { background-color: #6c757d; color: #fff; border: none; border-radius: 8px; transition: .3s; }
+    .btn-secondary:hover { background-color: #5a6268; transform: scale(1.03); }
   </style>
-  
 </head>
 <body>
   <div class="registro-container">
-    <img src="https://cdn-icons-png.flaticon.com/512/833/833472.png" alt="Weeducate Logo" class="logo mb-3">
+    <img
+      src="../../assets/img/LogoSchoolCare.png"
+      alt="SchoolCare Logo"
+      class="img-fluid mb-3"
+      style="max-width: 150px; width: 100%; height: auto;"
+    >
+
     <h3 class="mb-3 fw-bold">Crear Cuenta</h3>
-    <p class="text-muted">Ingrese su información personal para continuar</p>
-    
-    <form id="registerForm" action="../php/register.php" method="POST">
-      <!-- Campos de Nombre y Apellido -->
-      <div class="form-row mb-3">
+    <p class="text-muted">Llene el siguiente formulario para crear su nueva cuenta.</p>
+
+    <form id="registerForm" action="../php/register.php" method="POST" novalidate>
+      <!-- Nombre y Apellido -->
+      <div class="row mb-3">
         <div class="col-md-6">
           <label for="nombre" class="form-label fw-semibold">Nombre</label>
-          <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
+          <input
+            type="text"
+            class="form-control"
+            id="nombre"
+            name="nombre"
+            placeholder="Ingrese su Nombre"
+            required
+          >
         </div>
         <div class="col-md-6">
           <label for="apellido" class="form-label fw-semibold">Apellido</label>
-          <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" required>
+          <input
+            type="text"
+            class="form-control"
+            id="apellido"
+            name="apellido"
+            placeholder="Ingrese su Apellido"
+            required
+          >
         </div>
       </div>
 
-      <!-- Campo de Correo Electrónico -->
+      <!-- Correo Electrónico -->
       <div class="mb-3">
         <label for="email" class="form-label fw-semibold">Correo Electrónico</label>
-        <input type="email" class="form-control" id="email" name="email" placeholder="Correo Electrónico" required>
+        <input
+          type="email"
+          class="form-control"
+          id="email"
+          name="email"
+          placeholder="Ingresa tu correo"
+          required
+        >
       </div>
-      
-      <!-- Campo de Contraseña -->
+
+      <!-- Contraseña -->
       <div class="mb-3">
         <label for="password" class="form-label fw-semibold">Contraseña</label>
-        <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña" required>
+        <input
+          type="password"
+          class="form-control"
+          id="password"
+          name="password"
+          placeholder="Ingresa tu Contraseña"
+          required
+        >
       </div>
 
-      <!-- Campo de Rol (oculto, siempre será Tutor) -->
-      <input type="hidden" id="rol" name="rol" value="2"> <!-- Valor 2 para Tutor -->
-
-      <!-- Campos adicionales dinámicos -->
-      <div id="campos-extra">
-        <!-- Campos adicionales para Tutor -->
-        <div class="form-row">
-          <div class="col-md-6">
-            <label for="telefono" class="form-label fw-semibold">Número de Teléfono</label>
-            <input type="text" class="form-control" id="telefono" name="telefono" required>
-          </div>
-
-          <div class="col-md-6">
-            <label for="direccion" class="form-label fw-semibold">Dirección</label>
-            <textarea class="form-control" id="direccion" name="direccion" rows="2" required></textarea>
-          </div>
+      <!-- Confirmar Contraseña con placeholder intacto -->
+      <div class="mb-3">
+        <label for="confirmPassword" class="form-label fw-semibold">Confirmar Contraseña</label>
+        <input
+          type="password"
+          class="form-control"
+          id="confirmPassword"
+          name="confirmPassword"
+          placeholder="Confirma tu Contraseña"
+          required
+        >
+        <div class="invalid-feedback">
+          Las contraseñas no coinciden.
         </div>
       </div>
-      
+
+      <!-- Rol oculto -->
+      <input type="hidden" id="rol" name="rol" value="2">
+
+      <!-- Campos extra -->
+      <div id="campos-extra" class="row mb-4">
+        <div class="col-md-6">
+          <label for="telefono" class="form-label fw-semibold">Número de Teléfono</label>
+          <input
+            type="text"
+            class="form-control"
+            id="telefono"
+            name="telefono"
+            placeholder="#"
+            required
+          >
+        </div>
+        <div class="col-md-6">
+          <label for="direccion" class="form-label fw-semibold">Dirección</label>
+          <textarea
+            class="form-control"
+            id="direccion"
+            name="direccion"
+            rows="2"
+            placeholder="#"
+            required
+          ></textarea>
+        </div>
+      </div>
+
       <!-- Botones -->
-      <button class="btn btn-primary w-100 mt-4" type="submit">Registrar</button>
-      <button type="button" class="btn btn-regresar mt-2 w-100" onclick="window.location.href='default-login.html'">Regresar</button>
+      <button class="btn btn-primary w-100" type="submit">Registrar</button>
+      <button
+        type="button"
+        class="btn btn-secondary w-100 mt-2"
+        onclick="location.href='default-login.html'"
+      >
+        Regresar
+      </button>
     </form>
   </div>
-  
-  <!-- Bootstrap JS -->
+
+  <!-- Bootstrap JS + validación -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    (function() {
+      const form = document.getElementById('registerForm');
+      const pwd  = document.getElementById('password');
+      const pwd2 = document.getElementById('confirmPassword');
+
+      form.addEventListener('submit', function(e) {
+        pwd2.classList.remove('is-invalid');
+        if (pwd.value !== pwd2.value) {
+          e.preventDefault();
+          pwd2.classList.add('is-invalid');
+          pwd2.focus();
+        }
+      });
+    })();
+  </script>
 </body>
 </html>

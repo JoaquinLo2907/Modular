@@ -1,225 +1,141 @@
+// assets/js/cargarDocentes.js
+
 document.addEventListener('DOMContentLoaded', function () {
+
+  // 1) Carga la lista de docentes
   function cargarDocentes() {
     fetch('../php/obtener_profesores.php')
-      .then(response => response.json())
+      .then(res => res.json())
       .then(data => {
-        const listaDocentes = document.getElementById('docentes-lista');
-        listaDocentes.innerHTML = '';
+        const lista = document.getElementById('docentes-lista');
+        lista.innerHTML = '';
+        if (!Array.isArray(data)) return console.error('Datos inválidos');
 
-        if (!Array.isArray(data)) {
-          console.error('Los datos recibidos no son un arreglo válido');
-          return;
-        }
-
-        data.forEach(docente => {
+        data.forEach(d => {
           const li = document.createElement('li');
-          li.classList.add('list-group-item', 'd-flex', 'justify-content-between', 'align-items-center');
-
+          li.className = 'list-group-item d-flex justify-content-between align-items-center';
           li.innerHTML = `
-  <div class="d-flex justify-content-between align-items-center flex-wrap w-100">
-    <div class="d-flex align-items-center flex-grow-1">
-      <i class="fa fa-user-circle fa-2x text-primary mr-3"></i>
-      <div>
-        <strong>${docente.nombre} ${docente.apellido}</strong> &nbsp;
-        <small class="text-muted">(${docente.puesto})</small><br>
-        <span class="text-muted">
-          <i class="fa fa-envelope"></i> ${docente.correo} &nbsp;|&nbsp;
-          <i class="fa fa-phone"></i> ${docente.telefono} &nbsp;|&nbsp;
-          <strong>$${docente.salario}</strong>
-        </span><br>
-        <span class="text-muted">
-          <i class="fa fa-map-marker-alt"></i> ${docente.direccion} &nbsp;|&nbsp;
-          <i class="fa fa-birthday-cake"></i> ${docente.fecha_nacimiento}
-        </span>
-      </div>
-    </div>
-    <div class="text-right mt-2 mt-md-0">
-      <button class="btn btn-sm btn-outline-warning btn-editar" data-id="${docente.docente_id}">
-        <i class="fa fa-edit"></i> Editar
-      </button>
-      <button class="btn btn-sm btn-outline-danger btn-eliminar" data-id="${docente.docente_id}">
-        <i class="fa fa-trash"></i> Eliminar
-      </button>
-    </div>
-  </div>
-`;
-
-
-
-          listaDocentes.appendChild(li);
+            <div class="d-flex justify-content-between align-items-center flex-wrap w-100">
+              <div class="d-flex align-items-center flex-grow-1">
+                <i class="fa fa-user-circle fa-2x text-primary mr-3"></i>
+                <div>
+                  <strong>${d.nombre} ${d.apellido}</strong> &nbsp;
+                  <small class="text-muted">(${d.puesto})</small><br>
+                  <span class="text-muted">
+                    <i class="fa fa-envelope"></i> ${d.correo} &nbsp;|&nbsp;
+                    <i class="fa fa-phone"></i> ${d.telefono} &nbsp;|&nbsp;
+                    <strong>$${d.salario}</strong>
+                  </span><br>
+                  <span class="text-muted">
+                    <i class="fa fa-map-marker-alt"></i> ${d.direccion} &nbsp;|&nbsp;
+                    <i class="fa fa-birthday-cake"></i> ${formatDate(d.fecha_nacimiento)}
+                  </span>
+                </div>
+              </div>
+              <div class="text-right mt-2 mt-md-0">
+                <button class="btn btn-sm btn-outline-warning btn-editar" data-id="${d.docente_id}">
+                  <i class="fa fa-edit"></i> Editar
+                </button>
+                <button class="btn btn-sm btn-outline-danger btn-eliminar" data-id="${d.docente_id}">
+                  <i class="fa fa-trash"></i> Eliminar
+                </button>
+              </div>
+            </div>`;
+          lista.appendChild(li);
         });
 
-        document.querySelectorAll('.btn-editar').forEach(btn => {
-          btn.addEventListener('click', function () {
-            const id = this.dataset.id;
-            editarDocente(id);
-          });
-        });
-
-        document.querySelectorAll('.btn-eliminar').forEach(btn => {
-          btn.addEventListener('click', function () {
-            const id = this.dataset.id;
-            eliminarDocente(id);
-          });
-        });
+        document.querySelectorAll('.btn-editar').forEach(btn =>
+          btn.addEventListener('click', () => editarDocente(btn.dataset.id))
+        );
+        document.querySelectorAll('.btn-eliminar').forEach(btn =>
+          btn.addEventListener('click', () => eliminarDocente(btn.dataset.id))
+        );
       })
-      .catch(error => {
-        console.error('Error al cargar los docentes:', error);
-      });
+      .catch(err => console.error('Error al cargar los docentes:', err));
   }
 
-function formatDate(dateString) {
-  const date = new Date(dateString);
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, '0'); // Los meses son 0-indexados, así que sumamos 1
-  const day = String(date.getDate()).padStart(2, '0');
+  // 2) Formatea fecha a YYYY-MM-DD
+  function formatDate(dateString) {
+    const d = new Date(dateString);
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  }
 
-  return `${year}-${month}-${day}`;
-}
+  // 3) Mostrar modal con datos (sin tocar el file-input)
+  function editarDocente(id) {
+    fetch(`../php/profesorId.php?id=${id}`)
+      .then(res => res.json())
+      .then(data => {
+        if (!data) return console.error('No llegan datos');
 
+        document.getElementById('edit-docente-id').value        = data.docente_id;
+        document.getElementById('edit-nombre').value           = data.nombre;
+        document.getElementById('edit-apellido').value         = data.apellido;
+        document.getElementById('edit-telefono').value         = data.telefono;
+        document.getElementById('edit-correo').value           = data.correo;
+        document.getElementById('edit-activo').value           = data.activo;
+        document.getElementById('edit-puesto').value           = data.puesto;
+        document.getElementById('edit-genero').value           = data.genero;
+        document.getElementById('edit-fecha-nacimiento').value = formatDate(data.fecha_nacimiento);
+        document.getElementById('edit-salario').value          = data.salario;
+        document.getElementById('edit-direccion').value        = data.direccion;
 
-  
-function editarDocente(id) {
-  fetch(`../php/profesorId.php?id=${id}`)
-    .then(response => response.json())
-    .then(data => {
-      if (data) {
-        console.log("Fecha de nacimiento recibida:", data.fecha_nacimiento); // Verifica la fecha recibida
+        // SOLO así mostramos la imagen existente, en un <img id="preview-foto">
+        const preview = document.getElementById('preview-foto');
+        if (preview) preview.src = data.foto_url;
 
-        // ✅ Define la variable antes de usarla
-        const fechaNacimiento = data.fecha_nacimiento;
-        console.log("Fecha a enviar:", fechaNacimiento);
+        // **NO** toques nunca el input file: 
+        //—> document.getElementById('edit-foto').value = ...
 
-        // Rellenamos todos los campos del formulario
-        document.getElementById('edit-docente-id').value = data.docente_id;
-        document.getElementById('edit-nombre').value = data.nombre;
-        document.getElementById('edit-apellido').value = data.apellido;
-        document.getElementById('edit-telefono').value = data.telefono;
-        document.getElementById('edit-correo').value = data.correo;
-        document.getElementById('edit-activo').value = data.activo;
-        document.getElementById('edit-puesto').value = data.puesto;
-        document.getElementById('edit-genero').value = data.genero;
-
-        document.getElementById('edit-fecha-nacimiento').value = fechaNacimiento;
-
-        document.getElementById('edit-salario').value = data.salario;
-        document.getElementById('edit-direccion').value = data.direccion;
-        document.getElementById('edit-foto').value = data.foto_url;
-        document.getElementById('edit-creado-en').value = data.creado_en;
-        document.getElementById('edit-actualizado-en').value = data.actualizado_en;
-
-        // Mostrar el modal
         $('#modalEditarProfesor').modal('show');
-      }
-    })
-    .catch(error => {
-      console.error('Error al obtener los datos del docente:', error);
-    });
-}
+      })
+      .catch(err => console.error('Error al obtener los datos del docente:', err));
+  }
 
-
-
-
-
-function eliminarDocente(id) {
-  if (confirm("¿Estás seguro de eliminar este docente?")) {
+  // 4) Eliminar docente
+  function eliminarDocente(id) {
+    if (!confirm('¿Seguro de eliminar?')) return;
     fetch('../php/eliminar_docentes.php', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ id: id }) // enviamos solo un ID individual
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ id })
     })
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        alert("Docente eliminado (lógicamente) con éxito.");
-        cargarDocentes(); // vuelve a cargar la lista
+    .then(r => r.json())
+    .then(resp => {
+      if (resp.success) {
+        alert('Docente eliminado.');
+        cargarDocentes();
       } else {
-        alert("Error al eliminar: " + (data.message || "Desconocido."));
-        
+        alert('Error al eliminar: '+(resp.message||''));
       }
     })
-    .catch(error => {
-      console.error("Error al eliminar:", error);
-      alert("Hubo un problema al intentar eliminar el docente.");
+    .catch(e => {
+      console.error('Error al eliminar:', e);
+      alert('No se pudo eliminar.');
     });
   }
-}
 
-
-const formEditar = document.getElementById('formEditarProfesor');
-formEditar.addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const id = document.getElementById('edit-docente-id').value;
-    const nombre = document.getElementById('edit-nombre').value;
-    const apellido = document.getElementById('edit-apellido').value;
-    const telefono = document.getElementById('edit-telefono').value;
-    const correo = document.getElementById('edit-correo').value;
-    const activo = document.getElementById('edit-activo').value;
-    const puesto = document.getElementById('edit-puesto').value;
-    const genero = document.getElementById('edit-genero').value;
-    const fechaNacimiento = document.getElementById('edit-fecha-nacimiento').value;
-    const salario = document.getElementById('edit-salario').value;
-    const direccion = document.getElementById('edit-direccion').value;
-    const fotoUrl = document.getElementById('edit-foto').value;
-
-    const nuevaContraseña = document.getElementById('edit-password').value;
-    const confirmarContraseña = document.getElementById('edit-password2').value;
-
-    if (!fechaNacimiento) {
-        alert("Por favor, ingresa una fecha de nacimiento.");
-        return;
-    }
-
-    if ((nuevaContraseña || confirmarContraseña) && nuevaContraseña !== confirmarContraseña) {
-        alert("Las contraseñas no coinciden.");
-        return;
-    }
-
-    const datos = {
-        id,
-        nombre,
-        apellido,
-        telefono,
-        correo,
-        activo,
-        puesto,
-        genero,
-        fecha_nacimiento: fechaNacimiento,
-        salario,
-        direccion,
-        foto_url: fotoUrl
-    };
-
-    if (nuevaContraseña && confirmarContraseña) {
-        datos.nueva_contraseña = nuevaContraseña;
-        datos.confirmar_contraseña = confirmarContraseña;
-    }
-
-    fetch('../php/editar_docentes.php', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(datos)
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            alert("Docente actualizado correctamente.");
-            $('#modalEditarProfesor').modal('hide');
-            cargarDocentes();
+  // 5) Submit del form de editar con FormData
+  const formEditar = document.getElementById('formEditarProfesor');
+  formEditar.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const fd = new FormData(this);
+    fetch(this.action, { method: 'POST', body: fd })
+      .then(r => r.json())
+      .then(resp => {
+        if (resp.success) {
+          alert('Docente actualizado.');
+          $('#modalEditarProfesor').modal('hide');
+          cargarDocentes();
         } else {
-            alert("Hubo un error al actualizar el docente: " + (data.message || ""));
+          alert('Error al actualizar: '+(resp.message||''));
         }
-    })
-    .catch(error => {
-        console.error('Error al enviar los datos:', error);
-    });
-});
+      })
+      .catch(e => {
+        console.error('Error enviando datos:', e);
+        alert('No se pudo conectar.');
+      });
+  });
 
-
-cargarDocentes();
+  // 6) Carga inicial
+  cargarDocentes();
 });

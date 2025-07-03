@@ -566,27 +566,32 @@
       </div>
 
       <div class="modal-body">
-        <form id="formEditarProfesor">
-          <input type="hidden" id="edit-docente-id">
+        <form id="formEditarProfesor"
+              action="../php/editar_docentes.php"
+              method="POST"
+              enctype="multipart/form-data">
+
+          <!-- ID oculto -->
+          <input type="hidden" id="edit-docente-id" name="id">
 
           <div class="form-group">
             <label for="edit-nombre">Nombre:</label>
-            <input type="text" class="form-control" id="edit-nombre" required>
+            <input type="text" class="form-control" id="edit-nombre" name="nombre" required>
           </div>
 
           <div class="form-group">
             <label for="edit-apellido">Apellido:</label>
-            <input type="text" class="form-control" id="edit-apellido" required>
+            <input type="text" class="form-control" id="edit-apellido" name="apellido" required>
           </div>
 
           <div class="form-group">
             <label for="edit-telefono">Teléfono:</label>
-            <input type="text" class="form-control" id="edit-telefono" required>
+            <input type="text" class="form-control" id="edit-telefono" name="telefono" required>
           </div>
 
           <div class="form-group">
             <label for="edit-correo">Correo:</label>
-            <input type="email" class="form-control" id="edit-correo" required>
+            <input type="email" class="form-control" id="edit-correo" name="correo" required>
           </div>
 
           <div class="form-group">
@@ -599,10 +604,9 @@
             <input type="password" class="form-control" id="edit-password2" name="confirmar_contraseña" placeholder="Confirmar contraseña">
           </div>
 
-
           <div class="form-group">
-            <label for="edit-activo">Activo</label>
-            <select class="form-control" id="edit-activo" required>
+            <label for="edit-activo">Status:</label>
+            <select class="form-control" id="edit-activo" name="activo" required>
               <option value="1">Activo</option>
               <option value="0">Inactivo</option>
             </select>
@@ -610,55 +614,78 @@
 
           <div class="form-group">
             <label for="edit-puesto">Puesto:</label>
-            <input type="text" class="form-control" id="edit-puesto" required>
+            <input type="text" class="form-control" id="edit-puesto" name="puesto" required>
           </div>
 
-         <div class="form-group">
-          <label for="edit-genero">Género:</label>
-          <select id="edit-genero" class="form-control">
-            <option value="Masculino">Masculino</option>
-            <option value="Femenino">Femenino</option>
-            <option value="Otro">Otro</option>
-            
+          <div class="form-group">
+            <label for="edit-genero">Género:</label>
+            <select id="edit-genero" name="genero" class="form-control" required>
+              <option value="Masculino">Masculino</option>
+              <option value="Femenino">Femenino</option>
+              <option value="Otro">Otro</option>
             </select>
-        </div>
-
-
-          <div class="form-group">
-            <label for="edit-fecha-nacimiento">Fecha de Nacimiento</label>
-            <input type="date" class="form-control" id="edit-fecha-nacimiento" required>
           </div>
 
           <div class="form-group">
-            <label for="edit-salario">Salario</label>
-            <input type="number" class="form-control" id="edit-salario" required>
+            <label for="edit-fecha-nacimiento">Fecha de Nacimiento:</label>
+            <input type="date" class="form-control" id="edit-fecha-nacimiento" name="fecha_nacimiento" required>
           </div>
 
           <div class="form-group">
-            <label for="edit-direccion">Dirección</label>
-            <input type="text" class="form-control" id="edit-direccion" required>
+            <label for="edit-salario">Salario:</label>
+            <input type="number" class="form-control" id="edit-salario" name="salario" required>
           </div>
 
           <div class="form-group">
-            <label for="edit-foto">Foto URL</label>
-            <input type="text" class="form-control" id="edit-foto" required>
+            <label for="edit-direccion">Dirección:</label>
+            <input type="text" class="form-control" id="edit-direccion" name="direccion" required>
+          </div>
+
+          <!-- Previsualización de la foto actual -->
+          <div class="form-group">
+            <label>Foto actual:</label><br>
+            <img id="preview-foto"
+                src=""
+                alt="Foto actual"
+                class="img-fluid mb-2"
+                style="max-height:150px;">
+          </div>
+
+          <!-- Campo para subir nueva foto -->
+          <div class="form-group">
+            <label for="edit-foto">Cambiar imagen (opcional):</label>
+            <input type="text"
+                  class="form-control"
+                  id="edit-foto"
+                  name="imagen"
+                  accept="image/*">
           </div>
 
           <div class="form-group">
-            <label for="edit-creado-en">Creado En</label>
-            <input type="text" class="form-control" id="edit-creado-en" disabled>
+            <label for="edit-creado-en">Creado En:</label>
+            <input type="text"
+                  class="form-control"
+                  id="edit-creado-en"
+                  name="creado_en"
+                  disabled>
           </div>
 
           <div class="form-group">
-            <label for="edit-actualizado-en">Actualizado En</label>
-            <input type="text" class="form-control" id="edit-actualizado-en" disabled>
+            <label for="edit-actualizado-en">Actualizado En:</label>
+            <input type="text"
+                  class="form-control"
+                  id="edit-actualizado-en"
+                  name="actualizado_en"
+                  disabled>
           </div>
 
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
             <button type="submit" class="btn btn-primary">Guardar cambios</button>
           </div>
+
         </form>
+
       </div>
     </div>
   </div>
@@ -666,11 +693,6 @@
 
 <!-- Script para cargar docentes -->
 <script src="../scripts/cargarDocentes.js"></script>
-
-
-
-
-
 
 
 
