@@ -12,7 +12,9 @@
   <link href="../../vendors/iconic-fonts/font-awesome/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../../vendors/iconic-fonts/flat-icons/flaticon.css">
   
-   <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/weicon/weicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/weicon/weicon.ico">
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     
           
   <!-- Bootstrap core CSS -->
@@ -573,6 +575,8 @@
 
           <!-- ID oculto -->
           <input type="hidden" id="edit-docente-id" name="id">
+          <!-- URL de la foto actual (campo oculto para el JS) -->
+          <input type="hidden" id="edit-foto-url" name="foto_url">
 
           <div class="form-group">
             <label for="edit-nombre">Nombre:</label>
@@ -654,10 +658,10 @@
           <!-- Campo para subir nueva foto -->
           <div class="form-group">
             <label for="edit-foto">Cambiar imagen (opcional):</label>
-            <input type="text"
+            <input type="file"
                   class="form-control"
                   id="edit-foto"
-                  name="imagen"
+                  name="foto"
                   accept="image/*">
           </div>
 
@@ -686,6 +690,7 @@
 
         </form>
 
+        <script src="../scripts/animacionActualizarDocente.js"></script>
       </div>
     </div>
   </div>

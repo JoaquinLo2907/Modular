@@ -1,121 +1,166 @@
 <?php
-require '../php/conecta.php';
-
+// Bufferizamos la salida y desactivamos errores para devolver solo JSON
 ob_start();
-header('Content-Type: application/json');
+ini_set('display_errors', 0);
+error_reporting(0);
 
+require '../php/conecta.php';
+header('Content-Type: application/json');
 $conexion = conecta();
 if (!$conexion) {
     http_response_code(500);
     ob_end_clean();
-    echo json_encode(['success' => false, 'message' => 'Error de conexión a la base de datos.']);
+    echo json_encode(['success' => false, 'message' => 'Error de conexión.']);
     exit;
 }
 
-$data = json_decode(file_get_contents('php://input'), true);
-if (!$data) {
-    http_response_code(400);
-    ob_end_clean();
-    echo json_encode(['success' => false, 'message' => 'Datos no recibidos correctamente.']);
+// 1) GET: devolver datos de un docente (incluye creado_en y actualizado_en)
+if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['id'])) {
+    $id = intval($_GET['id']);
+    $stmt = $conexion->prepare("SELECT
+        docente_id,
+        nombre,
+        apellido,
+        telefono,
+        correo,
+        activo,
+        puesto,
+        genero,
+        fecha_nacimiento,
+        salario,
+        direccion,
+        foto_url,
+        creado_en,
+        actualizado_en
+    FROM docentes
+    WHERE docente_id = ?");
+    $stmt->bind_param('i', $id);
+    $stmt->execute();
+    $res = $stmt->get_result();
+    if ($row = $res->fetch_assoc()) {
+        ob_end_clean();
+        echo json_encode($row);
+    } else {
+        http_response_code(404);
+        ob_end_clean();
+        echo json_encode(['success' => false, 'message' => 'Docente no encontrado.']);
+    }
+    $stmt->close();
     exit;
 }
 
-$docente_id       = $data['id'] ?? null;
-$nombre           = $data['nombre'] ?? '';
-$apellido         = $data['apellido'] ?? '';
-$telefono         = $data['telefono'] ?? '';
-$correo           = $data['correo'] ?? '';
-$activo           = $data['activo'] ?? 1;
-$puesto           = $data['puesto'] ?? '';
-$genero           = $data['genero'] ?? '';
-$fecha_nacimiento = $data['fecha_nacimiento'] ?? null;
-$salario          = $data['salario'] ?? '';
-$direccion        = $data['direccion'] ?? '';
-$foto_url         = $data['foto_url'] ?? '';
+// 2) POST: procesar formulario multipart/form-data
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Recoger campos
+    $docente_id           = $_POST['id']               ?? null;
+    $nombre               = $_POST['nombre']           ?? '';
+    $apellido             = $_POST['apellido']         ?? '';
+    $telefono             = $_POST['telefono']         ?? '';
+    $correo               = $_POST['correo']           ?? '';
+    $activo               = $_POST['activo']           ?? 1;
+    $puesto               = $_POST['puesto']           ?? '';
+    $genero               = $_POST['genero']           ?? '';
+    $fecha_nacimiento     = $_POST['fecha_nacimiento'] ?? null;
+    $salario              = $_POST['salario']          ?? '';
+    $direccion            = $_POST['direccion']        ?? '';
+    $foto_url             = $_POST['foto_url']         ?? '';
+    $nueva_contraseña     = $_POST['nueva_contraseña']     ?? '';
+    $confirmar_contraseña = $_POST['confirmar_contraseña'] ?? '';
 
-$nueva_contraseña     = $data['nueva_contraseña'] ?? '';
-$confirmar_contraseña = $data['confirmar_contraseña'] ?? '';
-
-if (!$docente_id) {
-    http_response_code(400);
-    ob_end_clean();
-    echo json_encode(['success' => false, 'message' => 'ID no proporcionado.']);
-    exit;
-}
-
-// ✅ Actualizar contraseña si fue proporcionada y es válida
-if (!empty($nueva_contraseña) || !empty($confirmar_contraseña)) {
-    if ($nueva_contraseña !== $confirmar_contraseña) {
+    // Validación básica
+    if (!$docente_id) {
         http_response_code(400);
         ob_end_clean();
-        echo json_encode(['success' => false, 'message' => 'Las contraseñas no coinciden.']);
+        echo json_encode(['success' => false, 'message' => 'ID no proporcionado.']);
         exit;
     }
 
-    $query_id = $conexion->prepare("SELECT usuario_id FROM docentes WHERE docente_id = ?");
-    $query_id->bind_param("i", $docente_id);
-    $query_id->execute();
-    $query_id->bind_result($usuario_id);
-    $query_id->fetch();
-    $query_id->close();
+    // 2.1) Procesar posible subida de archivo
+    if (isset($_FILES['foto']) && $_FILES['foto']['error'] === UPLOAD_ERR_OK) {
+        $tmp  = $_FILES['foto']['tmp_name'];
+        $name = basename($_FILES['foto']['name']);
+        // Subir DOS niveles arriba a Modular/assets/img/docentes
+        $dest = __DIR__ . '/../../assets/img/docentes/' . $name;
+        if (move_uploaded_file($tmp, $dest)) {
+            // Actualizamos la URL para la BD
+            $foto_url = 'assets/img/docentes/' . $name;
+        }
+    }
 
-    if ($usuario_id) {
-        $password_hash = password_hash($nueva_contraseña, PASSWORD_BCRYPT);
-        // ⚠️ Aquí usamos 'contraseña' porque así se llama en tu tabla
-        $update_pass = $conexion->prepare("UPDATE usuarios SET contraseña = ? WHERE usuario_id = ?");
-        $update_pass->bind_param("si", $password_hash, $usuario_id);
-        if (!$update_pass->execute()) {
-            http_response_code(500);
+    // Actualizar contraseña si se solicitó
+    if ($nueva_contraseña !== '' || $confirmar_contraseña !== '') {
+        if ($nueva_contraseña !== $confirmar_contraseña) {
+            http_response_code(400);
             ob_end_clean();
-            echo json_encode(['success' => false, 'message' => 'Error al actualizar la contraseña.']);
-            $update_pass->close();
-            $conexion->close();
+            echo json_encode(['success' => false, 'message' => 'Las contraseñas no coinciden.']);
             exit;
         }
-        $update_pass->close();
-    } else {
-        http_response_code(400);
-        ob_end_clean();
-        echo json_encode(['success' => false, 'message' => 'Usuario no encontrado para este docente.']);
-        $conexion->close();
-        exit;
+        // Obtener usuario_id
+        $q = $conexion->prepare('SELECT usuario_id FROM docentes WHERE docente_id = ?');
+        $q->bind_param('i', $docente_id);
+        $q->execute();
+        $q->bind_result($usuario_id);
+        $q->fetch();
+        $q->close();
+        if ($usuario_id) {
+            $hash = password_hash($nueva_contraseña, PASSWORD_BCRYPT);
+            $up = $conexion->prepare('UPDATE usuarios SET contraseña = ? WHERE usuario_id = ?');
+            $up->bind_param('si', $hash, $usuario_id);
+            $up->execute();
+            $up->close();
+        }
     }
-}
 
-if ($fecha_nacimiento === '0000-00-00') {
-    $fecha_nacimiento = null;
-}
+    // Normalizar fecha nula
+    if ($fecha_nacimiento === '0000-00-00') {
+        $fecha_nacimiento = null;
+    }
 
-$sql = "UPDATE docentes 
-        SET nombre = ?, apellido = ?, telefono = ?, correo = ?, activo = ?, puesto = ?, 
-            genero = ?, fecha_nacimiento = ?, salario = ?, direccion = ?, foto_url = ?, 
-            actualizado_en = NOW() 
-        WHERE docente_id = ?";
+    // Update de la tabla docentes
+    $sql = "UPDATE docentes SET
+                nombre           = ?,
+                apellido         = ?,
+                telefono         = ?,
+                correo           = ?,
+                activo           = ?,
+                puesto           = ?,
+                genero           = ?,
+                fecha_nacimiento = ?,
+                salario          = ?,
+                direccion        = ?,
+                foto_url         = ?,
+                actualizado_en   = NOW()
+            WHERE docente_id = ?";
+    $stmt = $conexion->prepare($sql);
+    $stmt->bind_param(
+        'ssssissssssi',
+        $nombre,
+        $apellido,
+        $telefono,
+        $correo,
+        $activo,
+        $puesto,
+        $genero,
+        $fecha_nacimiento,
+        $salario,
+        $direccion,
+        $foto_url,
+        $docente_id
+    );
 
-$stmt = $conexion->prepare($sql);
-if (!$stmt) {
-    http_response_code(500);
-    ob_end_clean();
-    echo json_encode(['success' => false, 'message' => 'Error al preparar la consulta.']);
+    if ($stmt->execute()) {
+        ob_end_clean();
+        echo json_encode(['success' => true]);
+    } else {
+        http_response_code(500);
+        ob_end_clean();
+        echo json_encode(['success' => false, 'message' => 'Error al actualizar el docente.']);
+    }
+    $stmt->close();
     exit;
 }
 
-$stmt->bind_param(
-    'ssssissssssi',
-    $nombre, $apellido, $telefono, $correo,
-    $activo, $puesto, $genero, $fecha_nacimiento,
-    $salario, $direccion, $foto_url, $docente_id
-);
-
-if ($stmt->execute()) {
-    ob_end_clean();
-    echo json_encode(['success' => true]);
-} else {
-    http_response_code(500);
-    ob_end_clean();
-    echo json_encode(['success' => false, 'message' => 'Error al ejecutar la consulta.']);
-}
-
-$stmt->close();
-$conexion->close();
-?>
+// Métodos no permitidos
+http_response_code(405);
+ob_end_clean();
+echo json_encode(['success' => false, 'message' => 'Método no permitido.']);

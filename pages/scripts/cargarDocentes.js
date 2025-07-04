@@ -1,6 +1,8 @@
 // assets/js/cargarDocentes.js
 
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
+  const modal = $('#modalEditarProfesor');
+  let currentFotoUrl = '';
 
   // 1) Carga la lista de docentes
   function cargarDocentes() {
@@ -56,16 +58,22 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // 2) Formatea fecha a YYYY-MM-DD
   function formatDate(dateString) {
+    if (!dateString) return '';
     const d = new Date(dateString);
     return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   }
 
-  // 3) Mostrar modal con datos (sin tocar el file-input)
+  // 3) Mostrar modal con datos
   function editarDocente(id) {
-    fetch(`../php/profesorId.php?id=${id}`)
-      .then(res => res.json())
+    fetch(`../php/editar_docentes.php?id=${id}`)
+      .then(res => {
+        if (!res.ok) throw new Error('No se pudo obtener el docente');
+        return res.json();
+      })
       .then(data => {
         if (!data) return console.error('No llegan datos');
+
+        currentFotoUrl = data.foto_url || '';
 
         document.getElementById('edit-docente-id').value        = data.docente_id;
         document.getElementById('edit-nombre').value           = data.nombre;
@@ -79,14 +87,26 @@ document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('edit-salario').value          = data.salario;
         document.getElementById('edit-direccion').value        = data.direccion;
 
-        // SOLO así mostramos la imagen existente, en un <img id="preview-foto">
+        // Si existe el campo oculto, lo actualizamos
+        const fotoUrlInput = document.getElementById('edit-foto-url');
+        if (fotoUrlInput) {
+          fotoUrlInput.value = data.foto_url || '';
+        }
+
+        // Previsualizar foto
         const preview = document.getElementById('preview-foto');
-        if (preview) preview.src = data.foto_url;
-
-        // **NO** toques nunca el input file: 
-        //—> document.getElementById('edit-foto').value = ...
-
-        $('#modalEditarProfesor').modal('show');
+        if (preview) {
+          preview.src = data.foto_url
+            ? `../../${data.foto_url}`
+            : '../../assets/img/default-avatar.png';
+        }
+        // **NUEVAS LÍNEAS** para cargar timestamps
+        const creadoInput    = document.getElementById('edit-creado-en');
+        const actualizadoInput = document.getElementById('edit-actualizado-en');
+        if (creadoInput)    creadoInput.value    = data.creado_en   || '';
+        if (actualizadoInput) actualizadoInput.value = data.actualizado_en || '';
+        
+        modal.modal('show');
       })
       .catch(err => console.error('Error al obtener los datos del docente:', err));
   }
@@ -96,45 +116,55 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!confirm('¿Seguro de eliminar?')) return;
     fetch('../php/eliminar_docentes.php', {
       method: 'POST',
-      headers: {'Content-Type':'application/json'},
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ id })
     })
-    .then(r => r.json())
-    .then(resp => {
-      if (resp.success) {
-        alert('Docente eliminado.');
-        cargarDocentes();
-      } else {
-        alert('Error al eliminar: '+(resp.message||''));
-      }
-    })
-    .catch(e => {
-      console.error('Error al eliminar:', e);
-      alert('No se pudo eliminar.');
-    });
-  }
-
-  // 5) Submit del form de editar con FormData
-  const formEditar = document.getElementById('formEditarProfesor');
-  formEditar.addEventListener('submit', function(e) {
-    e.preventDefault();
-    const fd = new FormData(this);
-    fetch(this.action, { method: 'POST', body: fd })
       .then(r => r.json())
       .then(resp => {
         if (resp.success) {
-          alert('Docente actualizado.');
-          $('#modalEditarProfesor').modal('hide');
+          alert('Docente eliminado.');
           cargarDocentes();
         } else {
-          alert('Error al actualizar: '+(resp.message||''));
+          alert('Error al eliminar: ' + (resp.message || ''));
         }
       })
       .catch(e => {
-        console.error('Error enviando datos:', e);
-        alert('No se pudo conectar.');
+        console.error('Error al eliminar:', e);
+        alert('No se pudo eliminar.');
       });
-  });
+  }
+
+// 5) Submit del form de editar (envío multipart/form-data)
+const formEditar = document.getElementById('formEditarProfesor');
+formEditar.addEventListener('submit', e => {
+  e.preventDefault();
+
+  // Con esto recoges TODOS los campos, incluido el <input type="file">
+  const fd = new FormData(formEditar);
+
+  fetch(formEditar.action, {
+    method: 'POST',
+    body: fd      // <-- ¡sin headers, sin JSON.stringify!
+  })
+    .then(res => {
+      // opcional: ver qué status responde el servidor
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      return res.json();
+    })
+    .then(resp => {
+      if (resp.success) {
+        alert('Docente actualizado.');
+        $('#modalEditarProfesor').modal('hide');
+        cargarDocentes();
+      } else {
+        alert('Error al actualizar: ' + (resp.message || resp.error || ''));
+      }
+    })
+    .catch(err => {
+      console.error('Error enviando datos:', err);
+      alert('Error de conexión o respuesta no válida: ' + err.message);
+    });
+});
 
   // 6) Carga inicial
   cargarDocentes();
