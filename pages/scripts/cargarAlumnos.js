@@ -1,6 +1,6 @@
 // cargarAlumnos.js
 
-// 1. Carga la tabla de estudiantes (ahora con tutor_nombre)
+// 1. Carga la tabla de estudiantes (ahora con tutor_id + tutor_nombre)
 function cargarEstudiantes() {
   $.ajax({
     url: "../php/estudiantes.php",
@@ -14,27 +14,33 @@ function cargarEstudiantes() {
           tbody += `
             <tr>
               <td>${est.estudiante_id}</td>
-              <td>${est.tutor_nombre ?? 'Sin tutor'}</td>    <!-- aquí va el nombre -->
+              <td>${est.tutor_id}</td>                            <!-- ID del tutor -->
+              <td>${est.tutor_nombre || 'Sin tutor'}</td>          <!-- Nombre completo del tutor -->
               <td>${est.nombre}</td>
               <td>${est.apellido}</td>
               <td>${est.fecha_nacimiento}</td>
               <td>${est.grado}</td>
               <td>${est.grupo}</td>
-              <td>${est.tutor_id}</td>                      <!-- aquí va el ID -->
               <td>${est.activo == 1 ? 'Sí' : 'No'}</td>
               <td>${est.creado_en}</td>
               <td>${est.actualizado_en}</td>
               <td>
-                <button class="btn btn-sm btn-outline-warning btn-editar" data-id="${est.estudiante_id}">Editar</button>
-                <button class="btn btn-sm btn-outline-danger btn-eliminar" data-id="${est.estudiante_id}">Eliminar</button>
+                <button class="btn btn-sm btn-outline-warning btn-editar" data-id="${est.estudiante_id}">
+                  Editar
+                </button>
+                <button class="btn btn-sm btn-outline-danger btn-eliminar" data-id="${est.estudiante_id}">
+                  Eliminar
+                </button>
               </td>
             </tr>
           `;
         }
       });
 
+      // Destruye la instancia previa y rellena el tbody
       $('#data-table-4').DataTable().destroy();
       $('#student-body').html(tbody);
+      // Vuelve a inicializar DataTable
       $('#data-table-4').DataTable({
         responsive: true,
         pageLength: 10,
@@ -80,9 +86,10 @@ function cargarTutores(selectedId = null) {
 }
 
 $(document).ready(function () {
+  // Inicializa la tabla al entrar
   cargarEstudiantes();
 
-  // Borrado lógico
+  // Evento para eliminar (borrado lógico)
   $(document).on('click', '.btn-eliminar', function () {
     const id = $(this).data('id');
     if (!confirm('¿Deseas eliminar este estudiante?')) return;
@@ -102,7 +109,7 @@ $(document).ready(function () {
     });
   });
 
-  // Abrir modal de edición
+  // Evento para abrir modal de edición
   $(document).on('click', '.btn-editar', function () {
     const id = $(this).data('id');
     fetch(`../php/obtener_estudiante.php?id=${id}`)
@@ -115,7 +122,7 @@ $(document).ready(function () {
         $('#edit-nacimiento').val(data.fecha_nacimiento);
         $('#edit-grado').val(data.grado);
         $('#edit-grupo').val(data.grupo);
-        // Cargamos tutores y luego el modal
+        // Cargamos tutores y luego mostramos el modal
         cargarTutores(data.tutor_id).then(() => {
           $('#modalEditarEstudiante').modal('show');
         });
@@ -130,17 +137,14 @@ $(document).ready(function () {
   $('#formEditarEstudiante').on('submit', function (e) {
     e.preventDefault();
     const formData = new FormData(this);
-    // muestro lo que voy a mandar
+    // Solo para debug:
     for (let [key, val] of formData.entries()) console.log(key, val);
 
     fetch('../php/editar_estudiante.php', {
       method: 'POST',
       body: formData
     })
-    .then(r => {
-      console.log('editar_estudiante.php status:', r.status);
-      return r.json();
-    })
+    .then(r => r.json())
     .then(data => {
       console.log('Respuesta al editar:', data);
       if (data.success) {
@@ -148,7 +152,7 @@ $(document).ready(function () {
         Swal.fire({ icon: 'success', title: '¡Estudiante actualizado!', timer: 1500, showConfirmButton: false });
         cargarEstudiantes();
       } else {
-        alert(`No se pudo actualizar: ${data.message || data.error || 'Error desconocido'}`);
+        alert(`No se pudo actualizar: ${data.message || 'Error desconocido'}`);
       }
     })
     .catch(err => {
