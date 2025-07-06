@@ -520,12 +520,32 @@
           </nav>
         </div>
       </div>
-    
-      <!-- Contenedor de tarjetas -->
-      <div class="row" id="materias-container">
-        <!-- Aquí se cargarán las tarjetas dinámicamente -->
+
+      <div class="row mb-4">
+        <div class="col-md-6">
+          <input
+            type="text"
+            id="buscar-materia"
+            class="form-control"
+            placeholder="Buscar materia…"
+          >
+        </div>
+        <div class="col-md-6">
+          <select id="filtrar-nivel" class="form-control">
+            <option value="">Todos los niveles</option>
+            <option value="primaria">Primaria</option>
+            <option value="secundaria">Secundaria</option>
+            <option value="bachillerato">Bachillerato</option>
+          </select>
+        </div>
       </div>
-    </div>
+
+    
+      <div
+          class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4 justify-content-center"
+          id="materias-container"
+        ></div>
+ 
     
     <!-- Script al final del body -->
     <script src="../scripts/cargareMaterias.js"></script>
