@@ -27,33 +27,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt->fetch();
 
         if (password_verify($password, $db_password)) {
-            $_SESSION['correo'] = $db_email;
-            $_SESSION['rol'] = $db_rol;
-            $_SESSION['usuario_id'] = $db_usuario_id;
-            $_SESSION['logueado'] = true;
+    $_SESSION['correo'] = $db_email;
+    $_SESSION['rol'] = $db_rol;
+    $_SESSION['usuario_id'] = $db_usuario_id;
+    $_SESSION['logueado'] = true;
 
-            switch ($db_rol) {
-                case 0:
-                    $redirect = "../../index.php";
-                    break;
-                case 1:
-                    $redirect = "../../PruebaDoc.html";
-                    break;
-                case 2:
-                    $redirect = "../../pruebaTuto.php";
-                    break;
-                default:
-                    echo json_encode(["status" => "error", "message" => "❌ Rol no válido."]);
-                    exit;
-            }
-
-            echo json_encode(["status" => "success", "redirect" => $redirect]);
-        } else {
-            echo json_encode(["status" => "error", "message" => "❌ Contraseña incorrecta."]);
+    // NUEVO: Obtener docente_id si es profesor
+    if ($db_rol == 1) {
+        $stmt_doc = $con->prepare("SELECT docente_id FROM docentes WHERE usuario_id = ?");
+        $stmt_doc->bind_param("i", $db_usuario_id);
+        $stmt_doc->execute();
+        $stmt_doc->bind_result($docente_id);
+        if ($stmt_doc->fetch()) {
+            $_SESSION['docente_id'] = $docente_id; // ✅ Ya disponible para estudiantes.php
         }
-    } else {
-        echo json_encode(["status" => "error", "message" => "❌ Usuario no encontrado."]);
+        $stmt_doc->close();
     }
+
+    // Redireccionamiento por rol
+    switch ($db_rol) {
+        case 0:
+            $redirect = "../../index.php";
+            break;
+        case 1:
+            $redirect = "../../Docentes.php";
+            break;
+        case 2:
+            $redirect = "../../pruebaTuto.php";
+            break;
+        default:
+            echo json_encode(["status" => "error", "message" => "❌ Rol no válido."]);
+            exit;
+    }
+
+    echo json_encode(["status" => "success", "redirect" => $redirect]);
+} else {
+    echo json_encode(["status" => "error", "message" => "❌ Contraseña incorrecta."]);
+}
+} else {
+    echo json_encode(["status" => "error", "message" => "❌ Usuario no encontrado."]);
+}
 
     $stmt->close();
     $con->close();

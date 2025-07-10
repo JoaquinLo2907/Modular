@@ -1,6 +1,11 @@
 document.addEventListener("DOMContentLoaded", () => {
+  // Determinar la URL según el rol del usuario
+  const url = (typeof userRol !== 'undefined' && userRol == 1)
+    ? '../../pages/php/estudiantes-doc.php'
+    : '../../pages/php/obtener_estudiante.php';
+
   // 1. Cargar estudiantes y agregarlos a la tabla
-  fetch('../../pages/php/obtener_estudiante.php')
+  fetch(url)
     .then(res => res.json())
     .then(estudiantes => {
       const tbody = document.querySelector("#tabla-estudiantes tbody");
@@ -42,9 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("nombreAlumno").textContent = nombre;
 
       // 3. Obtener calificaciones
-      
       fetch(`../../pages/php/obtener_calificaciones.php?id=${id}`)
-        
         .then(res => res.json())
         .then(data => {
           const tbody = document.getElementById("tablaCalificaciones");
@@ -56,7 +59,6 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
           data.forEach(item => {
-
             const fila = document.createElement("tr");
             fila.innerHTML = `<td>${item.materia}</td><td>${item.calificacion}</td>`;
             tbody.appendChild(fila);

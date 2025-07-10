@@ -1,9 +1,10 @@
-// cargarAlumnos.js
-
-// 1. Carga la tabla de estudiantes (ahora con tutor_id + tutor_nombre)
 function cargarEstudiantes() {
+  const url = (typeof userRol !== 'undefined' && userRol == 1)
+    ? '../php/estudiantes-doc.php'
+    : '../php/estudiantes.php';
+
   $.ajax({
-    url: "../php/estudiantes.php",
+    url: url,
     method: "GET",
     dataType: "json",
     success: data => {
@@ -14,8 +15,8 @@ function cargarEstudiantes() {
           tbody += `
             <tr>
               <td>${est.estudiante_id}</td>
-              <td>${est.tutor_id}</td>                            <!-- ID del tutor -->
-              <td>${est.tutor_nombre || 'Sin tutor'}</td>          <!-- Nombre completo del tutor -->
+              <td>${est.tutor_id}</td>
+              <td>${est.tutor_nombre || 'Sin tutor'}</td>
               <td>${est.nombre}</td>
               <td>${est.apellido}</td>
               <td>${est.fecha_nacimiento}</td>
@@ -37,10 +38,8 @@ function cargarEstudiantes() {
         }
       });
 
-      // Destruye la instancia previa y rellena el tbody
       $('#data-table-4').DataTable().destroy();
       $('#student-body').html(tbody);
-      // Vuelve a inicializar DataTable
       $('#data-table-4').DataTable({
         responsive: true,
         pageLength: 10,
@@ -58,6 +57,7 @@ function cargarEstudiantes() {
     error: (xhr, status, err) => console.error("Error al cargar estudiantes:", err)
   });
 }
+
 
 // 2. Carga los tutores en el <select> y marca el seleccionado
 function cargarTutores(selectedId = null) {
