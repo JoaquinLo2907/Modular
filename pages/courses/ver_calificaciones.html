@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Prueba Calificaciones</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+</head>
+<body>
+
+<div class="container mt-5">
+  <h4>Lista de estudiantes</h4>
+  <table class="table table-bordered" id="tabla-estudiantes">
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Apellido</th>
+        <th>Grado</th>
+        <th>Grupo</th>
+        <th>Acción</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Se llena con JS -->
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modalCalificaciones" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-warning text-white">
+        <h5 class="modal-title">Calificaciones de <span id="nombreAlumno"></span></h5>
+        <button type="button" class="close text-white" data-dismiss="modal">
+          <span>&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <table class="table table-striped">
+          <thead>
+            <tr><th>Materia</th><th>Calificación</th></tr>
+          </thead>
+          <tbody id="tablaCalificaciones">
+            <!-- Calificaciones dinámicas -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts necesarios -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Simulación de datos de estudiantes
+  const estudiantes = [
+    { estudiante_id: 1, nombre: "Juan", apellido: "López", grado: "6", grupo: "B" },
+    { estudiante_id: 2, nombre: "Ana", apellido: "García", grado: "5", grupo: "A" }
+  ];
+
+  const tbody = document.querySelector("#tabla-estudiantes tbody");
+
+  estudiantes.forEach(est => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${est.nombre}</td>
+      <td>${est.apellido}</td>
+      <td>${est.grado}</td>
+      <td>${est.grupo}</td>
+      <td>
+        <button class="btn btn-info btn-sm ver-calificaciones" data-id="${est.estudiante_id}" data-nombre="${est.nombre} ${est.apellido}">
+          Ver Calificaciones
+        </button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+
+  document.addEventListener("click", function (e) {
+    if (e.target.classList.contains("ver-calificaciones")) {
+      const id = e.target.dataset.id;
+      const nombre = e.target.dataset.nombre;
+
+      document.getElementById("nombreAlumno").textContent = nombre;
+
+      // Simulación de respuesta del servidor
+      const calificaciones = {
+        1: [{ materia: "Matemáticas", calificacion: 9.5 }, { materia: "Español", calificacion: 8 }],
+        2: [{ materia: "Historia", calificacion: 7 }, { materia: "Ciencias", calificacion: 8.5 }]
+      };
+
+      const datos = calificaciones[id] || [];
+
+      const tbodyCal = document.getElementById("tablaCalificaciones");
+      tbodyCal.innerHTML = "";
+
+      if (datos.length === 0) {
+        tbodyCal.innerHTML = `<tr><td colspan="2">No hay calificaciones</td></tr>`;
+      } else {
+        datos.forEach(item => {
+          const fila = document.createElement("tr");
+          fila.innerHTML = `<td>${item.materia}</td><td>${item.calificacion}</td>`;
+          tbodyCal.appendChild(fila);
+        });
+      }
+
+      $('#modalCalificaciones').modal('show');
+    }
+  });
+});
+</script>
+
+</body>
+</html>
