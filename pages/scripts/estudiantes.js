@@ -56,7 +56,6 @@ document.addEventListener("DOMContentLoaded", () => {
           }
 
           data.forEach(item => {
-            console.log("ID capturado:", id);
 
             const fila = document.createElement("tr");
             fila.innerHTML = `<td>${item.materia}</td><td>${item.calificacion}</td>`;
