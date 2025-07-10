@@ -115,7 +115,7 @@
             <ul id="professor" class="collapse" aria-labelledby="dashboard" data-parent="#side-nav-accordion">
               <li> <a href="pages/students-doc/studendoc.php">All students </a> </li>
                <li> <a href="pages/students-doc/addstudent.html">Add students</a> </li>
-                 <li> <a href="pages/students-doc/aboutstudent.html">About Students</a> </li>
+                 <li> <a href="pages/students-doc/aboutstudent.html">About Student  </a> </li>
             </ul>
         </li>
         <!-- /Proessors End--->
