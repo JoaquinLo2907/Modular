@@ -516,31 +516,26 @@
   <div class="ms-panel">
     <div class="ms-panel-header d-flex justify-content-between align-items-center">
       <h6>Lista de Docentes</h6>
-      <div>
-        <!-- Formulario para importar CSV -->
-        <form action="../php/importar_profesores.php" method="POST" enctype="multipart/form-data" class="d-inline-block">
-          <!-- Input oculto -->
-          <input type="file" id="archivoCSV" name="archivo_csv" accept=".csv" required hidden>
-          
-          <!-- Botón personalizado -->
-          <label for="archivoCSV" class="btn btn-warning btn-sm mb-1">Elegir archivo</label>
+        <div>
+          <!-- Botón Importar -->
+          <button
+            id="btnImportarProfesores"
+            class="btn btn-warning btn-sm me-2"
+            data-toggle="modal"
+            data-target="#importProfesoresModal"
+          >
+            <i class="fa fa-file-import"></i> Importar
+          </button>
 
-          <!-- Mostrar nombre del archivo -->
-          <span id="nombreArchivo" class="text-muted ml-2">Ningún archivo seleccionado</span>
-
-          <!-- Botón de envío -->
-          <button type="submit" class="btn btn-primary btn-sm ml-2">Importar CSV</button>
-        </form>
-        <!-- Dropdown existente -->
-        <div class="dropdown d-inline-block ml-3">
-          <a class="fa fa-chevron-down" data-toggle="dropdown"></a>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="./addprofessor.html">Agregar Docente</a>
-            <a class="dropdown-item" href="../php/csv-profesores.php">Exportar a (CSV)</a>
-            <a class="dropdown-item" href="./aboutprofessor.html">Detalles</a>
-          </div>
+          <!-- Botón Exportar -->
+          <button
+            id="btnExportarProfesores"
+            class="btn btn-success btn-sm"
+            onclick="window.location.href='../php/csv-profesores.php'"
+          >
+            <i class="fa fa-file-export"></i> Exportar
+          </button>
         </div>
-      </div>
     </div>
 
     <div class="ms-panel-body">
@@ -714,6 +709,42 @@
 <!-- Script para cargar docentes -->
 <script src="../scripts/cargarDocentes.js"></script>
 
+<!-- Modal Importar Profesores -->
+  <div class="modal fade" id="importProfesoresModal" tabindex="-1" aria-labelledby="importProfesoresLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form
+        id="formImportarProfesores"
+        action="../php/importar_profesores.php"
+        method="post"
+        enctype="multipart/form-data"
+        class="modal-content"
+      >
+        <div class="modal-header">
+          <h5 class="modal-title" id="importProfesoresLabel">Importar Profesores</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="csvProfesores" class="form-label">Selecciona archivo CSV</label>
+            <input
+              class="form-control"
+              type="file"
+              id="csvProfesores"
+              name="archivo_csv"
+              accept=".csv"
+              required
+            >
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-warning">Importar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
 
   </main>

@@ -1,17 +1,10 @@
 // importarCSV.js
 document.addEventListener('DOMContentLoaded', function() {
-  const inputFile  = document.getElementById('archivoCSV');
-  const spanNombre = document.getElementById('nombreArchivo');
-
-  if (!inputFile || !spanNombre) {
-    console.warn('No se encontró #archivoCSV o #nombreArchivo en el DOM');
-    return;
-  }
+  const inputFile = document.getElementById('csvEstudiantes');
+  if (!inputFile) return; // Si no está el input, salimos
 
   inputFile.addEventListener('change', function() {
-    const fileName = this.files.length
-      ? this.files[0].name
-      : 'Ningún archivo seleccionado';
-    spanNombre.textContent = fileName;
+    // Si en el futuro quieres mostrar el nombre en pantalla, aquí lo recogerías:
+    console.log('Archivo seleccionado:', this.files[0]?.name ?? 'Ningún archivo seleccionado');
   });
 });
