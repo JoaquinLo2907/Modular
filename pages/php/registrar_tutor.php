@@ -1,132 +1,77 @@
 <?php
-// pages/php/registrar_tutor.php
-
-// 1. Conexión
 require '../php/conecta.php';
+header('Content-Type: application/json');
 $conexion = conecta();
-if (!$conexion) {
-    die("Error: No se pudo establecer la conexión a la base de datos.");
-}
 
-// 2. Solo POST
+// 1) Método
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo "<script>
-            alert('Acceso no autorizado.');
-            window.location.href = '../tutores/addtutor.html';
-          </script>";
-    exit;
+  echo json_encode(['success' => false, 'message' => 'Método no permitido']);
+  exit;
 }
 
-// 3. Obtener datos del formulario
+// 2) Recoger
 $nombre       = trim($_POST['nombre']       ?? '');
 $apellido     = trim($_POST['apellido']     ?? '');
 $telefono     = trim($_POST['telefono']     ?? '');
 $correo       = trim($_POST['correo']       ?? '');
 $direccion    = trim($_POST['direccion']    ?? '');
 $estudianteId = intval($_POST['estudiante_id'] ?? 0);
-$password1    = $_POST['password']  ?? '';
-$password2    = $_POST['password2'] ?? '';
-$rol          = 2;                // 2 = Tutor
+$pass1        = $_POST['password']  ?? '';
+$pass2        = $_POST['password2'] ?? '';
+$rol          = 2;
 
-// 4. Validaciones básicas
-if ($nombre === '' || $apellido === '' || $correo === '' ||
-    $telefono === '' || $direccion === '' || $password1 === '' || $password2 === '') {
-    echo "<script>
-            alert('Todos los campos son obligatorios.');
-            window.location.href = '../tutor/addtutor.html';
-          </script>";
-    exit;
+// 3) Validar
+$errors = [];
+if (!$nombre || !$apellido || !$telefono || !$correo || !$direccion) {
+  $errors[] = 'Todos los campos son obligatorios';
+}
+if ($pass1 !== $pass2) {
+  $errors[] = 'Las contraseñas no coinciden';
+}
+if ($errors) {
+  echo json_encode(['success' => false, 'message' => implode('. ', $errors)]);
+  exit;
 }
 
-if ($password1 !== $password2) {
-    echo "<script>
-            alert('Las contraseñas no coinciden.');
-            window.location.href = '../tutor/addtutor.html';
-          </script>";
-    exit;
+// 4) Correo duplicado
+$stmt = $conexion->prepare("SELECT 1 FROM usuarios WHERE correo = ?");
+$stmt->bind_param('s', $correo);
+$stmt->execute();
+$rs = $stmt->get_result();
+if ($rs->num_rows) {
+  echo json_encode(['success' => false, 'message' => 'Correo ya registrado']);
+  exit;
 }
 
-// 5. Verificar duplicado de correo
-$sqlVer = "SELECT 1 FROM usuarios WHERE correo = ?";
-$stmtVer = $conexion->prepare($sqlVer);
-$stmtVer->bind_param('s', $correo);
-$stmtVer->execute();
-$resVer = $stmtVer->get_result();
-
-if ($resVer->num_rows > 0) {
-    echo "<script>
-            alert('El correo ya está registrado. Por favor usa otro.');
-            window.location.href = '../tutor/addtutor.html';
-          </script>";
-    exit;
+// 5) Insert usuario
+$hash = password_hash($pass1, PASSWORD_BCRYPT);
+$stmt = $conexion->prepare("INSERT INTO usuarios (nombre_usuario, contraseña, correo, rol) VALUES (?, ?, ?, ?)");
+$stmt->bind_param('sssi', $correo, $hash, $correo, $rol);
+if (!$stmt->execute()) {
+  echo json_encode(['success' => false, 'message' => 'Error al crear usuario']);
+  exit;
 }
+$usuarioId = $stmt->insert_id;
 
-// 6. Insertar en USUARIOS
-$passwordHash = password_hash($password1, PASSWORD_BCRYPT);
-$sqlUsr = "INSERT INTO usuarios (nombre_usuario, contraseña, correo, rol)
-           VALUES (?, ?, ?, ?)";
-$stmtUsr = $conexion->prepare($sqlUsr);
-$stmtUsr->bind_param('sssi', $correo, $passwordHash, $correo, $rol);
-
-if (!$stmtUsr->execute()) {
-    echo "<script>
-            alert('Error al registrar usuario.');
-            window.location.href = '../tutor/addtutor.html';
-          </script>";
-    exit;
+// 6) Insert tutor
+$stmt = $conexion->prepare("
+  INSERT INTO tutores (usuario_id, nombre, apellido, telefono, correo, direccion, activo, rol)
+  VALUES (?, ?, ?, ?, ?, ?, 1, ?)
+");
+$stmt->bind_param('isssssi', $usuarioId, $nombre, $apellido, $telefono, $correo, $direccion, $rol);
+if (!$stmt->execute()) {
+  echo json_encode(['success' => false, 'message' => 'Error al crear tutor']);
+  exit;
 }
-$usuarioId = $stmtUsr->insert_id;   // FK para tutores
+$tutorId = $stmt->insert_id;
 
-// 7. Insertar en TUTORES
-$sqlTut = "INSERT INTO tutores
-              (usuario_id, nombre, apellido, telefono, correo, direccion, activo, rol)
-           VALUES (?, ?, ?, ?, ?, ?, 1, ?)";
-$stmtTut = $conexion->prepare($sqlTut);
-$stmtTut->bind_param('isssssi',
-    $usuarioId,
-    $nombre,
-    $apellido,
-    $telefono,
-    $correo,
-    $direccion,
-    $rol
-);
-
-if (!$stmtTut->execute()) {
-    echo "<script>
-            alert('Error al registrar tutor.');
-            window.location.href = '../tutor/addtutor.html';
-          </script>";
-    exit;
-}
-$tutorId = $stmtTut->insert_id;
-
-/* 8. (Opcional) Vincular tutor ↔ estudiante
-   ────────────────────────────────────────── */
+// 7) Vinculación opcional
 if ($estudianteId > 0) {
-    /* 8.a  Escribir el tutor en la tabla estudiantes */
-    $sqlUpd = "UPDATE estudiantes
-                  SET tutor_id = ?
-                WHERE estudiante_id = ?";
-    $stmtUpd = $conexion->prepare($sqlUpd);
-    if ($stmtUpd) {
-        $stmtUpd->bind_param('ii', $tutorId, $estudianteId);
-        $stmtUpd->execute();
-        $stmtUpd->close();
-    }
+  $upd = $conexion->prepare("UPDATE estudiantes SET tutor_id = ? WHERE estudiante_id = ?");
+  $upd->bind_param('ii', $tutorId, $estudianteId);
+  $upd->execute();
 }
 
-
-// 9. Éxito
-echo "<script>
-        alert('Tutor registrado con éxito.');
-        window.location.href = '../tutor/addtutor.html';
-      </script>";
+// 8) Éxito
+echo json_encode(['success' => true, 'message' => 'Tutor registrado con éxito']);
 exit;
-
-/* 10. Cierre */
-$stmtUsr->close();
-$stmtTut->close();
-$stmtVer->close();
-$conexion->close();
-?>
