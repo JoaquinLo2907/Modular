@@ -554,7 +554,7 @@
             <table class="table" id="tablaAsistencias">
               <thead>
                 <tr>
-                  <th>Nombre</th>
+                  <th>Nombres</th>
                   <th>Apellido</th>
                   <th>Asistencia</th>
                 </tr>
