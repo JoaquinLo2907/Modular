@@ -174,7 +174,7 @@
                  
             </ul>
         </li>
-        <!-- /Fees End--->
+        <!-- /Feess End--->
       
         
        

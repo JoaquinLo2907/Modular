@@ -1,11 +1,23 @@
 document.addEventListener('DOMContentLoaded', () => {
   const form = document.getElementById('formEstudiante');
 
-  form.addEventListener('submit', function (e) {
-    e.preventDefault(); // Evita el envío clásico
+  form.addEventListener('submit', function(e) {
+    e.preventDefault(); // nunca dejamos que el navegador haga validación nativa
 
+    // 1) Validación HTML5 simplona
+    if (!form.checkValidity()) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Corrige los campos',
+        text: 'Rellena correctamente todos los campos obligatorios.',
+        timer: 2000,
+        showConfirmButton: false
+      });
+      return; // aquí salimos sin añadir clases ni inline feedback
+    }
+
+    // 2) Si llega aquí, todo válido: enviamos por AJAX
     const formData = new FormData(form);
-
     fetch('../php/registrar_estudiante.php', {
       method: 'POST',
       body: formData
@@ -15,13 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (data.success) {
         Swal.fire({
           icon: 'success',
-          title: 'Estudiante registrado',
-          text: 'Puedes agregar otro estudiante.',
-          timer: 2500,
+          title: '¡Estudiante registrado!',
+          timer: 2000,
           showConfirmButton: false
         }).then(() => {
           form.reset();
-          form.querySelector('[name="nombre"]').focus();
+          form.nombre.focus();
         });
       } else {
         Swal.fire({
@@ -31,8 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
       }
     })
-    .catch(error => {
-      console.error('Error en la solicitud:', error);
+    .catch(() => {
       Swal.fire({
         icon: 'error',
         title: 'Error de conexión',

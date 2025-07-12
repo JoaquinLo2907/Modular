@@ -1,140 +1,147 @@
 <?php
-
-// Incluir la conexión a la base de datos
+header('Content-Type: text/plain; charset=utf-8');
 require '../php/conecta.php';
 $conexion = conecta();
 
-// 1) Verificar conexión
+// 1) Conexión
 if (!$conexion) {
-    header('Content-Type: text/plain; charset=utf-8');
+    http_response_code(500);
     echo "Error: No se pudo conectar a la base de datos.";
     exit;
 }
 
-// 2) Sólo procesar POST
+// 2) Sólo POST
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    header('Content-Type: text/plain; charset=utf-8');
-    echo "Error: Acceso no autorizado.";
+    http_response_code(405);
+    echo "Error: acceso no autorizado.";
     exit;
 }
 
-// 3) Obtener datos del formulario
-$nombre       = $_POST['nombre'] ?? '';
-$apellido     = $_POST['apellido'] ?? '';
-$correo       = $_POST['email'] ?? '';
-$password1    = $_POST['contraseña'] ?? '';
-$password2    = $_POST['confirmar_contraseña'] ?? '';
-$rol          = intval($_POST['rol'] ?? 0);
+// 3) Captura
+$nombre     = trim($_POST['nombre']              ?? '');
+$apellido   = trim($_POST['apellido']            ?? '');
+$correo     = trim($_POST['email']               ?? '');
+$pass1      = $_POST['contraseña']               ?? '';
+$pass2      = $_POST['confirmar_contraseña']     ?? '';
+$rol        = intval($_POST['rol']               ?? 0);
+$puesto     = trim($_POST['puesto']              ?? '');
+$genero     = trim($_POST['genero']              ?? '');
+$telefono   = trim($_POST['telefono']            ?? '');
+$nacimiento = $_POST['nacimiento']               ?? '';
+$salario    = trim($_POST['salario']             ?? '');
+$direccion  = trim($_POST['direccion']           ?? '');
 
-// 4) Validar contraseñas
-if ($password1 !== $password2) {
-    header('Content-Type: text/plain; charset=utf-8');
-    echo "Error: Las contraseñas no coinciden.";
-    exit;
+// 4) Validaciones
+
+// 4.1) Contraseñas iguales y fuertes
+if ($pass1 !== $pass2) {
+    echo "Error: Las contraseñas no coinciden."; exit;
 }
-$password_hash = password_hash($password1, PASSWORD_BCRYPT);
-
-// 5) Manejo de la imagen
-$directorio   = "../../assets/img/uploads/";
-$nombreImagen = basename($_FILES['imagen']['name'] ?? '');
-$rutaImagen   = $directorio . $nombreImagen;
-$rutaBD       = "assets/img/docentes/" . $nombreImagen;
-
-if (
-    !isset($_FILES['imagen']) ||
-    $_FILES['imagen']['error'] !== UPLOAD_ERR_OK
-) {
-    header('Content-Type: text/plain; charset=utf-8');
-    echo "Error: al subir la imagen (código {$_FILES['imagen']['error']}).";
-    exit;
+if (!preg_match('/^(?=.*[A-Z])(?=.*\d).{8,}$/', $pass1)) {
+    echo "Error: La contraseña debe tener mínimo 8 caracteres, una mayúscula y un número."; exit;
 }
+$pass_hash = password_hash($pass1, PASSWORD_BCRYPT);
 
-if (!move_uploaded_file($_FILES['imagen']['tmp_name'], $rutaImagen)) {
-    header('Content-Type: text/plain; charset=utf-8');
-    echo "Error: no se pudo guardar la imagen en el servidor.";
-    exit;
+// 4.2) Nombre/apellido
+if (!preg_match('/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/u', $nombre)) {
+    echo "Error: Nombre inválido."; exit;
+}
+if (!preg_match('/^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]{2,}$/u', $apellido)) {
+    echo "Error: Apellido inválido."; exit;
 }
 
-// 6) Verificar email duplicado
-$sql = "SELECT 1 FROM usuarios WHERE correo = ?";
-$stmt = $conexion->prepare($sql);
-if (!$stmt) {
-    header('Content-Type: text/plain; charset=utf-8');
-    echo "Error: fallo al preparar consulta de verificación.";
-    exit;
+// 4.3) Correo
+if (!filter_var($correo, FILTER_VALIDATE_EMAIL)) {
+    echo "Error: Correo inválido."; exit;
 }
+
+// 4.4) Puesto y género
+if (!in_array($puesto, ['profesor','coordinador'], true)) {
+    echo "Error: Puesto no válido."; exit;
+}
+if (!in_array($genero, ['masculino','femenino','otro'], true)) {
+    echo "Error: Género no válido."; exit;
+}
+
+// 4.5) Teléfono
+if (!preg_match('/^\d{7,15}$/', $telefono)) {
+    echo "Error: Teléfono inválido."; exit;
+}
+
+// 4.6) Fecha
+$d = DateTime::createFromFormat('Y-m-d', $nacimiento);
+if (!$d || $d->format('Y-m-d') !== $nacimiento) {
+    echo "Error: Fecha de nacimiento inválida."; exit;
+}
+
+// 4.7) Salario
+if (!is_numeric($salario) || floatval($salario) <= 0) {
+    echo "Error: Salario inválido."; exit;
+}
+
+// 4.8) Dirección
+if (strlen($direccion) < 5) {
+    echo "Error: Dirección demasiado corta."; exit;
+}
+
+// 4.9) Imagen
+if (!isset($_FILES['imagen']) || $_FILES['imagen']['error'] !== UPLOAD_ERR_OK) {
+    echo "Error: Problema al subir la imagen."; exit;
+}
+$info = getimagesize($_FILES['imagen']['tmp_name']);
+if (!$info || !in_array($info['mime'], ['image/jpeg','image/png'], true)) {
+    echo "Error: Formato de imagen no válido."; exit;
+}
+if ($_FILES['imagen']['size'] > 2*1024*1024) {
+    echo "Error: Imagen supera 2 MB."; exit;
+}
+$destDir = "../../assets/img/uploads/";
+if (!move_uploaded_file($_FILES['imagen']['tmp_name'], $destDir . basename($_FILES['imagen']['name']))) {
+    echo "Error: No se pudo guardar la imagen."; exit;
+}
+$fotoUrl = "assets/img/uploads/" . basename($_FILES['imagen']['name']);
+
+// 5) Verificar correo único
+$stmt = $conexion->prepare("SELECT 1 FROM usuarios WHERE correo = ?");
 $stmt->bind_param('s', $correo);
 $stmt->execute();
-$res = $stmt->get_result();
-if ($res->num_rows > 0) {
-    header('Content-Type: text/plain; charset=utf-8');
-    echo "Error: El correo ya está registrado.";
-    $stmt->close();
-    exit;
+$stmt->store_result();
+if ($stmt->num_rows) {
+    echo "Error: El correo ya está registrado."; exit;
 }
 $stmt->close();
 
-// 7) Insertar en usuarios
-$sql = "INSERT INTO usuarios (nombre_usuario, contraseña, correo, rol)
-        VALUES (?, ?, ?, ?)";
-$stmt = $conexion->prepare($sql);
-if (!$stmt) {
-    header('Content-Type: text/plain; charset=utf-8');
-    echo "Error: fallo al preparar consulta de usuario.";
-    exit;
-}
-$stmt->bind_param('sssi', $nombre, $password_hash, $correo, $rol);
+// 6) Insertar en usuarios
+$stmt = $conexion->prepare(
+    "INSERT INTO usuarios (nombre_usuario, contraseña, correo, rol)
+     VALUES (?, ?, ?, ?)"
+);
+$stmt->bind_param('sssi', $nombre, $pass_hash, $correo, $rol);
 if (!$stmt->execute()) {
-    header('Content-Type: text/plain; charset=utf-8');
-    echo "Error: No se pudo registrar el usuario.";
-    $stmt->close();
-    exit;
+    echo "Error: No se pudo registrar el usuario."; exit;
 }
-$usuario_id = $stmt->insert_id;
+$userId = $stmt->insert_id;
 $stmt->close();
 
-// 8) Si es docente (rol = 1), insertar en la tabla docentes
-if ($rol === 1) {
-    $direccion  = $_POST['direccion']  ?? '';
-    $telefono   = $_POST['telefono']   ?? '';
-    $puesto     = $_POST['puesto']     ?? '';
-    $genero     = $_POST['genero']     ?? '';
-    $nacimiento = $_POST['nacimiento'] ?? '';
-    $salario    = $_POST['salario']    ?? '';
-
-    $sql = "INSERT INTO docentes
-            (usuario_id, nombre, apellido, telefono, correo, rol, puesto, genero,
-             fecha_nacimiento, salario, direccion, foto_url)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conexion->prepare($sql);
-    if (!$stmt) {
-        header('Content-Type: text/plain; charset=utf-8');
-        echo "Error: fallo al preparar consulta de docente.";
-        exit;
-    }
-    $stmt->bind_param(
-        'issssisssdss',
-        $usuario_id, $nombre, $apellido, $telefono, $correo, $rol,
-        $puesto, $genero, $nacimiento, $salario, $direccion, $rutaBD
-    );
-    if (!$stmt->execute()) {
-        header('Content-Type: text/plain; charset=utf-8');
-        echo "Error: No se pudo registrar el docente.";
-        $stmt->close();
-        exit;
-    }
-    $stmt->close();
-
-    // 9) Éxito final
-    header('Content-Type: text/plain; charset=utf-8');
-    echo "Docente registrado con éxito.";
-    $conexion->close();
-    exit;
+// 7) Insertar en docentes
+$stmt = $conexion->prepare(
+    "INSERT INTO docentes
+     (usuario_id, nombre, apellido, telefono, correo, rol, puesto, genero,
+      fecha_nacimiento, salario, direccion, foto_url)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+);
+$stmt->bind_param(
+    'issssissdiss',
+    $userId, $nombre, $apellido, $telefono, $correo,
+    $rol, $puesto, $genero, $nacimiento, $salario,
+    $direccion, $fotoUrl
+);
+if (!$stmt->execute()) {
+    echo "Error: No se pudo registrar el docente."; exit;
 }
+$stmt->close();
 
-// 10) Si llega aquí, se registró un usuario sin rol docente
-header('Content-Type: text/plain; charset=utf-8');
-echo "Usuario registrado con éxito.";
+echo "Docente registrado con éxito.";
 $conexion->close();
 exit;
 ?>
