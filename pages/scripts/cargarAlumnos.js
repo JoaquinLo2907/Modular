@@ -1,7 +1,9 @@
-function cargarEstudiantes() {
-  const url = (typeof userRol !== 'undefined' && userRol == 1)
+function cargarEstudiantes(materiaId = null) {
+  const urlBase = (typeof userRol !== 'undefined' && userRol == 1)
     ? '../php/estudiantes-doc.php'
     : '../php/estudiantes.php';
+
+  const url = materiaId ? `${urlBase}?materia_id=${materiaId}` : urlBase;
 
   $.ajax({
     url: url,
@@ -22,16 +24,14 @@ function cargarEstudiantes() {
               <td>${est.fecha_nacimiento}</td>
               <td>${est.grado}</td>
               <td>${est.grupo}</td>
+              <td>${est.materia_id}</td>
+              <td>${est.ciclo}</td>
               <td>${est.activo == 1 ? 'Sí' : 'No'}</td>
               <td>${est.creado_en}</td>
               <td>${est.actualizado_en}</td>
               <td>
-                <button class="btn btn-sm btn-outline-warning btn-editar" data-id="${est.estudiante_id}">
-                  Editar
-                </button>
-                <button class="btn btn-sm btn-outline-danger btn-eliminar" data-id="${est.estudiante_id}">
-                  Eliminar
-                </button>
+                <button class="btn btn-sm btn-outline-warning btn-editar" data-id="${est.estudiante_id}">Editar</button>
+                <button class="btn btn-sm btn-outline-danger btn-eliminar" data-id="${est.estudiante_id}">Eliminar</button>
               </td>
             </tr>
           `;
@@ -58,24 +58,17 @@ function cargarEstudiantes() {
   });
 }
 
-
-// 2. Carga los tutores en el <select> y marca el seleccionado
 function cargarTutores(selectedId = null) {
   return fetch('../php/tutores_opciones.php')
     .then(res => {
-      console.log("tutores_opciones.php status:", res.status);
       if (!res.ok) throw new Error('HTTP ' + res.status);
       return res.json();
     })
     .then(tutores => {
-      console.log("TUTORES RECIBIDOS:", tutores);
       let options = '<option value="" disabled>Seleccione un tutor</option>';
       tutores.forEach(tutor => {
         const sel = tutor.tutor_id == selectedId ? ' selected' : '';
-        options += `
-          <option value="${tutor.tutor_id}"${sel}>
-            ${tutor.nombre} ${tutor.apellido}
-          </option>`;
+        options += `<option value="${tutor.tutor_id}"${sel}>${tutor.nombre} ${tutor.apellido}</option>`;
       });
       $('#edit-tutor-id').html(options);
     })
@@ -85,11 +78,33 @@ function cargarTutores(selectedId = null) {
     });
 }
 
-$(document).ready(function () {
-  // Inicializa la tabla al entrar
-  cargarEstudiantes();
+function cargarMateriasDocente() {
+  fetch('../php/materias-docente.php')
+    .then(r => r.json())
+    .then(materias => {
+      let opciones = '<option value="">Seleccione una materia</option>';
+      materias.forEach(m => {
+        opciones += `<option value="${m.materia_id}">${m.nombre} (ID: ${m.materia_id} | Ciclo: ${m.ciclo})</option>`;
+      });
+      $('#materia-select').html(opciones);
+    })
+    .catch(err => console.error('Error al cargar materias del docente:', err));
+}
 
-  // Evento para eliminar (borrado lógico)
+
+$(document).ready(function () {
+  cargarMateriasDocente(); // Solo cargar el select
+
+  $('#materia-select').on('change', function () {
+    const materiaId = $(this).val();
+    if (materiaId) {
+      cargarEstudiantes(materiaId);
+    } else {
+      $('#student-body').html('');
+      $('#data-table-4').DataTable().clear().draw();
+    }
+  });
+
   $(document).on('click', '.btn-eliminar', function () {
     const id = $(this).data('id');
     if (!confirm('¿Deseas eliminar este estudiante?')) return;
@@ -102,27 +117,25 @@ $(document).ready(function () {
     .then(resp => {
       if (resp.success) {
         Swal.fire({ icon: 'success', title: 'Eliminado', timer: 1500, showConfirmButton: false });
-        cargarEstudiantes();
+        const materiaId = $('#materia-select').val();
+        cargarEstudiantes(materiaId);
       } else {
         alert('Error al eliminar estudiante.');
       }
     });
   });
 
-  // Evento para abrir modal de edición
   $(document).on('click', '.btn-editar', function () {
     const id = $(this).data('id');
     fetch(`../php/obtener_estudiante.php?id=${id}`)
       .then(r => r.json())
       .then(data => {
-        console.log("ESTUDIANTE PARA EDITAR:", data);
         $('#edit-id').val(data.estudiante_id);
         $('#edit-nombre').val(data.nombre);
         $('#edit-apellido').val(data.apellido);
         $('#edit-nacimiento').val(data.fecha_nacimiento);
         $('#edit-grado').val(data.grado);
         $('#edit-grupo').val(data.grupo);
-        // Cargamos tutores y luego mostramos el modal
         cargarTutores(data.tutor_id).then(() => {
           $('#modalEditarEstudiante').modal('show');
         });
@@ -133,24 +146,20 @@ $(document).ready(function () {
       });
   });
 
-  // Enviar formulario de edición
   $('#formEditarEstudiante').on('submit', function (e) {
     e.preventDefault();
     const formData = new FormData(this);
-    // Solo para debug:
-    for (let [key, val] of formData.entries()) console.log(key, val);
-
     fetch('../php/editar_estudiante.php', {
       method: 'POST',
       body: formData
     })
     .then(r => r.json())
     .then(data => {
-      console.log('Respuesta al editar:', data);
       if (data.success) {
         $('#modalEditarEstudiante').modal('hide');
         Swal.fire({ icon: 'success', title: '¡Estudiante actualizado!', timer: 1500, showConfirmButton: false });
-        cargarEstudiantes();
+        const materiaId = $('#materia-select').val();
+        cargarEstudiantes(materiaId);
       } else {
         alert(`No se pudo actualizar: ${data.message || 'Error desconocido'}`);
       }
