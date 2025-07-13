@@ -119,12 +119,12 @@
         <!--Proessors Start-->
         <li class="menu-item">
             <a href="#" class="has-chevron" data-toggle="collapse" data-target="#professor" aria-expanded="false" aria-controls="dashboard">
-               <span><i class="fa fa-user fs-16"></i>Professors</span>
+               <span><i class="fa fa-user fs-16"></i>Students</span>
              </a>
             <ul id="professor" class="collapse" aria-labelledby="dashboard" data-parent="#side-nav-accordion">
-              <li> <a href="../professors/allprofessor.html">All Professors</a> </li>
-               <li> <a href="../professors/addprofessor.html">Add Professors</a> </li>
-                 <li> <a href="../professors/aboutprofessor.html">About Professors</a> </li>
+              <li> <a href="../professors/allprofessor.html">All Students</a> </li>
+               <li> <a href="../professors/addprofessor.html">Add Students</a> </li>
+                 <li> <a href="../professors/aboutprofessor.html">About Students</a> </li>
             </ul>
         </li>
         <!-- /Proessors End--->
@@ -524,52 +524,54 @@
                 <button type="submit" class="btn btn-primary btn-sm ml-2">Importar CSV</button>
               </form>
 
-              <!-- Dropdown igual al de profesores, pero sin “Detalles” -->
-              <div class="dropdown d-inline-block ml-3">
-                <a href="#" class="fa fa-chevron-down text-secondary p-0" data-toggle="dropdown"></a>
-                <div class="dropdown-menu dropdown-menu-right">
-                  <a class="dropdown-item" href="./studentadd.html">Agregar Estudiante</a>
-                  <a class="dropdown-item" href="../php/csv-estudiantes.php">Exportar a CSV</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          </div>
-          <div class="ms-panel-body">
-            <div class="table-responsive">
-             <table id="tabla-estudiantes" class="table table-striped table-bordered w-100">
-
-
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Tutor ID</th>           <!-- ahora mostramos el ID del tutor -->
-                  <th>Nombre Tutor</th>       <!-- y su nombre completo -->
-                  <th>Nombre</th>
-                  <th>Apellido</th>
-                  <th>Fecha de Nacimiento</th>
-                  <th>Grado</th>
-                  <th>Grupo</th>
-                  <th>Activo</th>
-                  <th>Creado en</th>
-                  <th>Actualizado en</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-
-              <tbody id="student-body">
-                <!-- Aquí van los datos -->
-              </tbody>
-            </table>
-
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
+<!-- Botones dropdown -->
+<div class="dropdown d-inline-block ml-3">
+  <a href="#" class="fa fa-chevron-down text-secondary p-0" data-toggle="dropdown"></a>
+  <div class="dropdown-menu dropdown-menu-right">
+    <a class="dropdown-item" href="./studentadd.html">Agregar Estudiante</a>
+    <a class="dropdown-item" href="../php/csv-estudiantes.php">Exportar a CSV</a>
   </div>
+</div>
+</div> <!-- <- cierre del contenedor de botones -->
+</div> <!-- <- cierre del contenedor superior -->
+
+<!-- ✅ Selector de materia -->
+<div style="margin-left: 20px; display: flex; align-items: center; gap: 10px;">
+  <label for="materia-select">Selecciona una materia:</label>
+  <select id="materia-select">...</select>
+</div>
+
+
+<!-- Tabla -->
+<div class="ms-panel-body">
+  <div class="table-responsive">
+    <table id="tabla-estudiantes" class="table table-striped table-bordered w-100">
+      <thead>
+        <tr>
+          <th>ID Alumno</th>
+          <th>Tutor ID</th>
+          <th>Nombre Tutor</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Fecha de Nacimiento</th>
+          <th>Grado</th>
+          <th>Grupo</th>
+          <th>Activo</th>
+          <th>Creado en</th>
+          <th>Actualizado en</th>
+          <th>Acciones</th>
+          <th>ID Materia</th>
+          <th>Ciclo</th>
+
+        </tr>
+      </thead>
+      <tbody id="student-body">
+        <!-- Aquí van los datos -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
 
 
   <!-- Modal Editar Estudiante -->

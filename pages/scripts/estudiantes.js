@@ -4,7 +4,8 @@ document.addEventListener("DOMContentLoaded", () => {
     ? '../../pages/php/estudiantes-doc.php'
     : '../../pages/php/obtener_estudiante.php';
 
-  // 1. Cargar estudiantes y agregarlos a la tabla
+  // Comentamos todo lo que carga y dibuja estudiantes
+  /*
   fetch(url)
     .then(res => res.json())
     .then(estudiantes => {
@@ -36,17 +37,17 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch(err => {
       console.error("Error al cargar estudiantes:", err);
     });
+  */
 
-  // 2. Escuchar los clics en el botón de calificaciones (de forma global)
+  // También eliminamos el listener de los botones
+  /*
   document.addEventListener("click", function (e) {
     if (e.target.classList.contains("ver-calificaciones")) {
       const id = e.target.dataset.id;
       const nombre = e.target.dataset.nombre;
 
-      // Mostrar nombre del alumno en el modal
       document.getElementById("nombreAlumno").textContent = nombre;
 
-      // 3. Obtener calificaciones
       fetch(`../../pages/php/obtener_calificaciones.php?id=${id}`)
         .then(res => res.json())
         .then(data => {
@@ -64,7 +65,6 @@ document.addEventListener("DOMContentLoaded", () => {
             tbody.appendChild(fila);
           });
 
-          // Mostrar el modal
           $('#modalCalificaciones').modal('show');
         })
         .catch(() => {
@@ -72,4 +72,5 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
   });
+  */
 });
