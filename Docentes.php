@@ -126,21 +126,12 @@
                <span><i class="fa fa-graduation-cap fs-16"></i>Courses</span>
              </a>
             <ul id="courses" class="collapse" aria-labelledby="courses" data-parent="#side-nav-accordion">
-              <li> <a href="pages/students-doc/allcoursesDoc.html">All Courses</a> </li>
+              <li> <a href="pages/students-doc/allcoursesDoc.php">All Courses</a> </li>
             </ul>
         </li>
         <!-- /Courses End--->
         
-        <!--Student Start-->
-        <li class="menu-item">
-            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#student" aria-expanded="false" aria-controls="dashboard">
-               <span><i class="fa fa-users fs-16"></i>Student</span>
-             </a>
-            <ul id="student" class="collapse" aria-labelledby="courses" data-parent="#side-nav-accordion">
-               <li> <a href="pages/student/studenttable.html">Student Table</a> </li>
-                  </ul>
-        </li>
-        <!-- /Student End--->
+        
         
         
         <!--tutor Start-->

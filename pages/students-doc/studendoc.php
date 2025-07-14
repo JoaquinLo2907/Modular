@@ -94,7 +94,7 @@
   <div class="ms-aside-overlay ms-overlay-left ms-toggler" data-target="#ms-side-nav" data-toggle="slideLeft"></div>
   <div class="ms-aside-overlay ms-overlay-right ms-toggler" data-target="#ms-recent-activity" data-toggle="slideRight"></div>
 
-  <!-- Sidebar Navigation Left -->
+   <!-- Sidebar Navigation Left -->
   <aside id="ms-side-nav" class="side-nav fixed ms-aside-scrollable ms-aside-left">
 
     <!-- Logo -->
@@ -111,7 +111,7 @@
              </a>
             <ul id="dashboard" class="collapse" aria-labelledby="dashboard" data-parent="#side-nav-accordion">
               <li> <a href="../../Docentes.php">Weeducate</a> </li>
-              
+
             </ul>
         </li>
         <!-- /Dashboard -->
@@ -122,9 +122,9 @@
                <span><i class="fa fa-user fs-16"></i>Students</span>
              </a>
             <ul id="professor" class="collapse" aria-labelledby="dashboard" data-parent="#side-nav-accordion">
-              <li> <a href="../professors/allprofessor.html">All Students</a> </li>
-               <li> <a href="../professors/addprofessor.html">Add Students</a> </li>
-                 <li> <a href="../professors/aboutprofessor.html">About Students</a> </li>
+              <li> <a href="studendoc.php">All students </a> </li>
+               <li> <a href="asistencias.php">Assistances</a> </li>
+                 <li> <a href="aboutstudent.html">About Student  </a> </li>
             </ul>
         </li>
         <!-- /Proessors End--->
@@ -135,24 +135,12 @@
                <span><i class="fa fa-graduation-cap fs-16"></i>Courses</span>
              </a>
             <ul id="courses" class="collapse" aria-labelledby="courses" data-parent="#side-nav-accordion">
-              <li> <a href="../courses/allcourses.html">All Courses</a> </li>
-               <li> <a href="../courses/addcourses.html">Add Courses</a> </li>
-                 <li> <a href="../courses/aboutcourses.html">About Courses</a> </li>
+              <li> <a href="allcoursesDoc.php">All Courses</a> </li>
             </ul>
         </li>
         <!-- /Courses End--->
         
-        <!--Student Start-->
-        <li class="menu-item">
-            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#student" aria-expanded="false" aria-controls="dashboard">
-               <span><i class="fa fa-users fs-16"></i>Student</span>
-             </a>
-            <ul id="student" class="collapse" aria-labelledby="courses" data-parent="#side-nav-accordion">
-              <li> <a href="../student/studentadd.html">Student Add</a> </li>
-               <li> <a href="../student/studenttable.html">Student Table</a> </li>
-                  </ul>
-        </li>
-        <!-- /Student End--->
+        
         
         
         <!--tutor Start-->
@@ -161,52 +149,27 @@
                <span><i class="fa fa-user-circle fs-16"></i>Tutores</span>
              </a>
             <ul id="staff" class="collapse" aria-labelledby="staff" data-parent="#side-nav-accordion">
-              <li> <a href="../tutor/addtutor.html">Añadir Tutor</a> </li>
-              <li> <a href="../tutor/tutorprofile.html">Tabla de Tutores</a> </li>
-                 
+               <li> <a href="tutoresDoc.php">Tabla de Tutores</a> </li>
             </ul>
         </li>
         <!-- /tutor End--->
         
-        
-        
-        <!--Fees Start-->
+
+
+       <!--Holiday Start-->
         <li class="menu-item">
-            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#fees" aria-expanded="false" aria-controls="dashboard">
-                <span><i class="fas fa-dollar-sign"></i>Fees</span>
-             </a>
-            <ul id="fees" class="collapse" aria-labelledby="staff" data-parent="#side-nav-accordion">
-              <li> <a href="../fees/feescollection.html">Fees Collection</a> </li>
-              <li> <a href="../fees/addfees.html">Add Fees</a> </li>
-              <li> <a href="../fees/feesrecepit.html">Fees Recepit</a> </li>
-               
-                 
-            </ul>
-        </li>
-        <!-- /Fees End--->
-        
-        
-        <!--Holiday Start-->
-        <li class="menu-item">
-          <a href="../holidays/holiday.html">
+          <a href="../../pages/holidays/holiday.html">
             <span><i class="fa fa-calendar fs-16"></i>Holidays</span>
           </a>
         </li>
         <!-- /Holiday End--->
-        <!-- Charts -->
         <li class="menu-item">
-            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#charts" aria-expanded="false" aria-controls="charts">
-              <span><i class="material-icons fs-16">equalizer</i>Charts</span>
-            </a>
-            <ul id="charts" class="collapse" aria-labelledby="charts" data-parent="#side-nav-accordion">
-              <li> <a href="../charts/chartjs.html">Chart JS</a> </li>
-              <li> <a href="../charts/morris-charts.html">Morris Chart</a> </li>
-            </ul>
+          <a href="../../pages/widgets.html">
+            <span><i class="material-icons fs-16">widgets</i>Widgets</span>
+          </a>
         </li>
-        <!-- /Charts -->
 
     </ul>
-
 
   </aside>
 
@@ -469,7 +432,7 @@
           <a href="#"  id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <img class="ms-user-img ms-img-round float-right" src="../../assets/img/we-educate/new-student-5.jpg" alt="people"> </a>
           <ul class="dropdown-menu dropdown-menu-right user-dropdown" aria-labelledby="userDropdown">
             <li class="dropdown-menu-header">
-              <h6 class="dropdown-header ms-inline m-0"><span class="text-disabled">Welcome, Anny Farisha</span></h6>
+              <span class="text-disabled">Welcome, <?php echo $_SESSION['correo']; ?></span>
             </li>
             <li class="dropdown-divider"></li>
             <li class="ms-dropdown-list">
@@ -482,7 +445,8 @@
               <a class="media fs-14 p-2" href="pages/prebuilt-pages/lock-screen.html"> <span><i class="flaticon-security mr-2"></i> Lock</span> </a>
             </li>
             <li class="dropdown-menu-footer">
-              <a class="media fs-14 p-2" href="pages/prebuilt-pages/default-login.html"> <span><i class="flaticon-shut-down mr-2"></i> Logout</span> </a>
+              <a class="media fs-14 p-2" href="Docentes.php?logout=true"></a>
+              <a class="media fs-14 p-2" href="../prebuilt-pages/default-login.html"> <span><i class="flaticon-shut-down mr-2"></i> Logout</span> </a>
             </li>
           </ul>
         </li>
