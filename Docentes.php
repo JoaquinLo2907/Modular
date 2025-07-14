@@ -126,24 +126,11 @@
                <span><i class="fa fa-graduation-cap fs-16"></i>Courses</span>
              </a>
             <ul id="courses" class="collapse" aria-labelledby="courses" data-parent="#side-nav-accordion">
-              <li> <a href="pages/students-doc/allcoursesDoc.html">All Courses</a> </li>
+              <li> <a href="pages/students-doc/allcoursesDoc.php">All Courses</a> </li>
             </ul>
         </li>
         <!-- /Courses End--->
-        
-        <!--Student Start-->
-        <li class="menu-item">
-            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#student" aria-expanded="false" aria-controls="dashboard">
-               <span><i class="fa fa-users fs-16"></i>Student</span>
-             </a>
-            <ul id="student" class="collapse" aria-labelledby="courses" data-parent="#side-nav-accordion">
-               <li> <a href="pages/student/studenttable.html">Student Table</a> </li>
-                  </ul>
-        </li>
-        <!-- /Student End--->
-        
-        
-        <!--tutor Start-->
+          <!--tutor Start-->
         <li class="menu-item">
             <a href="#" class="has-chevron" data-toggle="collapse" data-target="#staff" aria-expanded="false" aria-controls="dashboard">
                <span><i class="fa fa-user-circle fs-16"></i>Tutores</span>
@@ -163,32 +150,7 @@
           </a>
         </li>
         <!-- /Holiday End--->
-        <li class="menu-item">
-          <a href="pages/widgets.html">
-            <span><i class="material-icons fs-16">widgets</i>Widgets</span>
-          </a>
-        </li>
-        <!-- Basic UI Elements -->
-        <li class="menu-item">
-            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#basic-elements" aria-expanded="false" aria-controls="basic-elements">
-              <span><i class="material-icons fs-16">filter_list</i>Estadisticas</span>
-            </a>
-            <ul id="basic-elements" class="collapse" aria-labelledby="basic-elements" data-parent="#side-nav-accordion">
-              <li> <a href="pages/ui-basic/accordions.html">Accordions</a> </li>
-              <li> <a href="pages/ui-basic/alerts.html">Alerts</a> </li>
-              <li> <a href="pages/ui-basic/buttons.html">Buttons</a> </li>
-              <li> <a href="pages/ui-basic/breadcrumbs.html">Breadcrumbs</a> </li>
-              <li> <a href="pages/ui-basic/badges.html">Badges</a> </li>
-              <li> <a href="pages/ui-basic/cards.html">Cards</a> </li>
-              <li> <a href="pages/ui-basic/progress-bars.html">Progress Bars</a> </li>
-              <li> <a href="pages/ui-basic/preloaders.html">Pre-loaders</a> </li>
-              <li> <a href="pages/ui-basic/pagination.html">Pagination</a> </li>
-              <li> <a href="pages/ui-basic/tabs.html">Tabs</a> </li>
-
-              <li> <a href="pages/ui-basic/typography.html">Typography</a> </li>
-            </ul>
-        </li>
-        <!-- /Basic UI Elements -->
+ 
     </ul>
 
   </aside>
@@ -469,7 +431,7 @@
               
             </li>
             <li class="dropdown-menu-footer">
-             <a class="media fs-14 p-2" href="index.php?logout=true">
+             <a class="media fs-14 p-2" href="Docentes.php?logout=true">
              <span><i class="flaticon-shut-down mr-2"></i> Logout</span>
     </a>
 </li>
