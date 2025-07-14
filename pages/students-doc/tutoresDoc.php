@@ -415,7 +415,7 @@
                 </div>
                 <div class="media-body">
                   <span>How many people are we inviting to the dashboard?</span>
-                  <p class="fs-10 my-1 text-disabled"><i class="material-icons">access_time</i> 6 hours ago</p>
+                  <p class="fs-10 my-1 text-disabled"><i class="material-icons">access_time</i> 6 hours agoo</p>
                 </div>
               </a>
             </li>
