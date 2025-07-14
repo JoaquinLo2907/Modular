@@ -131,7 +131,6 @@
                  <li> <a href="../courses/aboutcourses.html">About Courses</a> </li>
                   <li> <a href="../courses/ciclos.html">Ciclos</a> </li>
                    <li> <a href="../courses/clases.html">Clases</a> </li>
-                    <li> <a href="../courses/inscripciones.html">Inscripciones</a> </li>
             </ul>
         </li>
         <!-- /Courses End--->
@@ -495,35 +494,64 @@
     
     <!-- Body Content Wrapper -->
     <div class="ms-content-wrapper">
-      <div class="row">
-        <div class="col-md-12">
-          <nav aria-label="breadcrumb">
-            <ol class="breadcrumb pl-0">
-              <li class="breadcrumb-item">
-                <a href="../../index.php"><i class="material-icons">home</i> Home</a>
-              </li>
-              <li class="breadcrumb-item">Clases</li>
-              <li class="breadcrumb-item active" aria-current="page">Todas las clases</li>
-            </ol>
-          </nav>
-          <h2 class="section-title">Clases</h2>
-        </div>
-      </div>
-    
-      <!-- Aquí empieza la sección para mostrar las materias -->
-      <div class="row">
-        <div class="col-md-12">
-          <!-- Lista de Materias -->
-          <ul class="list-group" id="materias-lista">
-            <!-- Las materias se cargarán aquí dinámicamente con JS -->
-          </ul>
-        </div>
-      </div>
-    
-      
+        <!-- Dentro de tu <body>, en el lugar donde quieras que aparezca la sección -->
+        <div class="ms-panel">
+            <form id="formInscripciones">
+                    <div class="form-group">
+                        <label for="selectClase">Clase</label>
+                        <select id="selectClase" class="form-control">
+                        <option value="">Seleccione clase</option>
+                        <!-- JS inyecta aquí las opciones -->
+                        </select>
+                    </div>
 
-      <!-- Incluir el archivo JS que carga las materias -->
-      <script src="../scripts/cargarMaterias.js"></script>
+                    <div class="row mt-3">
+                        <!-- Alumnos inscritos -->
+                        <div class="col-md-5">
+                        <h6>Inscritos a <span id="tituloClase"></span></h6>
+                        <table class="table table-sm table-hover" id="tablaInscritos">
+                            <thead>
+                            <tr><th>Nombre</th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        </div>
+
+                        <!-- Añade esta regla CSS en el <head> -->
+                        <style>
+                        .flip { display:inline-block; transform: scaleX(-1); }
+                        </style>
+
+                        <!-- Y en el cuerpo: -->
+                        <div class="col-md-2 d-flex flex-column justify-content-center align-items-center">
+                        <!-- giramos el símbolo '>' -->
+                        <button type="button" id="btnPasarADerecha" class="btn btn-outline-primary mb-2">
+                            <span class="flip">&gt;</span>
+                        </button>
+                        <!-- giramos el símbolo '<' -->
+                        <button type="button" id="btnPasarAIzquierda" class="btn btn-outline-secondary">
+                            <span class="flip">&lt;</span>
+                        </button>
+                        </div>
+
+                        <!-- Alumnos no inscritos -->
+                        <div class="col-md-5">
+                        <h6>No inscritos</h6>
+                        <table class="table table-sm table-hover" id="tablaNoInscritos">
+                            <thead>
+                            <th><!-- checkbox --></th>
+                            <tr><th>Nombre</th></tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                        </div>
+                    </div>
+
+            <button type="submit" id="btnGuardar" class="btn btn-success mt-3">Guardar cambios</button>
+            </form>
+
+        </div>
+
     </div>
 
 
@@ -1241,8 +1269,8 @@
   <script src="../../assets/js/slick.min.js"> </script>
   <script src="../../assets/js/moment.js"> </script>
   <script src="../../assets/js/jquery.webticker.min.js"> </script>
-  <script src="../../pages/scripts/cargarMateriasTabla.js"></script>
-   <script src="../../pages/scripts/estudiantes.js"></script>
+  <!-- JS específico para inscripciones -->
+  <script src="../../pages/scripts/inscripciones.js"></script>
    
 
  
