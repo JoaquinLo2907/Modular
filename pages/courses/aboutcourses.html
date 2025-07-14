@@ -129,6 +129,9 @@
               <li> <a href="../courses/allcourses.html">All Courses</a> </li>
                <li> <a href="../courses/addcourses.html">Add Courses</a> </li>
                  <li> <a href="../courses/aboutcourses.html">About Courses</a> </li>
+                  <li> <a href="../courses/ciclos.html">Ciclos</a> </li>
+                   <li> <a href="../courses/clases.html">Clases</a> </li>
+                    <li> <a href="../courses/inscripciones.html">Inscripciones</a> </li>
             </ul>
         </li>
         <!-- /Courses End--->
@@ -496,11 +499,14 @@
         <div class="col-md-12">
           <nav aria-label="breadcrumb">
             <ol class="breadcrumb pl-0">
-              <li class="breadcrumb-item"><a href="../../index.php"><i class="material-icons">home</i> Home</a></li>
-              <li class="breadcrumb-item active" aria-current="page">Materias</li>
-              <li class="breadcrumb-item active" aria-current="page">Todas las materias</li>
+              <li class="breadcrumb-item">
+                <a href="../../index.php"><i class="material-icons">home</i> Home</a>
+              </li>
+              <li class="breadcrumb-item">Clases</li>
+              <li class="breadcrumb-item active" aria-current="page">Todas las clases</li>
             </ol>
           </nav>
+          <h2 class="section-title">Clases</h2>
         </div>
       </div>
     
@@ -547,59 +553,6 @@
             </div>
         </div>
     </div>
-  </div>
-
-    
-<!--About Courses End-->
-<table id="tabla-estudiantes" class="table table-striped mt-4">
-  <thead>
-    <tr>
-      <th>Nombre</th>
-      <th>Apellido</th>
-      <th>Grado</th>
-      <th>Grupo</th>
-      <th>Acción</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- Los estudiantes se cargarán aquí con JS -->
-  </tbody>
-</table>
-
-
-
-<!-- Modal Ver Calificaciones -->
-<!-- Modal Calificaciones -->
-<div class="modal fade" id="modalCalificaciones" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="modal-content">
-      <div class="modal-header bg-warning text-white">
-        <h5 class="modal-title">Calificaciones de <span id="nombreAlumno"></span></h5>
-        <button type="button" class="close text-white" data-dismiss="modal" aria-label="Cerrar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <table class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Materia</th>
-              <th>Calificación</th>
-            </tr>
-          </thead>
-          <tbody id="tablaCalificaciones">
-            <!-- Aquí van las calificaciones -->
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
-</div>
-
-
-
-        
-      
 
   </main>
 

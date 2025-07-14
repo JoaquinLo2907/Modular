@@ -96,14 +96,97 @@
 
     <!-- Navigation -->
     <ul class="accordion ms-main-aside fs-14" id="side-nav-accordion">
-      <!-- Dashboard -->
-      <li class="menu-item">
-        <a href="#" class="has-chevron" data-toggle="collapse" data-target="#dashboard" aria-expanded="false"
-          aria-controls="dashboard">
-          <span><i class="material-icons fs-16">dashboard</i>Dashboard </span>
-        </a>
-        <ul id="dashboard" class="collapse" aria-labelledby="dashboard" data-parent="#side-nav-accordion">
-          <li> <a href="../../index.php">Weeducate</a> </li>
+        <!-- Dashboard -->
+        <li class="menu-item">
+            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#dashboard" aria-expanded="false" aria-controls="dashboard">
+               <span><i class="material-icons fs-16">dashboard</i>Dashboard </span>
+             </a>
+            <ul id="dashboard" class="collapse" aria-labelledby="dashboard" data-parent="#side-nav-accordion">
+              <li> <a href="../../index.php">Weeducate</a> </li>
+              
+            </ul>
+        </li>
+        <!-- /Dashboard -->
+        
+        <!--Proessors Start-->
+        <li class="menu-item">
+            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#professor" aria-expanded="false" aria-controls="dashboard">
+               <span><i class="fa fa-user fs-16"></i>Professors</span>
+             </a>
+            <ul id="professor" class="collapse" aria-labelledby="dashboard" data-parent="#side-nav-accordion">
+              <li> <a href="../professors/allprofessor.html">All Professors</a> </li>
+               <li> <a href="../professors/addprofessor.html">Add Professors</a> </li>
+                 <li> <a href="../professors/aboutprofessor.html">About Professors</a> </li>
+            </ul>
+        </li>
+        <!-- /Proessors End--->
+        
+         <!--Courses Start-->
+        <li class="menu-item">
+            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#courses" aria-expanded="false" aria-controls="dashboard">
+               <span><i class="fa fa-graduation-cap fs-16"></i>Courses</span>
+             </a>
+            <ul id="courses" class="collapse" aria-labelledby="courses" data-parent="#side-nav-accordion">
+              <li> <a href="../courses/allcourses.html">All Courses</a> </li>
+               <li> <a href="../courses/addcourses.html">Add Courses</a> </li>
+                 <li> <a href="../courses/aboutcourses.html">About Courses</a> </li>
+            </ul>
+        </li>
+        <!-- /Courses End--->
+        
+        <!--Student Start-->
+        <li class="menu-item">
+            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#student" aria-expanded="false" aria-controls="dashboard">
+               <span><i class="fa fa-users fs-16"></i>Student</span>
+             </a>
+            <ul id="student" class="collapse" aria-labelledby="courses" data-parent="#side-nav-accordion">
+              <li> <a href="../student/studentadd.html">Student Add</a> </li>
+               <li> <a href="../student/studenttable.html">Student Table</a> </li>
+                <li> <a href="../student/scoretable.html">Score Table</a> </li>
+                  </ul>
+        </li>
+        <!-- /Student End--->
+        
+        
+        <!--tutor Start-->
+        <li class="menu-item">
+            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#staff" aria-expanded="false" aria-controls="dashboard">
+               <span><i class="fa fa-user-circle fs-16"></i>Tutores</span>
+             </a>
+            <ul id="staff" class="collapse" aria-labelledby="staff" data-parent="#side-nav-accordion">
+              <li> <a href="../tutor/addtutor.html">Añadir Tutor</a> </li>
+              <li> <a href="../tutor/tutorprofile.html">Tabla de Tutores</a> </li>
+                 
+            </ul>
+        </li>
+        <!-- /tutor End--->
+        
+        
+        
+        <!--Fees Start-->
+        <li class="menu-item">
+            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#fees" aria-expanded="false" aria-controls="dashboard">
+                <span><i class="fas fa-dollar-sign"></i>Fees</span>
+             </a>
+            <ul id="fees" class="collapse" aria-labelledby="staff" data-parent="#side-nav-accordion">
+              <li> <a href="../fees/feescollection.html">Fees Collection</a> </li>
+              <li> <a href="../fees/addfees.html">Add Fees</a> </li>
+              <li> <a href="../fees/feesrecepit.html">Fees Recepit</a> </li>
+               
+                 
+            </ul>
+        </li>
+        <!-- /Fees End--->
+        
+       
+        
+        <!--Holiday Start-->
+        <li class="menu-item">
+          <a href="../holidays/holiday.html">
+            <span><i class="fa fa-calendar fs-16"></i>Holidays</span>
+          </a>
+        </li>
+        <!-- /Holiday End--->
 
         </ul>
       </li>
@@ -536,146 +619,140 @@
           </nav>
         </div>
 
-        <div class="col-lg-12">
-          <div class="ms-panel">
-            <div class="ms-panel-header">
-              <h6>Añadir Estudiante</h6>
+        <div class="ms-panel-body">
+          <form id="formEstudiante" novalidate>
+            <div class="row">
+              <!-- Nombre -->
+              <div class="col-lg-6 mb-3">
+                <label>Nombre:</label>
+                <input type="text" class="form-control" name="nombre" placeholder="Ej. Jorge" required>
+              </div>
+              <!-- Apellido -->
+              <div class="col-lg-6 mb-3">
+                <label>Apellido:</label>
+                <input type="text" class="form-control" name="apellido" placeholder="Ej. Pérez" required>
+              </div>
+              <!-- Fecha de Nacimiento -->
+              <div class="col-lg-4 mb-3">
+                <label>Fecha de Nacimiento:</label>
+                <input type="date" class="form-control" name="fecha_nacimiento" required>
+              </div>
+              <!-- Grado -->
+              <div class="col-lg-4 mb-3">
+                <label>Grado:</label>
+                <select class="form-control" name="grado" required>
+                  <option value="">Seleccione un grupo</option>
+                  <option value="1">1ro</option>
+                  <option value="2">2do</option>
+                  <option value="3">3ro</option>
+                  <option value="4">4to</option>
+                  <option value="5">5to</option>
+                  <option value="6">6to</option>
+                </select>
+              </div>
+              <!-- Grupo -->
+              <div class="col-lg-4 mb-3">
+                <label>Grupo:</label>
+                <select class="form-control" name="grupo" required>
+                  <option value="">Seleccione un grupo</option>
+                  <option value="A">A</option>
+                  <option value="B">B</option>
+                  <option value="C">C</option>
+                </select>
+              </div>
+              <!-- Tutor -->
+              <div class="col-lg-6 mb-3">
+                <label>Tutor:</label>
+                <select class="form-control" name="tutor_id" id="tutorSelect" required>
+                  <option value="">Cargando tutores...</option>
+                </select>
+              </div>
+              <!-- Botones -->
+              <div class="text-center col-lg-12">
+                <button type="submit" class="btn btn-warning mb-3">Registrar</button>
+                <button type="reset" class="btn btn-outline-warning mb-3 ml-2">Cancelar</button>
+              </div>
             </div>
+          </form>
 
-            <div class="ms-panel-body">
-              <form id="formEstudiante" novalidate>
-                <div class="row">
-                  <!-- Nombre -->
-                  <div class="col-lg-6 mb-3">
-                    <label>Nombre:</label>
-                    <input type="text" class="form-control" name="nombre" placeholder="Ej. Jorge" required>
-                  </div>
-                  <!-- Apellido -->
-                  <div class="col-lg-6 mb-3">
-                    <label>Apellido:</label>
-                    <input type="text" class="form-control" name="apellido" placeholder="Ej. Pérez" required>
-                  </div>
-                  <!-- Fecha de Nacimiento -->
-                  <div class="col-lg-4 mb-3">
-                    <label>Fecha de Nacimiento:</label>
-                    <input type="date" class="form-control" name="fecha_nacimiento" required>
-                  </div>
-                  <!-- Grado -->
-                  <div class="col-lg-4 mb-3">
-                    <label>Grado:</label>
-                    <select class="form-control" name="grado" required>
-                      <option value="">Seleccione un grupo</option>
-                      <option value="1">1ro</option>
-                      <option value="2">2do</option>
-                      <option value="3">3ro</option>
-                      <option value="4">4to</option>
-                      <option value="5">5to</option>
-                      <option value="6">6to</option>
-                    </select>
-                  </div>
-                  <!-- Grupo -->
-                  <div class="col-lg-4 mb-3">
-                    <label>Grupo:</label>
-                    <select class="form-control" name="grupo" required>
-                      <option value="">Seleccione un grupo</option>
-                      <option value="A">A</option>
-                      <option value="B">B</option>
-                      <option value="C">C</option>
-                    </select>
-                  </div>
-                  <!-- Tutor -->
-                  <div class="col-lg-6 mb-3">
-                    <label>Tutor:</label>
-                    <select class="form-control" name="tutor_id" id="tutorSelect" required>
-                      <option value="">Cargando tutores...</option>
-                    </select>
-                  </div>
-                  <!-- Botones -->
-                  <div class="text-center col-lg-12">
-                    <button type="submit" class="btn btn-warning mb-3">Registrar</button>
-                    <button type="reset" class="btn btn-outline-warning mb-3 ml-2">Cancelar</button>
-                  </div>
-                </div>
-              </form>
-
-            </div>
-          </div>
         </div>
       </div>
     </div>
-    <script src="../scripts/cargarTutoresSelect.js"></script>
-    <script>
-      (function () {
-        const form = document.getElementById('formEstudiante');
-        const nameRegex = /^[A-Za-zÁÉÍÓÚÑáéíóúñ ]{2,}$/;
+  </div>
+</div>
+<script src="../scripts/cargarTutoresSelect.js"></script>
+ <script>
+    (function() {
+      const form = document.getElementById('formEstudiante');
+      const nameRegex = /^[A-Za-zÁÉÍÓÚÑáéíóúñ ]{2,}$/;
 
-        form.addEventListener('submit', function (e) {
-          let valid = true;
+      form.addEventListener('submit', function(e) {
+        let valid = true;
 
-          const campo = (selector) => form.elements[selector];
+        const campo = (selector) => form.elements[selector];
 
-          // Nombre
-          if (!nameRegex.test(campo('nombre').value.trim())) {
-            valid = false;
-            campo('nombre').classList.add('is-invalid');
-          } else {
-            campo('nombre').classList.remove('is-invalid');
-          }
+        // Nombre
+        if (!nameRegex.test(campo('nombre').value.trim())) {
+          valid = false;
+          campo('nombre').classList.add('is-invalid');
+        } else {
+          campo('nombre').classList.remove('is-invalid');
+        }
 
-          // Apellido
-          if (!nameRegex.test(campo('apellido').value.trim())) {
-            valid = false;
-            campo('apellido').classList.add('is-invalid');
-          } else {
-            campo('apellido').classList.remove('is-invalid');
-          }
+        // Apellido
+        if (!nameRegex.test(campo('apellido').value.trim())) {
+          valid = false;
+          campo('apellido').classList.add('is-invalid');
+        } else {
+          campo('apellido').classList.remove('is-invalid');
+        }
 
-          // Fecha de Nacimiento
-          if (!campo('fecha_nacimiento').value) {
-            valid = false;
-            campo('fecha_nacimiento').classList.add('is-invalid');
-          } else {
-            campo('fecha_nacimiento').classList.remove('is-invalid');
-          }
+        // Fecha de Nacimiento
+        if (!campo('fecha_nacimiento').value) {
+          valid = false;
+          campo('fecha_nacimiento').classList.add('is-invalid');
+        } else {
+          campo('fecha_nacimiento').classList.remove('is-invalid');
+        }
 
-          // Grado
-          const gradoVal = parseInt(campo('grado').value, 10);
-          if (isNaN(gradoVal) || gradoVal < 1 || gradoVal > 12) {
-            valid = false;
-            campo('grado').classList.add('is-invalid');
-          } else {
-            campo('grado').classList.remove('is-invalid');
-          }
+        // Grado
+        const gradoVal = parseInt(campo('grado').value, 10);
+        if (isNaN(gradoVal) || gradoVal < 1 || gradoVal > 12) {
+          valid = false;
+          campo('grado').classList.add('is-invalid');
+        } else {
+          campo('grado').classList.remove('is-invalid');
+        }
 
-          // Grupo
-          if (!campo('grupo').value) {
-            valid = false;
-            campo('grupo').classList.add('is-invalid');
-          } else {
-            campo('grupo').classList.remove('is-invalid');
-          }
+        // Grupo
+        if (!campo('grupo').value) {
+          valid = false;
+          campo('grupo').classList.add('is-invalid');
+        } else {
+          campo('grupo').classList.remove('is-invalid');
+        }
 
-          // Tutor
-          if (!campo('tutor_id').value) {
-            valid = false;
-            campo('tutor_id').classList.add('is-invalid');
-          } else {
-            campo('tutor_id').classList.remove('is-invalid');
-          }
+        // Tutor
+        if (!campo('tutor_id').value) {
+          valid = false;
+          campo('tutor_id').classList.add('is-invalid');
+        } else {
+          campo('tutor_id').classList.remove('is-invalid');
+        }
 
-          if (!valid) {
-            e.preventDefault();
-            e.stopPropagation();
-            Swal.fire({
-              icon: 'error',
-              title: 'Corrige los campos marcados',
-              timer: 2000,
-              showConfirmButton: false
-            });
-          }
-        });
-      })();
-    </script>
+        if (!valid) {
+          e.preventDefault();
+          e.stopPropagation();
+          Swal.fire({
+            icon: 'error',
+            title: 'Corrige los campos marcados',
+            timer: 2000,
+            showConfirmButton: false
+          });
+        }
+      });
+    })();
+  </script>
   </main>
 
   <!-- Quick bar -->

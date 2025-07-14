@@ -2,6 +2,7 @@
 require 'conecta.php';
 header('Content-Type: application/json');
 
+// 0) Conexión a la base de datos
 $conexion = conecta();
 if (!$conexion) {
     echo json_encode([
