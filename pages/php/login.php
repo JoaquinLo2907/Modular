@@ -53,7 +53,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $redirect = "../../Docentes.php";
             break;
         case 2:
-            $redirect = "../../pruebaTuto.php";
+            $redirect = "../../Tutor.php";
             break;
         default:
             echo json_encode(["status" => "error", "message" => "❌ Rol no válido."]);

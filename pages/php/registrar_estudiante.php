@@ -2,7 +2,6 @@
 require 'conecta.php';
 header('Content-Type: application/json');
 
-// 0) Conexión a la base de datos
 $conexion = conecta();
 if (!$conexion) {
     echo json_encode([
@@ -20,13 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit;
 }
 
-// 1) Recogemos y saneamos los datos del formulario
-$nombre           = trim($_POST['nombre'] ?? '');
-$apellido         = trim($_POST['apellido'] ?? '');
+// 1) Recogemos y saneamos
+$nombre           = trim($_POST['nombre']           ?? '');
+$apellido         = trim($_POST['apellido']         ?? '');
 $fecha_nacimiento = trim($_POST['fecha_nacimiento'] ?? '');
-$grado            = intval($_POST['grado'] ?? 0);
-$grupo            = trim($_POST['grupo'] ?? '');
-$tutor_id         = intval($_POST['tutor_id'] ?? 0);
+$grado            = intval($_POST['grado']         ?? 0);
+$grupo            = trim($_POST['grupo']           ?? '');
+$tutor_id         = intval($_POST['tutor_id']      ?? 0);
 
 // 2) Validaciones
 
@@ -67,38 +66,60 @@ if ($tutor_id <= 0) {
     exit;
 }
 
-// 3) Preparamos el INSERT
-$sql = "
-  INSERT INTO estudiantes
-    (nombre, apellido, fecha_nacimiento, grado, grupo, tutor_id, activo, creado_en, actualizado_en)
-  VALUES
-    (?, ?, ?, ?, ?, ?, 1, NOW(), NOW())
-";
-$stmt = $conexion->prepare($sql);
-if (!$stmt) {
-    echo json_encode(['success' => false, 'message' => 'Error al preparar la consulta: '.$conexion->error]);
-    exit;
-}
+// 3) Empezamos la transacción
+$conexion->begin_transaction();
 
-// 4) Enlazamos parámetros y ejecutamos
-$stmt->bind_param(
-    'sssisi',
-    $nombre,
-    $apellido,
-    $fecha_nacimiento,
-    $grado,
-    $grupo,
-    $tutor_id
-);
+try {
+    // 4) Insertar en estudiantes (sin tutor_id)
+    $sql1 = "
+      INSERT INTO estudiantes
+        (nombre, apellido, fecha_nacimiento, grado, grupo, activo, creado_en, actualizado_en)
+      VALUES
+        (?, ?, ?, ?, ?, 1, NOW(), NOW())
+    ";
+    $stmt1 = $conexion->prepare($sql1);
+    $stmt1->bind_param('sssis', $nombre, $apellido, $fecha_nacimiento, $grado, $grupo);
 
-if ($stmt->execute()) {
-    echo json_encode(['success' => true]);
-} else {
+    if (!$stmt1->execute()) {
+        throw new Exception('Error al insertar estudiante: ' . $stmt1->error);
+    }
+
+    // 5) Recuperar el ID generado del estudiante
+    $estudiante_id = $conexion->insert_id;
+    $stmt1->close();
+
+    // 6) Insertar en la tabla de relación
+    $sql2 = "
+      INSERT INTO tutor_estudiante
+        (tutor_id, estudiante_id)
+      VALUES
+        (?, ?)
+    ";
+    $stmt2 = $conexion->prepare($sql2);
+    $stmt2->bind_param('ii', $tutor_id, $estudiante_id);
+
+    if (!$stmt2->execute()) {
+        throw new Exception('Error al asignar tutor: ' . $stmt2->error);
+    }
+
+    // Si quieres obtener el tutorEstudiante_id recién creado:
+    $tutorEstudiante_id = $conexion->insert_id;
+    $stmt2->close();
+
+    // 7) Confirmamos la transacción
+    $conexion->commit();
+
+    // 8) Respondemos con éxito y el id de la relación
+    echo json_encode([
+        'success'              => true,
+        'estudiante_id'        => $estudiante_id,
+        'tutorEstudiante_id'   => $tutorEstudiante_id
+    ]);
+} catch (Exception $e) {
+    $conexion->rollback();
     echo json_encode([
         'success' => false,
-        'message' => 'Error al insertar estudiante: '.$stmt->error
+        'message' => $e->getMessage()
     ]);
 }
-
-$stmt->close();
 $conexion->close();
