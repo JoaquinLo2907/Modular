@@ -505,7 +505,7 @@
     <table id="tabla-estudiantes" class="table table-striped table-bordered w-100">
       <thead>
         <tr>
-          <th>ID Alumno</th>
+          <th>ID Alumnos</th>
           <th>Tutor ID</th>
           <th>Nombre Tutor</th>
           <th>Nombre</th>
