@@ -119,12 +119,12 @@
         <!--Proessors Start-->
         <li class="menu-item">
             <a href="#" class="has-chevron" data-toggle="collapse" data-target="#professor" aria-expanded="false" aria-controls="dashboard">
-               <span><i class="fa fa-user fs-16"></i>Professors</span>
+               <span><i class="fa fa-user fs-16"></i>Students</span>
              </a>
             <ul id="professor" class="collapse" aria-labelledby="dashboard" data-parent="#side-nav-accordion">
-              <li> <a href="../professors/allprofessor.html">All Professors</a> </li>
-               <li> <a href="../professors/addprofessor.html">Add Professors</a> </li>
-                 <li> <a href="../professors/aboutprofessor.html">About Professors</a> </li>
+              <li> <a href="studendoc.php">All Students</a> </li>
+               <li> <a href="asistencias.php">Assistences</a> </li>
+                 <li> <a href="aboutstudent.html">About Students</a> </li>
             </ul>
         </li>
         <!-- /Proessors End--->
@@ -135,56 +135,22 @@
                <span><i class="fa fa-graduation-cap fs-16"></i>Courses</span>
              </a>
             <ul id="courses" class="collapse" aria-labelledby="courses" data-parent="#side-nav-accordion">
-              <li> <a href="../courses/allcourses.html">All Courses</a> </li>
-               <li> <a href="../courses/addcourses.html">Add Courses</a> </li>
-                 <li> <a href="../courses/aboutcourses.html">About Courses</a> </li>
+                 <li> <a href="allcoursesDoc.php">About Courses</a> </li>
             </ul>
         </li>
         <!-- /Courses End--->
-        
-        <!--Student Start-->
-        <li class="menu-item">
-            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#student" aria-expanded="false" aria-controls="dashboard">
-               <span><i class="fa fa-users fs-16"></i>Student</span>
-             </a>
-            <ul id="student" class="collapse" aria-labelledby="courses" data-parent="#side-nav-accordion">
-              <li> <a href="../student/studentadd.html">Student Add</a> </li>
-               <li> <a href="../student/studenttable.html">Student Table</a> </li>
-                  </ul>
-        </li>
-        <!-- /Student End--->
-        
-        
+
         <!--tutor Start-->
         <li class="menu-item">
             <a href="#" class="has-chevron" data-toggle="collapse" data-target="#staff" aria-expanded="false" aria-controls="dashboard">
                <span><i class="fa fa-user-circle fs-16"></i>Tutores</span>
              </a>
             <ul id="staff" class="collapse" aria-labelledby="staff" data-parent="#side-nav-accordion">
-              <li> <a href="../tutor/addtutor.html">Añadir Tutor</a> </li>
-              <li> <a href="../tutor/tutorprofile.html">Tabla de Tutores</a> </li>
-                 
+              <li> <a href="tutoresDoc.php">Tabla de Tutores</a> </li>
+
             </ul>
         </li>
         <!-- /tutor End--->
-        
-        
-        
-        <!--Fees Start-->
-        <li class="menu-item">
-            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#fees" aria-expanded="false" aria-controls="dashboard">
-                <span><i class="fas fa-dollar-sign"></i>Fees</span>
-             </a>
-            <ul id="fees" class="collapse" aria-labelledby="staff" data-parent="#side-nav-accordion">
-              <li> <a href="../fees/feescollection.html">Fees Collection</a> </li>
-              <li> <a href="../fees/addfees.html">Add Fees</a> </li>
-              <li> <a href="../fees/feesrecepit.html">Fees Recepit</a> </li>
-               
-                 
-            </ul>
-        </li>
-        <!-- /Fees End--->
-        
         
         <!--Holiday Start-->
         <li class="menu-item">
@@ -193,17 +159,7 @@
           </a>
         </li>
         <!-- /Holiday End--->
-        <!-- Charts -->
-        <li class="menu-item">
-            <a href="#" class="has-chevron" data-toggle="collapse" data-target="#charts" aria-expanded="false" aria-controls="charts">
-              <span><i class="material-icons fs-16">equalizer</i>Charts</span>
-            </a>
-            <ul id="charts" class="collapse" aria-labelledby="charts" data-parent="#side-nav-accordion">
-              <li> <a href="../charts/chartjs.html">Chart JS</a> </li>
-              <li> <a href="../charts/morris-charts.html">Morris Chart</a> </li>
-            </ul>
-        </li>
-        <!-- /Charts -->
+
 
     </ul>
 
@@ -469,7 +425,7 @@
           <a href="#"  id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <img class="ms-user-img ms-img-round float-right" src="../../assets/img/we-educate/new-student-5.jpg" alt="people"> </a>
           <ul class="dropdown-menu dropdown-menu-right user-dropdown" aria-labelledby="userDropdown">
             <li class="dropdown-menu-header">
-              <h6 class="dropdown-header ms-inline m-0"><span class="text-disabled">Welcome, Anny Farisha</span></h6>
+              <span class="text-disabled">Welcome, <?php echo $_SESSION['correo']; ?></span>
             </li>
             <li class="dropdown-divider"></li>
             <li class="ms-dropdown-list">
@@ -482,7 +438,8 @@
               <a class="media fs-14 p-2" href="pages/prebuilt-pages/lock-screen.html"> <span><i class="flaticon-security mr-2"></i> Lock</span> </a>
             </li>
             <li class="dropdown-menu-footer">
-              <a class="media fs-14 p-2" href="pages/prebuilt-pages/default-login.html"> <span><i class="flaticon-shut-down mr-2"></i> Logout</span> </a>
+                    <a class="media fs-14 p-2" href="../../pages/prebuilt-pages/default-login.html"> <span><i
+                    class="flaticon-shut-down mr-2"></i> Logout</span> </a>
             </li>
           </ul>
         </li>
@@ -524,52 +481,52 @@
                 <button type="submit" class="btn btn-primary btn-sm ml-2">Importar CSV</button>
               </form>
 
-              <!-- Dropdown igual al de profesores, pero sin “Detalles” -->
-              <div class="dropdown d-inline-block ml-3">
-                <a href="#" class="fa fa-chevron-down text-secondary p-0" data-toggle="dropdown"></a>
-                <div class="dropdown-menu dropdown-menu-right">
-                  <a class="dropdown-item" href="./studentadd.html">Agregar Estudiante</a>
-                  <a class="dropdown-item" href="../php/csv-estudiantes.php">Exportar a CSV</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          </div>
-          <div class="ms-panel-body">
-            <div class="table-responsive">
-             <table id="tabla-estudiantes" class="table table-striped table-bordered w-100">
-
-
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Tutor ID</th>           <!-- ahora mostramos el ID del tutor -->
-                  <th>Nombre Tutor</th>       <!-- y su nombre completo -->
-                  <th>Nombre</th>
-                  <th>Apellido</th>
-                  <th>Fecha de Nacimiento</th>
-                  <th>Grado</th>
-                  <th>Grupo</th>
-                  <th>Activo</th>
-                  <th>Creado en</th>
-                  <th>Actualizado en</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-
-              <tbody id="student-body">
-                <!-- Aquí van los datos -->
-              </tbody>
-            </table>
-
-
-            </div>
-          </div>
-        </div>
-      </div>
-
-    </div>
+<!-- Botones dropdown -->
+<div class="dropdown d-inline-block ml-3">
+  <a href="#" class="fa fa-chevron-down text-secondary p-0" data-toggle="dropdown"></a>
+  <div class="dropdown-menu dropdown-menu-right">
+    <a class="dropdown-item" href="./studentadd.html">Agregar Estudiante</a>
+    <a class="dropdown-item" href="../php/csv-estudiantes.php">Exportar a CSV</a>
   </div>
+</div>
+</div> <!-- <- cierre del contenedor de botones -->
+</div> <!-- <- cierre del contenedor superior -->
+
+<!-- ✅ Selector de materia -->
+<div style="margin-left: 20px; display: flex; align-items: center; gap: 10px;">
+  <label for="materia-select">Selecciona una materia:</label>
+  <select id="materia-select">...</select>
+</div>
+
+
+<!-- Tabla -->
+<div class="ms-panel-body">
+  <div class="table-responsive">
+    <table id="tabla-estudiantes" class="table table-striped table-bordered w-100">
+      <thead>
+        <tr>
+          <th>ID Alumno</th>
+          <th>Tutor ID</th>
+          <th>Nombre Tutor</th>
+          <th>Nombre</th>
+          <th>Apellido</th>
+          <th>Fecha de Nacimiento</th>
+          <th>Grado</th>
+          <th>Grupo</th>
+          <th>Activo</th>
+          <th>Creado en</th>
+          <th>Actualizado en</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="student-body">
+        <!-- Aquí van los datos -->
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
 
 
   <!-- Modal Editar Estudiante -->

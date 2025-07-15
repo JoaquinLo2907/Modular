@@ -1,7 +1,10 @@
-function cargarEstudiantes() {
-  const url = (typeof userRol !== 'undefined' && userRol == 1)
-    ? '../php/estudiantes-doc.php'
-    : '../php/estudiantes.php';
+function cargarEstudiantes(materiaId = null) {
+  const isDocente = typeof userRol !== 'undefined' && userRol == 1;
+
+  let url = '../php/estudiantes-doc.php';
+  if (isDocente && materiaId) {
+    url += `?materia_id=${materiaId}`;
+  }
 
   $.ajax({
     url: url,
@@ -22,8 +25,6 @@ function cargarEstudiantes() {
               <td>${est.fecha_nacimiento}</td>
               <td>${est.grado}</td>
               <td>${est.grupo}</td>
-              <td>${est.materia_id}</td>
-              <td>${est.ciclo}</td>
               <td>${est.activo == 1 ? 'Sí' : 'No'}</td>
               <td>${est.creado_en}</td>
               <td>${est.actualizado_en}</td>
@@ -36,9 +37,13 @@ function cargarEstudiantes() {
         }
       });
 
-      $('#data-table-4').DataTable().destroy();
+      const $tabla = $('#data-table-4');
+      if ($.fn.DataTable.isDataTable($tabla)) {
+        $tabla.DataTable().clear().destroy();
+      }
+
       $('#student-body').html(tbody);
-      $('#data-table-4').DataTable({
+      $tabla.DataTable({
         responsive: true,
         pageLength: 10,
         language: {
@@ -52,12 +57,13 @@ function cargarEstudiantes() {
         }
       });
     },
-    error: (xhr, status, err) => console.error("Error al cargar estudiantes:", err)
+    error: (xhr, status, err) => {
+      console.error("Error al cargar estudiantes:", err);
+      $('#student-body').html('<tr><td colspan="14">Error al cargar estudiantes</td></tr>');
+    }
   });
 }
 
-
-// 2. Carga los tutores en el <select> y marca el seleccionado
 function cargarTutores(selectedId = null) {
   return fetch('../php/tutores_opciones.php')
     .then(res => {
@@ -91,19 +97,24 @@ function cargarMateriasDocente() {
     .catch(err => console.error('Error al cargar materias del docente:', err));
 }
 
-
 $(document).ready(function () {
-  cargarMateriasDocente(); // Solo cargar el select
+  const isDocente = typeof userRol !== 'undefined' && userRol == 1;
 
-  $('#materia-select').on('change', function () {
-    const materiaId = $(this).val();
-    if (materiaId) {
-      cargarEstudiantes(materiaId);
-    } else {
-      $('#student-body').html('');
-      $('#data-table-4').DataTable().clear().draw();
-    }
-  });
+  if (isDocente) {
+    cargarMateriasDocente();
+    $('#materia-select').on('change', function () {
+      const materiaId = $(this).val();
+      if (materiaId) {
+        cargarEstudiantes(materiaId);
+      } else {
+        $('#student-body').html('');
+        $('#data-table-4').DataTable().clear().draw();
+      }
+    });
+  } else {
+    $('#materia-select').closest('.form-group').hide();
+    cargarEstudiantes();
+  }
 
   $(document).on('click', '.btn-eliminar', function () {
     const id = $(this).data('id');
