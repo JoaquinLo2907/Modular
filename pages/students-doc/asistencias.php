@@ -534,7 +534,7 @@
             <ol class="breadcrumb pl-0">
               <li class="breadcrumb-item"><a href="../../index.php"><i class="material-icons">home</i> Home</a></li>
               <li class="breadcrumb-item active" aria-current="page">Materias</li>
-              <li class="breadcrumb-item active" aria-current="page">Añadir Asistencias</li>
+              <li class="breadcrumb-item active" aria-current="page">Añadir Materias</li>
             </ol>
           </nav>
         </div>

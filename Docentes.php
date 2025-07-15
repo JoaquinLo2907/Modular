@@ -114,7 +114,7 @@
              </a>
             <ul id="professor" class="collapse" aria-labelledby="dashboard" data-parent="#side-nav-accordion">
               <li> <a href="pages/students-doc/studendoc.php">All students </a> </li>
-               <li> <a href="pages/students-doc/asistencias.php">Assistances</a> </li>
+               <li> <a href="pages/students-doc/asistencias.php">Add students</a> </li>
                  <li> <a href="pages/students-doc/aboutstudent.html">About Student  </a> </li>
             </ul>
         </li>
@@ -126,7 +126,7 @@
                <span><i class="fa fa-graduation-cap fs-16"></i>Courses</span>
              </a>
             <ul id="courses" class="collapse" aria-labelledby="courses" data-parent="#side-nav-accordion">
-              <li> <a href="pages/students-doc/allcoursesDoc.html">All Courses</a> </li>
+              <li> <a href="pages/courses/allcourses.html">All Courses</a> </li>
             </ul>
         </li>
         <!-- /Courses End--->
@@ -149,7 +149,7 @@
                <span><i class="fa fa-user-circle fs-16"></i>Tutores</span>
              </a>
             <ul id="staff" class="collapse" aria-labelledby="staff" data-parent="#side-nav-accordion">
-               <li> <a href="pages/students-doc/tutoresDoc.php">Tabla de Tutores</a> </li>
+               <li> <a href="pages/tutor/tutorprofile.html">Tabla de Tutores</a> </li>     
             </ul>
         </li>
         <!-- /tutor End--->

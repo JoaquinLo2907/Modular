@@ -1,10 +1,3 @@
-<?php session_start(); ?>
-<script>
-  const userRol = <?php echo $_SESSION['rol'] ?? 'null'; ?>;
-</script>
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -18,11 +11,11 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="../../vendors/iconic-fonts/font-awesome/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../../vendors/iconic-fonts/flat-icons/flaticon.css">
- 
-    <link rel="stylesheet" href="../../assets/css/datatables.min.css">
-    
+  
   <!-- Bootstrap core CSS -->
   <link href="../../assets/css/bootstrap.min.css" rel="stylesheet">
+  <!-- DataTables -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
   <!-- jQuery UI -->
   <link href="../../assets/css/jquery-ui.min.css" rel="stylesheet">
   <!-- Page Specific CSS (Slick Slider.css) -->
@@ -30,7 +23,7 @@
   <!-- Weeducate styles -->
   <link href="../../assets/css/style.css" rel="stylesheet">
   <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/weicon/weicon.ico">
+ <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/weicon/weicon.ico">
 
 </head>
 
@@ -99,7 +92,7 @@
 
     <!-- Logo -->
     <div class="logo-sn ms-d-block-lg">
-      <a class="pl-0 ml-0 text-center" href="../../Docentes.php"><img src="../../assets/img/logo/weeducate-4.png" alt="logo">  </a>
+      <a class="pl-0 ml-0 text-center" href="../../index.html"> <img src="../../assets/img/logo/weeducate-4.png" alt="logo"> </a>
     </div>
 
     <!-- Navigation -->
@@ -110,7 +103,7 @@
                <span><i class="material-icons fs-16">dashboard</i>Dashboard </span>
              </a>
             <ul id="dashboard" class="collapse" aria-labelledby="dashboard" data-parent="#side-nav-accordion">
-              <li> <a href="../../Docentes.php">Weeducate</a> </li>
+              <li> <a href="../../index.html">Weeducate</a> </li>
               
             </ul>
         </li>
@@ -369,7 +362,7 @@
       </div>
 
       <div class="logo-sn logo-sm ms-d-block-sm">
-        <a class="pl-0 ml-0 text-center navbar-brand mr-0" href="../../index.php"><img src="../../assets/img/logo/weeducate-4.png" alt="logo"> </a>
+        <a class="pl-0 ml-0 text-center navbar-brand mr-0" href="index.html"><img src="../../assets/img/logo/weeducate-4.png" alt="logo"> </a>
       </div>
 
       <ul class="ms-nav-list ms-inline mb-0" id="ms-nav-options">
@@ -391,7 +384,7 @@
             <li class="ms-scrollable ms-dropdown-list">
               <a class="media p-2" href="#">
                 <div class="ms-chat-status ms-status-offline ms-chat-img mr-2 align-self-center">
-                  <img src="../../assets/img/we-educate/topper-1.jpg" class="ms-img-round" alt="people">
+                  <img src="../../assets/img/we-educate/topper-5.jpg" class="ms-img-round" alt="people">
                 </div>
                 <div class="media-body">
                   <span>Hey man, looking forward to your new project.</span>
@@ -497,143 +490,143 @@
     </nav>
 
 
- <!-- Body Content Wrapper -->
-  <div class="ms-content-wrapper">
-    <div class="row">
-      <div class="col-md-12">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb pl-0">
-            <li class="breadcrumb-item"><a href="../../Docentes.php"><i class="material-icons">home</i> Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Estudiantes</li>
-            <li class="breadcrumb-item active" aria-current="page">Tabla de Estudiantes</li>
-          </ol>
-        </nav>
-      </div>
-
-      <div class="col-lg-12">
-        <div class="ms-panel">
-          <div class="ms-panel-header d-flex justify-content-between align-items-center">
-            <h6>Tabla de Estudiantes</h6>
-
-            <div>
-              <!-- Formulario para importar CSV -->
-              <form action="../php/importar_estudiantes.php" method="POST" enctype="multipart/form-data" class="d-inline-block">
-                <input type="file" id="archivoCSV" name="archivo_csv" accept=".csv" required hidden>
-                <label for="archivoCSV" class="btn btn-warning btn-sm mb-1">Elegir archivo</label>
-                <span id="nombreArchivo" class="text-muted ml-2">Ningún archivo seleccionado</span>
-                <button type="submit" class="btn btn-primary btn-sm ml-2">Importar CSV</button>
-              </form>
-
-              <!-- Dropdown igual al de profesores, pero sin “Detalles” -->
-              <div class="dropdown d-inline-block ml-3">
-                <a href="#" class="fa fa-chevron-down text-secondary p-0" data-toggle="dropdown"></a>
-                <div class="dropdown-menu dropdown-menu-right">
-                  <a class="dropdown-item" href="./studentadd.html">Agregar Estudiante</a>
-                  <a class="dropdown-item" href="../php/csv-estudiantes.php">Exportar a CSV</a>
-                </div>
-              </div>
-            </div>
-          </div>
-          </div>
-          <div class="ms-panel-body">
-            <div class="table-responsive">
-             <table id="tabla-estudiantes" class="table table-striped table-bordered w-100">
-
-
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Tutor ID</th>           <!-- ahora mostramos el ID del tutor -->
-                  <th>Nombre Tutor</th>       <!-- y su nombre completo -->
-                  <th>Nombre</th>
-                  <th>Apellido</th>
-                  <th>Fecha de Nacimiento</th>
-                  <th>Grado</th>
-                  <th>Grupo</th>
-                  <th>Activo</th>
-                  <th>Creado en</th>
-                  <th>Actualizado en</th>
-                  <th>Acciones</th>
-                </tr>
-              </thead>
-
-              <tbody id="student-body">
-                <!-- Aquí van los datos -->
-              </tbody>
-            </table>
-
-
-            </div>
-          </div>
+    <!-- Body Content Wrapper -->
+    
+    <!-- Body Content Wrapper -->
+    <div class="ms-content-wrapper">
+        <!-- BOTÓN NUEVO CICLO -->
+        <div class="row mb-3">
+        <div class="col-md-12 text-right">
+            <button id="newCicloBtn" class="btn btn-primary">
+            <i class="fa fa-plus"></i> Nuevo Ciclo Escolar
+            </button>
         </div>
-      </div>
+        </div>
+
+        <!-- TABLA DE CICLOS -->
+        <table id="tabla-ciclos" class="table table-striped">
+        <thead>
+            <tr>
+            <th>Nombre</th>
+            <th>Inicio</th>
+            <th>Fin</th>
+            <th>Estado</th>
+            <th>Observaciones</th>
+            <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+        </table>
+
+        <!-- MODAL CREAR/EDITAR CICLO -->
+        <div class="modal fade" id="cicloModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <form id="cicloForm">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="cicloModalLabel">Nuevo Ciclo</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body">
+                <!-- DATOS DEL CICLO -->
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" id="nombreCiclo" class="form-control" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                    <label>Fecha Inicio</label>
+                    <input type="date" id="fechaInicioCiclo" class="form-control" required>
+                    </div>
+                    <div class="form-group col-md-6">
+                    <label>Fecha Fin</label>
+                    <input type="date" id="fechaFinCiclo" class="form-control" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select id="estadoCiclo" class="form-control">
+                    <option value="activo">Activo</option>
+                    <option value="cerrado">Cerrado</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Observaciones</label>
+                    <textarea id="observacionesCiclo" class="form-control"></textarea>
+                </div>
+                <hr>
+                <!-- Repeater dinámico de periodos -->
+                <button type="button"
+                        id="addPeriodoBtn"
+                        class="btn btn-sm btn-outline-primary mb-2">
+                  + Agregar periodo
+                </button>
+
+                <!-- Resumen de periodos antes de guardar -->
+                <ul id="periodosSummary" class="list-group mb-3"></ul>
+
+                <div id="periodosContainer"></div>
+
+                <!-- Plantilla para cada periodo -->
+                <template id="periodoTemplate">
+                  <div class="form-row mb-2 periodo-row">
+                    <input type="hidden" class="periodo-id">
+                    <div class="form-group col-md-4">
+                      <label>Nombre Periodo</label>
+                      <input type="text" class="form-control periodo-nombre" required>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label>Inicio</label>
+                      <input type="date" class="form-control periodo-inicio" required>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <label>Fin</label>
+                      <input type="date" class="form-control periodo-fin" required>
+                    </div>
+                    <div class="form-group col-md-2 d-flex align-items-end">
+                      <button type="button" class="btn btn-sm btn-danger btn-remove-periodo">×</button>
+                    </div>
+                  </div>
+                </template>
+                </div>
+                <div class="modal-footer">
+                <button type="submit" class="btn btn-success">Guardar</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                </div>
+            </div>
+            </form>
+        </div>
+        </div>
 
     </div>
-  </div>
 
 
-  <!-- Modal Editar Estudiante -->
-<div class="modal fade" id="modalEditarEstudiante" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <form id="formEditarEstudiante" class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Editar Estudiante</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <input type="hidden" id="edit-id" name="estudiante_id">
-
-       <div class="form-group">
-        <label>Tutor asignado:</label>
-        <select class="form-control" name="tutor_id" id="edit-tutor-id" required>
-          <option value="">Cargando tutores...</option>
-        </select>
-       </div>
-
-        <div class="form-group">
-          <label>Nombre:</label>
-          <input type="text" class="form-control" name="nombre" id="edit-nombre" required>
+      <!-- Modal de Edición -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editModalLabel">Editar Materia</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="editForm">
+                    <div class="form-group">
+                        <label for="materiaNombre">Nombre de la Materia</label>
+                        <input type="text" class="form-control" id="materiaNombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="materiaNivel">Nivel de la Materia</label>
+                        <input type="text" class="form-control" id="materiaNivel" required>
+                    </div>
+                    <input type="hidden" id="materiaId">
+                    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                </form>
+            </div>
         </div>
-
-        <div class="form-group">
-          <label>Apellido:</label>
-          <input type="text" class="form-control" name="apellido" id="edit-apellido" required>
-        </div>
-
-        <div class="form-group">
-          <label>Fecha de Nacimiento:</label>
-          <input type="date" class="form-control" name="fecha_nacimiento" id="edit-nacimiento" required>
-        </div>
-
-        <div class="form-group">
-          <label>Grado:</label>
-          <input type="number" class="form-control" name="grado" id="edit-grado" min="1" max="12" required>
-        </div>
-
-        <div class="form-group">
-          <label>Grupo:</label>
-          <select class="form-control" name="grupo" id="edit-grupo" required>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-warning">Guardar cambios</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-
-
-
+    </div>
 
   </main>
 
@@ -705,7 +698,7 @@
             <div class="ms-chat-header px-3">
               <div class="ms-chat-user-container media clearfix">
                 <div class="ms-chat-status ms-status-online ms-chat-img mr-3 align-self-center">
-                  <img src="../../assets/img/we-educate/topper-5.jpg" class="ms-img-round" alt="people">
+                  <img src="../../assets/img/we-educate/topper-1.jpg" class="ms-img-round" alt="people">
                 </div>
                 <div class="media-body ms-chat-user-info mt-1">
                   <h6>Anny Farisha</h6>
@@ -829,22 +822,22 @@
                         <h6>Raymart Sandiago</h6> <a href="#" class="ms-chat-time"> <i class="flaticon-chat"></i> </a>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in arcu turpis. Nunc</p>
                         <ul class="ms-group-members clearfix mt-3 mb-0">
-                          <li> <img src="../../assets/img/we-educate/topper-6.jpg" alt="member"> </li>
                           <li> <img src="../../assets/img/we-educate/topper-1.jpg" alt="member"> </li>
+                          <li> <img src="../../assets/img/we-educate/topper-2.jpg" alt="member"> </li>
                         </ul>
                       </div>
                     </li>
                     <li class="ms-chat-user-container ms-open-chat p-3 media clearfix">
                       <div class="ms-chat-img mr-3 align-self-center">
-                        <img src="../../assets/img/we-educate/topper-2.jpg" class="ms-img-round" alt="people">
+                        <img src="../../assets/img/we-educate/topper-3.jpg" class="ms-img-round" alt="people">
                       </div>
                       <div class="media-body ms-chat-user-info mt-1">
                         <h6>John Doe</h6> <a href="#" class="ms-chat-time"> <i class="flaticon-chat"></i> </a>
                         <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. In in arcu turpis. Nunc</p>
                         <ul class="ms-group-members clearfix mt-3 mb-0">
-                          <li> <img src="../../assets/img/we-educate/topper-3.jpg" alt="member"> </li>
                           <li> <img src="../../assets/img/we-educate/topper-4.jpg" alt="member"> </li>
                           <li> <img src="../../assets/img/we-educate/topper-5.jpg" alt="member"> </li>
+                          <li> <img src="../../assets/img/we-educate/topper-6.jpg" alt="member"> </li>
                           <li class="ms-group-count"> + 4 more </li>
                         </ul>
                       </div>
@@ -1073,8 +1066,8 @@
                   vel varius metus. Pellentesque eget orci malesuada, venenatis magna et
                 </p>
                 <ul class="ms-note-members clearfix mb-0">
-                  <li class="ms-deletable"> <img src="../../assets/img/we-educate/topper-1.jpg" alt="member"> </li>
-                  <li class="ms-deletable"> <img src="../../assets/img/we-educate/topper-2.jpg" alt="member"> </li>
+                  <li class="ms-deletable"> <img src="../../assets/img/we-educate/topper-4.jpg" alt="member"> </li>
+                  <li class="ms-deletable"> <img src="../../assets/img/we-educate/topper-5.jpg" alt="member"> </li>
                 </ul>
               </div>
               <div class="ms-card-footer clearfix">
@@ -1091,7 +1084,7 @@
                     <li class="ms-scrollable ms-dropdown-list ms-members-list">
                       <a class="media p-2" href="#">
                         <div class="mr-2 align-self-center">
-                          <img src="../../assets/img/we-educate/topper-1.jpg" class="ms-img-round" alt="people">
+                          <img src="../../assets/img/we-educate/topper-6.jpg" class="ms-img-round" alt="people">
                         </div>
                         <div class="media-body">
                           <span>John Doe</span>
@@ -1099,7 +1092,7 @@
                       </a>
                       <a class="media p-2" href="#">
                         <div class="mr-2 align-self-center">
-                          <img src="../../assets/img/we-educate/topper-2.jpg" class="ms-img-round" alt="people">
+                          <img src="../../assets/img/we-educate/topper-1.jpg" class="ms-img-round" alt="people">
                         </div>
                         <div class="media-body">
                           <span>Raymart Sandiago</span>
@@ -1107,7 +1100,7 @@
                       </a>
                       <a class="media p-2" href="#">
                         <div class="mr-2 align-self-center">
-                          <img src="../../assets/img/we-educate/topper-3.jpg" class="ms-img-round" alt="people">
+                          <img src="../../assets/img/we-educate/topper-2.jpg" class="ms-img-round" alt="people">
                         </div>
                         <div class="media-body">
                           <span>Heather Brown</span>
@@ -1134,7 +1127,7 @@
                   vel varius metus. Pellentesque eget orci malesuada, venenatis magna et
                 </p>
                 <ul class="ms-note-members clearfix mb-0">
-                  <li class="ms-deletable"> <img src="../../assets/img/we-educate/topper-4.jpg" alt="member"> </li>
+                  <li class="ms-deletable"> <img src="../../assets/img/we-educate/topper-3.jpg" alt="member"> </li>
                 </ul>
               </div>
               <div class="ms-card-footer clearfix">
@@ -1151,7 +1144,7 @@
                     <li class="ms-scrollable ms-dropdown-list ms-members-list">
                       <a class="media p-2" href="#">
                         <div class="mr-2 align-self-center">
-                          <img src="../../assets/img/we-educate/topper-5.jpg" class="ms-img-round" alt="people">
+                          <img src="../../assets/img/we-educate/topper-4.jpg" class="ms-img-round" alt="people">
                         </div>
                         <div class="media-body">
                           <span>John Doe</span>
@@ -1159,7 +1152,7 @@
                       </a>
                       <a class="media p-2" href="#">
                         <div class="mr-2 align-self-center">
-                          <img src="../../assets/img/we-educate/topper-1.jpg" class="ms-img-round" alt="people">
+                          <img src="../../assets/img/we-educate/topper-5.jpg" class="ms-img-round" alt="people">
                         </div>
                         <div class="media-body">
                           <span>Raymart Sandiago</span>
@@ -1167,7 +1160,7 @@
                       </a>
                       <a class="media p-2" href="#">
                         <div class="mr-2 align-self-center">
-                          <img src="../../assets/img/we-educate/topper-2.jpg" class="ms-img-round" alt="people">
+                          <img src="../../assets/img/we-educate/topper-6.jpg" class="ms-img-round" alt="people">
                         </div>
                         <div class="media-body">
                           <span>Heather Brown</span>
@@ -1310,40 +1303,36 @@
   </div>
 
   <!-- SCRIPTS -->
-  <!-- Global Required Scripts Start -->
-  <script src="../../assets/js/jquery-3.3.1.min.js"></script>
-  <script src="../../assets/js/popper.min.js"></script>
-  <script src="../../assets/js/bootstrap.min.js"></script>
-  <script src="../../assets/js/perfect-scrollbar.js"> </script>
-  <script src="../../assets/js/jquery-ui.min.js"> </script>
-  <script src="../scripts/cargarAlumnos.js"></script>
-  
+   <!-- 1) jQuery -->
+    <script src="../../assets/js/jquery-3.3.1.min.js"></script>
 
-  <!-- Global Required Scripts End -->
+    <!-- 2) jQuery UI (para .sortable) -->
+    <script src="../../assets/js/jquery-ui.min.js"></script>
 
-  <!-- Page Specific Scripts Start -->
-  <script src="../../assets/js/slick.min.js"> </script>
-  <script src="../../assets/js/moment.js"> </script>
-  <script src="../../assets/js/jquery.webticker.min.js"> </script>
-  
- 
-<script src="../../assets/js/datatables.min.js"> </script>
+    <!-- 3) Popper + Bootstrap (para .modal, tooltips, etc.) -->
+    <script src="../../assets/js/popper.min.js"></script>
+    <script src="../../assets/js/bootstrap.min.js"></script>
 
-  <!-- Weeducate core JavaScript -->
-  <script src="../../assets/js/framework.js"></script>
+    <!-- 4) DataTables CSS (en el <head>) -->
+    <link rel="stylesheet"
+          href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap4.min.css">
 
-  <!-- Settings -->
-  <script src="../../assets/js/settings.js"></script>
-  
-  <!-- SweetAlert2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- 5) DataTables JS -->
+    <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.4/js/dataTables.bootstrap4.min.js"></script>
 
-<!-- Nombre del Archico CV -->
-  <script src="../scripts/ImportarEstudiantes.js" defer></script>
-  <script src="../scripts/alertaImportacionAlumnos.js" defer></script>
-  <script src="../scripts/estudiantes.js"></script>
+    <!-- 6) Otros plugins de tu plantilla -->
+    <script src="../../assets/js/perfect-scrollbar.js"></script>
+    <script src="../../assets/js/slick.min.js"></script>
+    <script src="../../assets/js/moment.js"></script>
+    <script src="../../assets/js/jquery.webticker.min.js"></script>
 
+    <!-- 7) Framework de tu tema y settings -->
+    <script src="../../assets/js/framework.js"></script>
+    <script src="../../assets/js/settings.js"></script>
 
+    <!-- 8) Tu lógica: cargarCiclos.js -->
+    <script src="../scripts/cargarCiclos.js"></script>
 
 </body>
 

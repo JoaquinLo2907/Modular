@@ -1,9 +1,7 @@
-function cargarEstudiantes(materiaId = null) {
-  const urlBase = (typeof userRol !== 'undefined' && userRol == 1)
+function cargarEstudiantes() {
+  const url = (typeof userRol !== 'undefined' && userRol == 1)
     ? '../php/estudiantes-doc.php'
     : '../php/estudiantes.php';
-
-  const url = materiaId ? `${urlBase}?materia_id=${materiaId}` : urlBase;
 
   $.ajax({
     url: url,
@@ -58,6 +56,8 @@ function cargarEstudiantes(materiaId = null) {
   });
 }
 
+
+// 2. Carga los tutores en el <select> y marca el seleccionado
 function cargarTutores(selectedId = null) {
   return fetch('../php/tutores_opciones.php')
     .then(res => {

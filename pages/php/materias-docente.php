@@ -18,7 +18,6 @@ $query = "
   WHERE d.usuario_id = ?
 ";
 
-
 $stmt = $con->prepare($query);
 $stmt->bind_param("i", $usuario_id);
 $stmt->execute();
