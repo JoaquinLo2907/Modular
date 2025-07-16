@@ -71,15 +71,15 @@ if ($tutor_id <= 0) {
 $conexion->begin_transaction();
 
 try {
-    // 4) Insertar en estudiantes (sin tutor_id)
+    // 4) Insertar en estudiantes
     $sql1 = "
-      INSERT INTO estudiantes
-        (nombre, apellido, fecha_nacimiento, grado, grupo, activo, creado_en, actualizado_en)
-      VALUES
-        (?, ?, ?, ?, ?, 1, NOW(), NOW())
+        INSERT INTO estudiantes
+        (nombre, apellido, fecha_nacimiento, grado, grupo, tutor_id, activo, creado_en, actualizado_en)
+        VALUES
+        (?, ?, ?, ?, ?, ?, 1, NOW(), NOW())
     ";
     $stmt1 = $conexion->prepare($sql1);
-    $stmt1->bind_param('sssis', $nombre, $apellido, $fecha_nacimiento, $grado, $grupo);
+    $stmt1->bind_param("sssisi", $nombre, $apellido, $fecha_nacimiento, $grado, $grupo, $tutor_id);
 
     if (!$stmt1->execute()) {
         throw new Exception('Error al insertar estudiante: ' . $stmt1->error);

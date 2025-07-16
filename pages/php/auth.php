@@ -7,11 +7,16 @@ if (!isset($_SESSION['correo'])) {
     exit();
 }
 
-// Si el usuario hace clic en "logout", destruye la sesión
+// 🔁 Logout universal
 if (isset($_GET['logout'])) {
     session_unset();
     session_destroy();
-    header("Location: pages/prebuilt-pages/default-login.html");
-    exit();
+    header('Location: /dashboard/Modular/pages/prebuilt-pages/default-login.html');
+    exit;
 }
+
+
+
+
+
 ?>

@@ -540,55 +540,50 @@
               <h6>Tabla de Estudiantes</h6>
 
               <div>
-                <button
-                  id="btnImportarEstudiantes"
-                  class="btn btn-primary btn-sm me-2"
-                  data-toggle="modal"
+                <button id="btnImportarEstudiantes" class="btn btn-primary btn-sm me-2" data-toggle="modal"
                   data-target="#importModalEstudiantes">
                   <i class="fa fa-file-import"></i> Importar
                 </button>
-                <a
-                  href="../php/csv-estudiantes.php"
-                  class="btn btn-success btn-sm">
+                <a href="../php/csv-estudiantes.php" class="btn btn-success btn-sm">
                   <i class="fa fa-file-export"></i> Exportar
                 </a>
               </div>
 
 
-          </div>
-          <div class="ms-panel-body">
-            <div class="table-responsive">
-              <table id="data-table-4" class="table table-striped table-bordered w-100">
+            </div>
+            <div class="ms-panel-body">
+              <div class="table-responsive">
+                <table id="data-table-4" class="table table-striped table-bordered w-100">
 
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Tutor ID</th> <!-- ahora mostramos el ID del tutor -->
-                    <th>Nombre Tutor</th> <!-- y su nombre completo -->
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Fecha de Nacimiento</th>
-                    <th>Grado</th>
-                    <th>Grupo</th>
-                    <th>Activo</th>
-                    <th>Creado en</th>
-                    <th>Actualizado en</th>
-                    <th>Acciones</th>
-                  </tr>
-                </thead>
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Tutor ID</th> <!-- ahora mostramos el ID del tutor -->
+                      <th>Nombre Tutor</th> <!-- y su nombre completo -->
+                      <th>Nombre</th>
+                      <th>Apellido</th>
+                      <th>Fecha de Nacimiento</th>
+                      <th>Grado</th>
+                      <th>Grupo</th>
+                      <th>Activo</th>
+                      <th>Creado en</th>
+                      <th>Actualizado en</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
 
-                <tbody id="student-body">
-                  <!-- Aquí van los datos -->
-                </tbody>
-              </table>
+                  <tbody id="student-body">
+                    <!-- Aquí van los datos -->
+                  </tbody>
+                </table>
 
 
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-    </div>
+      </div>
     </div>
 
 
@@ -659,31 +654,28 @@
   </main>
 
   <!-- Importar CSV Estudiantes -->
-    <div class="modal fade" id="importModalEstudiantes" tabindex="-1" aria-labelledby="importModalEstudiantesLabel" aria-hidden="true">
-      <div class="modal-dialog">
-        <form
-          id="formImportarEstudiantes"
-          action="../php/importar_estudiantes.php"
-          method="post"
-          enctype="multipart/form-data"
-          class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="importModalEstudiantesLabel">Importar Estudiantes</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+  <div class="modal fade" id="importModalEstudiantes" tabindex="-1" aria-labelledby="importModalEstudiantesLabel"
+    aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="formImportarEstudiantes" action="../php/importar_estudiantes.php" method="post"
+        enctype="multipart/form-data" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="importModalEstudiantesLabel">Importar Estudiantes</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="csvEstudiantes" class="form-label">Selecciona archivo CSV</label>
+            <input class="form-control" type="file" id="csvEstudiantes" name="archivo_csv" accept=".csv" required>
           </div>
-          <div class="modal-body">
-            <div class="mb-3">
-              <label for="csvEstudiantes" class="form-label">Selecciona archivo CSV</label>
-              <input class="form-control" type="file" id="csvEstudiantes" name="archivo_csv" accept=".csv" required>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-light" data-dismiss="modal">Cerrar</button>
-            <button type="submit" class="btn btn-primary">Importar</button>
-          </div>
-        </form>
-      </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Importar</button>
+        </div>
+      </form>
     </div>
+  </div>
 
 
 
@@ -1427,7 +1419,6 @@
   <!-- Nombre del Archico CV -->
   <script src="../scripts/ImportarEstudiantes.js" defer></script>
   <script src="../scripts/alertaImportacionAlumnos.js" defer></script>
-
 
 
 </body>
