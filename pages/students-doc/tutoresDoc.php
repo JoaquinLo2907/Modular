@@ -1,7 +1,8 @@
-<?php session_start(); ?>
+<?php include '../php/auth.php'; ?>
 <script>
   const userRol = <?php echo $_SESSION['rol'] ?? 'null'; ?>;
 </script>
+
 
 
 
@@ -18,9 +19,8 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="../../vendors/iconic-fonts/font-awesome/css/all.min.css" rel="stylesheet">
   <link rel="stylesheet" href="../../vendors/iconic-fonts/flat-icons/flaticon.css">
- 
-    <link rel="stylesheet" href="../../assets/css/datatables.min.css">
-    
+  
+     <link rel="stylesheet" href="../../assets/css/datatables.min.css">
   <!-- Bootstrap core CSS -->
   <link href="../../assets/css/bootstrap.min.css" rel="stylesheet">
   <!-- jQuery UI -->
@@ -30,7 +30,9 @@
   <!-- Weeducate styles -->
   <link href="../../assets/css/style.css" rel="stylesheet">
   <!-- Favicon -->
-  <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/weicon/weicon.ico">
+ <link rel="icon" type="image/png" sizes="32x32" href="../../assets/img/weicon/weicon.ico">
+ <link href="../../assets/css/datatables.min.css" rel="stylesheet">
+
 
 </head>
 
@@ -94,7 +96,7 @@
   <div class="ms-aside-overlay ms-overlay-left ms-toggler" data-target="#ms-side-nav" data-toggle="slideLeft"></div>
   <div class="ms-aside-overlay ms-overlay-right ms-toggler" data-target="#ms-recent-activity" data-toggle="slideRight"></div>
 
-  <!-- Sidebar Navigation Left -->
+   <!-- Sidebar Navigation Left -->
   <aside id="ms-side-nav" class="side-nav fixed ms-aside-scrollable ms-aside-left">
 
     <!-- Logo -->
@@ -369,7 +371,7 @@
                 </div>
                 <div class="media-body">
                   <span>How many people are we inviting to the dashboard?</span>
-                  <p class="fs-10 my-1 text-disabled"><i class="material-icons">access_time</i> 6 hours ago</p>
+                  <p class="fs-10 my-1 text-disabled"><i class="material-icons">access_time</i> 6 hours agoo</p>
                 </div>
               </a>
             </li>
@@ -454,142 +456,57 @@
     </nav>
 
 
- <!-- Body Content Wrapper -->
-  <div class="ms-content-wrapper">
-    <div class="row">
-      <div class="col-md-12">
-        <nav aria-label="breadcrumb">
-          <ol class="breadcrumb pl-0">
-            <li class="breadcrumb-item"><a href="../../Docentes.php"><i class="material-icons">home</i> Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Estudiantes</li>
-            <li class="breadcrumb-item active" aria-current="page">Tabla de Estudiantes</li>
-          </ol>
-        </nav>
+    <!-- Body Content Wrapper -->
+<!-- Body Content Wrapper -->
+<div class="ms-content-wrapper">
+  <div class="row">
+
+    <div class="col-md-12">
+      <nav aria-label="breadcrumb">
+        <ol class="breadcrumb pl-0">
+          <li class="breadcrumb-item"><a href="../../Docentes.php"><i class="material-icons">home</i> Home</a></li>
+          <li class="breadcrumb-item active" aria-current="page">Tutores</li>
+          <li class="breadcrumb-item active" aria-current="page">Tabla Tutores</li>
+        </ol>
+      </nav>
+    </div>
+
+<select id="filtroGrupo" class="form-control mb-3" style="width: auto;">
+  <option value="">Todos los grupos</option>
+</select>
+
+
+
+<div class="col-lg-12">
+  <div class="ms-panel">
+    <!-- Header -->
+    <div class="ms-panel-header d-flex justify-content-between align-items-center">
+      <h6>Perfiles de Tutores</h6>
+
+      
+    </div>
+
+    <!-- Tabla -->
+    <div class="ms-panel-body">
+      <div class="table-responsive">
+        <table id="tablaTutores" class="table">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Teléfono</th>
+              <th>Correo</th>
+              <th>Dirección</th>
+            </tr>
+          </thead>
+          <tbody id="tutores-lista">
+            <!-- Los tutores se insertan dinámicamente aquí -->
+          </tbody>
+        </table>
       </div>
-
-      <div class="col-lg-12">
-        <div class="ms-panel">
-          <div class="ms-panel-header d-flex justify-content-between align-items-center">
-            <h6>Tabla de Estudiantes</h6>
-
-            <div>
-              <!-- Formulario para importar CSV -->
-              <form action="../php/importar_estudiantes.php" method="POST" enctype="multipart/form-data" class="d-inline-block">
-                <input type="file" id="archivoCSV" name="archivo_csv" accept=".csv" required hidden>
-                <label for="archivoCSV" class="btn btn-warning btn-sm mb-1">Elegir archivo</label>
-                <span id="nombreArchivo" class="text-muted ml-2">Ningún archivo seleccionado</span>
-                <button type="submit" class="btn btn-primary btn-sm ml-2">Importar CSV</button>
-              </form>
-
-<!-- Botones dropdown -->
-<div class="dropdown d-inline-block ml-3">
-  <a href="#" class="fa fa-chevron-down text-secondary p-0" data-toggle="dropdown"></a>
-  <div class="dropdown-menu dropdown-menu-right">
-    <a class="dropdown-item" href="./studentadd.html">Agregar Estudiante</a>
-    <a class="dropdown-item" href="../php/csv-estudiantes.php">Exportar a CSV</a>
+    </div>
   </div>
 </div>
-</div> <!-- <- cierre del contenedor de botones -->
-</div> <!-- <- cierre del contenedor superior -->
-
-<!-- ✅ Selector de materia -->
-<div style="margin-left: 20px; display: flex; align-items: center; gap: 10px;">
-  <label for="materia-select">Selecciona una materia:</label>
-  <select id="materia-select">...</select>
-</div>
-
-
-<!-- Tabla -->
-<div class="ms-panel-body">
-  <div class="table-responsive">
-    <table id="tabla-estudiantes" class="table table-striped table-bordered w-100">
-      <thead>
-        <tr>
-          <th>ID Alumno</th>
-          <th>Tutor ID</th>
-          <th>Nombre Tutor</th>
-          <th>Nombre</th>
-          <th>Apellido</th>
-          <th>Fecha de Nacimiento</th>
-          <th>Grado</th>
-          <th>Grupo</th>
-          <th>Activo</th>
-          <th>Creado en</th>
-          <th>Actualizado en</th>
-          <th>Acciones</th>
-        </tr>
-      </thead>
-      <tbody id="student-body">
-        <!-- Aquí van los datos -->
-      </tbody>
-    </table>
-  </div>
-</div>
-
-
-
-
-  <!-- Modal Editar Estudiante -->
-<div class="modal fade" id="modalEditarEstudiante" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <form id="formEditarEstudiante" class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Editar Estudiante</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <input type="hidden" id="edit-id" name="estudiante_id">
-
-       <div class="form-group">
-        <label>Tutor asignado:</label>
-        <select class="form-control" name="tutor_id" id="edit-tutor-id" required>
-          <option value="">Cargando tutores...</option>
-        </select>
-       </div>
-
-        <div class="form-group">
-          <label>Nombre:</label>
-          <input type="text" class="form-control" name="nombre" id="edit-nombre" required>
-        </div>
-
-        <div class="form-group">
-          <label>Apellido:</label>
-          <input type="text" class="form-control" name="apellido" id="edit-apellido" required>
-        </div>
-
-        <div class="form-group">
-          <label>Fecha de Nacimiento:</label>
-          <input type="date" class="form-control" name="fecha_nacimiento" id="edit-nacimiento" required>
-        </div>
-
-        <div class="form-group">
-          <label>Grado:</label>
-          <input type="number" class="form-control" name="grado" id="edit-grado" min="1" max="12" required>
-        </div>
-
-        <div class="form-group">
-          <label>Grupo:</label>
-          <select class="form-control" name="grupo" id="edit-grupo" required>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-          </select>
-        </div>
-      </div>
-
-      <div class="modal-footer">
-        <button type="submit" class="btn btn-warning">Guardar cambios</button>
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-
-
 
 
   </main>
@@ -662,7 +579,7 @@
             <div class="ms-chat-header px-3">
               <div class="ms-chat-user-container media clearfix">
                 <div class="ms-chat-status ms-status-online ms-chat-img mr-3 align-self-center">
-                  <img src="../../assets/img/we-educate/topper-5.jpg" class="ms-img-round" alt="people">
+                  <img src="../../assets/img/we-educate/topper-1.jpg" class="ms-img-round" alt="people">
                 </div>
                 <div class="media-body ms-chat-user-info mt-1">
                   <h6>Anny Farisha</h6>
@@ -1030,8 +947,8 @@
                   vel varius metus. Pellentesque eget orci malesuada, venenatis magna et
                 </p>
                 <ul class="ms-note-members clearfix mb-0">
-                  <li class="ms-deletable"> <img src="../../assets/img/we-educate/topper-1.jpg" alt="member"> </li>
-                  <li class="ms-deletable"> <img src="../../assets/img/we-educate/topper-2.jpg" alt="member"> </li>
+                  <li class="ms-deletable"> <img src="../../assets/img/we-educate/topper-4.jpg" alt="member"> </li>
+                  <li class="ms-deletable"> <img src="../../assets/img/we-educate/topper-5.jpg" alt="member"> </li>
                 </ul>
               </div>
               <div class="ms-card-footer clearfix">
@@ -1048,7 +965,7 @@
                     <li class="ms-scrollable ms-dropdown-list ms-members-list">
                       <a class="media p-2" href="#">
                         <div class="mr-2 align-self-center">
-                          <img src="../../assets/img/we-educate/topper-1.jpg" class="ms-img-round" alt="people">
+                          <img src="../../assets/img/we-educate/topper-6.jpg" class="ms-img-round" alt="people">
                         </div>
                         <div class="media-body">
                           <span>John Doe</span>
@@ -1056,7 +973,7 @@
                       </a>
                       <a class="media p-2" href="#">
                         <div class="mr-2 align-self-center">
-                          <img src="../../assets/img/we-educate/topper-2.jpg" class="ms-img-round" alt="people">
+                          <img src="../../assets/img/we-educate/topper-1.jpg" class="ms-img-round" alt="people">
                         </div>
                         <div class="media-body">
                           <span>Raymart Sandiago</span>
@@ -1064,7 +981,7 @@
                       </a>
                       <a class="media p-2" href="#">
                         <div class="mr-2 align-self-center">
-                          <img src="../../assets/img/we-educate/topper-3.jpg" class="ms-img-round" alt="people">
+                          <img src="../../assets/img/we-educate/topper-2.jpg" class="ms-img-round" alt="people">
                         </div>
                         <div class="media-body">
                           <span>Heather Brown</span>
@@ -1091,7 +1008,7 @@
                   vel varius metus. Pellentesque eget orci malesuada, venenatis magna et
                 </p>
                 <ul class="ms-note-members clearfix mb-0">
-                  <li class="ms-deletable"> <img src="../../assets/img/we-educate/topper-4.jpg" alt="member"> </li>
+                  <li class="ms-deletable"> <img src="../../assets/img/we-educate/topper-3.jpg" alt="member"> </li>
                 </ul>
               </div>
               <div class="ms-card-footer clearfix">
@@ -1108,7 +1025,7 @@
                     <li class="ms-scrollable ms-dropdown-list ms-members-list">
                       <a class="media p-2" href="#">
                         <div class="mr-2 align-self-center">
-                          <img src="../../assets/img/we-educate/topper-5.jpg" class="ms-img-round" alt="people">
+                          <img src="../../assets/img/we-educate/topper-4.jpg" class="ms-img-round" alt="people">
                         </div>
                         <div class="media-body">
                           <span>John Doe</span>
@@ -1116,7 +1033,7 @@
                       </a>
                       <a class="media p-2" href="#">
                         <div class="mr-2 align-self-center">
-                          <img src="../../assets/img/we-educate/topper-1.jpg" class="ms-img-round" alt="people">
+                          <img src="../../assets/img/we-educate/topper-5.jpg" class="ms-img-round" alt="people">
                         </div>
                         <div class="media-body">
                           <span>Raymart Sandiago</span>
@@ -1124,7 +1041,7 @@
                       </a>
                       <a class="media p-2" href="#">
                         <div class="mr-2 align-self-center">
-                          <img src="../../assets/img/we-educate/topper-2.jpg" class="ms-img-round" alt="people">
+                          <img src="../../assets/img/we-educate/topper-6.jpg" class="ms-img-round" alt="people">
                         </div>
                         <div class="media-body">
                           <span>Heather Brown</span>
@@ -1273,9 +1190,6 @@
   <script src="../../assets/js/bootstrap.min.js"></script>
   <script src="../../assets/js/perfect-scrollbar.js"> </script>
   <script src="../../assets/js/jquery-ui.min.js"> </script>
-  <script src="../scripts/cargarAlumnos.js"></script>
-  
-
   <!-- Global Required Scripts End -->
 
   <!-- Page Specific Scripts Start -->
@@ -1283,23 +1197,35 @@
   <script src="../../assets/js/moment.js"> </script>
   <script src="../../assets/js/jquery.webticker.min.js"> </script>
   
- 
-<script src="../../assets/js/datatables.min.js"> </script>
-
   <!-- Weeducate core JavaScript -->
   <script src="../../assets/js/framework.js"></script>
-
+  <script src="../../assets/js/datatables.min.js"> </script>
+  <script src="../../assets/js/data-tables.js"> </script>
   <!-- Settings -->
-  <script src="../../assets/js/settings.js"></script>
-  
-  <!-- SweetAlert2 -->
-  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="../../pages/scripts/cargarTutoresDocente.js"> </script>
 
-<!-- Nombre del Archico CV -->
-  <script src="../scripts/ImportarEstudiantes.js" defer></script>
-  <script src="../scripts/alertaImportacionAlumnos.js" defer></script>
-  <script src="../scripts/estudiantes.js"></script>
 
+  <!-- Importar CSV -->
+  <div class="modal fade" id="importModal" tabindex="-1" aria-labelledby="importModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <form id="formImportarTutores" action="../php/importar_tutores.php" method="post" enctype="multipart/form-data" class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="importModalLabel">Importar Tutores</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="csvTutores" class="form-label">Selecciona archivo CSV</label>
+            <input class="form-control" type="file" id="csvTutores" name="file" accept=".csv" required>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cerrar</button>
+          <button type="submit" class="btn btn-primary">Importar</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
 
 </body>

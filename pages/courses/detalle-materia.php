@@ -1,5 +1,14 @@
 <?php
 require '../php/conecta.php';
+
+session_start(); // 🔸 Necesario para acceder a $_SESSION
+
+$volverA = (isset($_SESSION['rol']) && $_SESSION['rol'] == 1)
+  ? '../students-doc/allcoursesDoc.php'
+  : 'allcourses.html';
+
+
+
 $db = conecta();
 $id = isset($_GET['id']) ? intval($_GET['id']) : 0;
 $query = "SELECT * FROM materias WHERE materia_id = $id";
@@ -197,20 +206,27 @@ $m = mysqli_fetch_assoc($res);
 <body>
 
   <!-- Botón volver -->
-  <a href="allcourses.html" id="back-btn">
-    <i class="material-icons">arrow_back</i>
-    <span>Todas las materias</span>
-  </a>
+<a href="<?= $volverA ?>" id="back-btn">
+  <i class="material-icons">arrow_back</i>
+  <span>Todas las materias</span>
+</a>
+
+
 
   <main class="container py-5">
 
-    <!-- Breadcrumb -->
-    <nav aria-label="breadcrumb" class="mb-4">
-      <ol class="breadcrumb bg-transparent px-0">
-        <li class="breadcrumb-item"><a href="allcourses.html">Todas las materias</a></li>
-        <li class="breadcrumb-item active" aria-current="page"><?= htmlspecialchars($m['nombre']) ?></li>
-      </ol>
-    </nav>
+<!-- Breadcrumb -->
+<nav aria-label="breadcrumb" class="mb-4">
+  <ol class="breadcrumb bg-transparent px-0">
+    <li class="breadcrumb-item">
+      <a href="<?= $volverA ?>">Todas las materias</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">
+      <?= htmlspecialchars($m['nombre']) ?>
+    </li>
+  </ol>
+</nav>
+
 
     <!-- Cabecera -->
     <div class="detail-header row align-items-center">

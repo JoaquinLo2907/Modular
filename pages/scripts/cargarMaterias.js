@@ -6,12 +6,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 const listaMaterias = document.getElementById('materias-lista');
                 listaMaterias.innerHTML = '';
 
-                if (!Array.isArray(data)) {
+                if (!data.materias || !Array.isArray(data.materias)) {
                     console.error('Los datos recibidos no son un arreglo válido');
                     return;
                 }
 
-                data.forEach(materia => {
+                data.materias.forEach(materia => {
                     const materiaElement = document.createElement('li');
                     materiaElement.classList.add('list-group-item', 'd-flex', 'justify-content-between');
 
