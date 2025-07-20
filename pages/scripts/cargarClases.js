@@ -8,8 +8,9 @@ $(document).ready(() => {
   const $form         = $('#claseForm');
   const $asigCont     = $('#asignacionesContainer');
 
-  let materiasAll = [];
-  let docentesAll = [];
+  window.materiasAll = [];
+  window.docentesAll = [];
+
 
   // ───── 1️⃣ Carga inicial de ciclos, materias y docentes ─────
   function cargarSelects() {
@@ -17,21 +18,18 @@ $(document).ready(() => {
       .then(r => r.json())
       .then(data => {
         $selectCiclo.empty().append('<option value="">Seleccione ciclo</option>');
-        // Sólo ciclos con estado 'activo'
-        data
-          .filter(c => c.estado === 'activo')
-          .forEach(c => {
-            $selectCiclo.append(
-              `<option value="${c.ciclo_id}">
-                 ${c.nombre} (${c.fecha_inicio} → ${c.fecha_fin})
-               </option>`
-            );
-          });
-      }); // :contentReference[oaicite:0]{index=0}
+        data.filter(c => c.estado === 'activo')
+            .forEach(c => {
+              $selectCiclo.append(
+                `<option value="${c.ciclo_id}">${c.nombre} (${c.fecha_inicio} → ${c.fecha_fin})</option>`
+              );
+            });
+      });
 
     const pMaterias = fetch('../php/obtener_materias.php')
       .then(r => r.json())
-      .then(data => materiasAll = data);
+      .then(data => materiasAll = data.materias || []);
+      console.log('Materias cargadas:', materiasAll);
 
     const pDocs = fetch('../php/obtener_profesores.php')
       .then(r => r.json())
@@ -41,76 +39,70 @@ $(document).ready(() => {
   }
 
   // ───── 2️⃣ Render dinámico de asignaciones según grado ─────
-  function renderAsignaciones() {
-    const grado = +$selectGrado.val();
-    $asigCont.empty();
-    if (!grado) return;
+function renderAsignaciones() {
+  const grado = +$selectGrado.val();
+  $asigCont.empty();
+  if (!grado) return;
 
-    const nivel = grado <= 6 ? 'primaria' : 'secundaria';
-    const mats  = materiasAll.filter(m => m.nivel_grado === nivel);
+  const nivel = grado <= 6 ? 'primaria' : 'secundaria';
+  const mats = (Array.isArray(materiasAll) ? materiasAll : []).filter(m =>
+    (m.nivel_grado || '').toLowerCase() === nivel
+  );
 
-    if (grado <= 6) {
-      // Primaria: checkbox para varias materias + un solo docente
-      $asigCont.append(`
-        <div class="form-group">
-          <label>Materias</label>
-          <div id="checkboxMaterias">
-            ${mats.map(m => `
-              <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="mat-${m.materia_id}" value="${m.materia_id}">
-                <label class="form-check-label" for="mat-${m.materia_id}">${m.nombre}</label>
-              </div>
-            `).join('')}
-          </div>
-        </div>
-        <div class="form-group">
-          <label for="selectDocenteAll">Docente (todas)</label>
-          <select id="selectDocenteAll" class="form-control">
-            <option value="">Seleccione docente</option>
-            ${docentesAll.map(d =>
-              `<option value="${d.docente_id}">${d.nombre} ${d.apellido}</option>`
-            ).join('')}
-          </select>
-        </div>
-      `);
-    } else {
-      // Secundaria: checkbox + select de docente por materia
-      $asigCont.append(`
-        <table class="table">
-          <thead>
-            <tr><th>Incluir</th><th>Materia</th><th>Docente</th></tr>
-          </thead>
-          <tbody>
-            ${mats.map(m => `
-              <tr>
-                <td>
-                  <input class="form-check-input checkMateriaSec" type="checkbox" data-m="${m.materia_id}">
-                </td>
-                <td>${m.nombre}</td>
-                <td>
-                  <select class="form-control selectDocentePorMateria" data-m="${m.materia_id}">
-                    <option value="">Seleccione docente</option>
-                    ${docentesAll.map(d =>
-                      `<option value="${d.docente_id}">${d.nombre} ${d.apellido}</option>`
-                    ).join('')}
-                  </select>
-                </td>
-              </tr>
-            `).join('')}
-          </tbody>
-        </table>
-      `);
+  if (grado <= 6) {
+    // ✅ PRIMARIA: checkbox por materia + único docente
+    if (mats.length === 0) {
+      $asigCont.append('<p class="text-danger">No hay materias disponibles para primaria.</p>');
+      return;
     }
-  }
 
-  // ───── 3️⃣ Botón “Nueva Clase” ─────
-  $('#newClaseBtn').click(() => {
-    $form[0].reset();
-    $form.removeData('id');
-    renderAsignaciones();
-    $modal.find('.modal-title').text('Nueva Clase');
-    $modal.modal('show');
-  });
+    $asigCont.append(`
+      <div class="form-group">
+        <label>Materias (seleccione al menos una)</label>
+        <div id="checkboxMaterias">
+          ${mats.map(m => `
+            <div class="form-check">
+              <input class="form-check-input" type="checkbox" id="mat-${m.materia_id}" value="${m.materia_id}">
+              <label class="form-check-label" for="mat-${m.materia_id}">${m.nombre}</label>
+            </div>
+          `).join('')}
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="selectDocenteAll">Docente que dará todas las materias seleccionadas</label>
+        <select id="selectDocenteAll" class="form-control">
+          <option value="">Seleccione docente</option>
+          ${docentesAll.map(d =>
+            `<option value="${d.docente_id}">${d.nombre} ${d.apellido}</option>`
+          ).join('')}
+        </select>
+      </div>
+    `);
+  } else {
+    // ✅ SECUNDARIA: checkbox + docente por materia
+    $asigCont.append(`
+      <table class="table">
+        <thead><tr><th>Incluir</th><th>Materia</th><th>Docente</th></tr></thead>
+        <tbody>
+          ${mats.map(m => `
+            <tr>
+              <td><input class="form-check-input checkMateriaSec" type="checkbox" data-m="${m.materia_id}"></td>
+              <td>${m.nombre}</td>
+              <td>
+                <select class="form-control selectDocentePorMateria" data-m="${m.materia_id}">
+                  <option value="">Seleccione docente</option>
+                  ${docentesAll.map(d =>
+                    `<option value="${d.docente_id}">${d.nombre} ${d.apellido}</option>`
+                  ).join('')}
+                </select>
+              </td>
+            </tr>
+          `).join('')}
+        </tbody>
+      </table>
+    `);
+  }
+}
 
   // ───── 4️⃣ Al cambiar el grado ─────
   $selectGrado.on('change', renderAsignaciones);
@@ -119,9 +111,7 @@ $(document).ready(() => {
   $form.submit(function(e) {
     e.preventDefault();
     const isEdit = !!$(this).data('id');
-    const url    = isEdit
-      ? '../php/actualizar_clase.php'
-      : '../php/crear_clase.php';
+    const url    = isEdit ? '../php/actualizar_clase.php' : '../php/crear_clase.php';
 
     const payload = {
       clase_id:     $(this).data('id') || null,
@@ -136,9 +126,7 @@ $(document).ready(() => {
     }
 
     if (payload.grado <= 6) {
-      // Primaria: obtiene materias checked
-      const materias = $('#checkboxMaterias input:checked')
-                         .map((_,el) => el.value).get();
+      const materias = $('#checkboxMaterias input:checked').map((_,el) => el.value).get();
       const doc      = $('#selectDocenteAll').val();
       if (!materias.length || !doc) {
         return alert('Elija al menos una materia y un docente.');
@@ -147,11 +135,8 @@ $(document).ready(() => {
         payload.asignaciones.push({ materia_id: mid, docente_id: doc });
       });
     } else {
-      // Secundaria: solo materias checked
       const checked = $('.checkMateriaSec:checked');
-      if (!checked.length) {
-        return alert('Seleccione al menos una materia de secundaria.');
-      }
+      if (!checked.length) return alert('Seleccione al menos una materia de secundaria.');
       let ok = true;
       checked.each((_, chk) => {
         const mid = $(chk).data('m');
@@ -195,13 +180,11 @@ $(document).ready(() => {
         $selectGrupo.val(c.grupo);
         renderAsignaciones();
         if (c.grado <= 6) {
-          // Marcar checkboxes y docente
           json.asignaciones.forEach(a => {
             $(`#checkboxMaterias input[value="${a.materia_id}"]`).prop('checked', true);
           });
           $('#selectDocenteAll').val(json.asignaciones[0].docente_id);
         } else {
-          // Marcar checkboxes y selects de secundaria
           json.asignaciones.forEach(a => {
             $(`.checkMateriaSec[data-m="${a.materia_id}"]`).prop('checked', true);
             $(`.selectDocentePorMateria[data-m="${a.materia_id}"]`).val(a.docente_id);
@@ -269,6 +252,17 @@ $(document).ready(() => {
       .catch(console.error);
   }
 
-  // ───── 9️⃣ Inicialización ─────
-  cargarSelects().then(cargarClases);
+  // ───── 9️⃣ Inicialización asegurada ─────
+  cargarSelects().then(() => {
+    cargarClases();
+
+    // Activar botón "Nueva Clase" cuando todo esté listo
+    $('#newClaseBtn').click(() => {
+      $form[0].reset();
+      $form.removeData('id');
+      renderAsignaciones();
+      $modal.find('.modal-title').text('Nueva Clase');
+      $modal.modal('show');
+    });
+  });
 });
